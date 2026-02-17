@@ -113,59 +113,59 @@ export async function Pools() {
             return (
               <div
                 key={pool.id}
-                className="rounded-xl border border-border/40 bg-card p-5 transition-colors hover:border-border/60"
+                className="flex flex-col rounded-xl border border-border/40 bg-card p-4 transition-colors hover:border-border/60"
               >
                 {/* Coin header */}
-                <div className="flex items-center gap-3 mb-4">
+                <div className="flex items-center gap-2.5 mb-3">
                   {meta && (
                     <Image
                       src={meta.icon}
                       alt={pool.coin.name}
-                      width={32}
-                      height={32}
-                      className="h-8 w-8"
+                      width={28}
+                      height={28}
+                      className="h-7 w-7"
                     />
                   )}
-                  <div>
-                    <p className="text-sm font-semibold">{pool.coin.name}</p>
-                    <p className="text-[11px] text-muted-foreground font-mono">{pool.coin.algorithm}</p>
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold truncate">{pool.coin.name}</p>
+                    <p className="text-[10px] text-muted-foreground font-mono">{pool.coin.algorithm}</p>
                   </div>
                 </div>
 
-                {/* Pool hashrate */}
+                {/* Pool hashrate — fixed height for alignment */}
                 <div className="mb-3">
-                  <p className="text-[11px] text-muted-foreground mb-0.5">Pool Hashrate</p>
-                  <div className="flex items-baseline gap-1">
+                  <p className="text-[10px] text-muted-foreground mb-0.5">Pool Hashrate</p>
+                  <div className="flex items-baseline gap-1 h-7">
                     {isActive ? (
                       <>
-                        <span className="font-mono text-lg font-semibold">{hr.value}</span>
-                        <span className="text-[11px] text-muted-foreground">{hr.unit}</span>
+                        <span className="font-mono text-lg font-semibold leading-none">{hr.value}</span>
+                        <span className="text-[10px] text-muted-foreground">{hr.unit}</span>
                       </>
                     ) : (
-                      <span className="text-sm text-muted-foreground">—</span>
+                      <span className="font-mono text-lg leading-none text-muted-foreground/50">—</span>
                     )}
                   </div>
                 </div>
 
                 {/* Miners & Network */}
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-1.5 mt-auto">
                   <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground">Workers</p>
+                    <p className="text-[9px] text-muted-foreground">Workers</p>
                     <div className="flex items-center gap-1">
-                      <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-green-500" : "bg-muted-foreground/30"}`} />
+                      <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${isActive ? "bg-green-500" : "bg-muted-foreground/30"}`} />
                       <span className="font-mono text-xs font-medium">{workers}</span>
                     </div>
                   </div>
                   <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[10px] text-muted-foreground">Network</p>
-                    <span className="font-mono text-[11px] text-muted-foreground">{netHr.value} {netHr.unit}</span>
+                    <p className="text-[9px] text-muted-foreground">Network</p>
+                    <p className="font-mono text-xs text-muted-foreground truncate">{netHr.value} {netHr.unit}</p>
                   </div>
                 </div>
 
                 {/* Block height */}
-                <div className="mt-2 text-[11px] text-muted-foreground font-mono text-center">
+                <p className="mt-2 text-[10px] text-muted-foreground font-mono text-center">
                   Block #{pool.networkStats.blockHeight.toLocaleString()}
-                </div>
+                </p>
               </div>
             );
           })}
