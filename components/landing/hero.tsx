@@ -31,13 +31,6 @@ const ICON = {
 export function Hero() {
   return (
     <section className="relative overflow-hidden pb-0">
-      {/* Ambient background orbs */}
-      <div className="pointer-events-none absolute inset-0">
-        <div className="orb-1 absolute -top-32 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/[0.04] blur-[120px]" />
-        <div className="orb-2 absolute top-1/4 -right-20 h-[400px] w-[400px] rounded-full bg-primary/[0.06] blur-[100px]" />
-        <div className="orb-1 absolute bottom-0 left-1/2 -translate-x-1/2 h-[600px] w-[800px] rounded-full bg-primary/[0.03] blur-[140px]" />
-      </div>
-
       {/* Dot-grid background */}
       <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
 

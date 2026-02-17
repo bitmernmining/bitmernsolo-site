@@ -30,6 +30,7 @@ export function Navbar() {
   // IntersectionObserver for active section highlighting
   useEffect(() => {
     const sections = navLinks
+      .filter((l) => l.href.startsWith("#"))
       .map((l) => document.querySelector(l.href))
       .filter(Boolean) as Element[];
 
@@ -67,14 +68,14 @@ export function Navbar() {
 
   return (
     <>
-      <header
-        className={`sticky top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "border-b border-border/40 bg-background/80 backdrop-blur-lg"
-            : "border-b border-transparent bg-transparent"
-        }`}
-      >
-        <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-4 sm:px-6">
+      <header className="sticky top-0 z-50 px-4 pt-3 sm:px-6">
+        <div
+          className={`mx-auto flex h-14 max-w-5xl items-center justify-between rounded-xl px-4 sm:px-5 transition-all duration-300 ${
+            scrolled
+              ? "border border-border/40 bg-background/80 backdrop-blur-lg"
+              : "border border-transparent bg-transparent"
+          }`}
+        >
           <Link
             href="/"
             className="flex items-center opacity-80 transition-opacity hover:opacity-100"
