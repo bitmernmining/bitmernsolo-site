@@ -1,9 +1,84 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
 type Page = "dashboard" | "miners" | "earnings" | "payouts" | "pool" | "alerts";
+type Coin = "BTC" | "BCH" | "LTC" | "DOGE" | "DGB";
+
+const COINS: { symbol: Coin; name: string; algo: string }[] = [
+  { symbol: "BTC", name: "Bitcoin", algo: "SHA-256" },
+  { symbol: "BCH", name: "Bitcoin Cash", algo: "SHA-256" },
+  { symbol: "LTC", name: "Litecoin", algo: "Scrypt" },
+  { symbol: "DOGE", name: "Dogecoin", algo: "Scrypt" },
+  { symbol: "DGB", name: "DigiByte", algo: "SHA-256" },
+];
+
+const COIN_DATA: Record<Coin, {
+  hashrate: string; hashUnit: string; trend: number;
+  workers: { name: string; hash: string; shares: string }[];
+  pending: string; pendingUsd: string;
+  effort: string; earnedToday: string; earnedTodayUsd: string;
+  poolHash: string; price: string; difficulty: string; networkHash: string;
+  blockReward: string; blockTime: string;
+}> = {
+  BTC: {
+    hashrate: "142.8", hashUnit: "TH/s", trend: 2.1,
+    workers: [
+      { name: "antminer-s21-01", hash: "52.4 TH/s", shares: "1.82" },
+      { name: "antminer-s21-02", hash: "51.8 TH/s", shares: "1.79" },
+      { name: "antminer-s19-03", hash: "38.6 TH/s", shares: "1.34" },
+    ],
+    pending: "0.0041", pendingUsd: "$421.12",
+    effort: "67.3", earnedToday: "0.00018", earnedTodayUsd: "$18.47",
+    poolHash: "213.9 TH/s", price: "$102,614", difficulty: "110.45 T",
+    networkHash: "789.2 EH/s", blockReward: "3.125 BTC", blockTime: "10m 0s",
+  },
+  BCH: {
+    hashrate: "48.2", hashUnit: "TH/s", trend: 1.8,
+    workers: [
+      { name: "antminer-s19-01", hash: "24.6 TH/s", shares: "2.14" },
+      { name: "antminer-s19-02", hash: "23.6 TH/s", shares: "2.01" },
+    ],
+    pending: "0.0830", pendingUsd: "$38.94",
+    effort: "42.1", earnedToday: "0.00410", earnedTodayUsd: "$1.92",
+    poolHash: "71.4 TH/s", price: "$469", difficulty: "1.02 T",
+    networkHash: "6.8 EH/s", blockReward: "6.25 BCH", blockTime: "10m 0s",
+  },
+  LTC: {
+    hashrate: "9.8", hashUnit: "GH/s", trend: -0.4,
+    workers: [
+      { name: "antminer-l9-01", hash: "5.2 GH/s", shares: "3.41" },
+      { name: "antminer-l9-02", hash: "4.6 GH/s", shares: "3.12" },
+    ],
+    pending: "0.2140", pendingUsd: "$24.61",
+    effort: "83.7", earnedToday: "0.01200", earnedTodayUsd: "$1.38",
+    poolHash: "14.2 GH/s", price: "$115", difficulty: "42.89 M",
+    networkHash: "2.1 PH/s", blockReward: "6.25 LTC", blockTime: "2m 30s",
+  },
+  DOGE: {
+    hashrate: "9.8", hashUnit: "GH/s", trend: 3.2,
+    workers: [
+      { name: "antminer-l9-01", hash: "5.2 GH/s", shares: "3.41" },
+      { name: "antminer-l9-02", hash: "4.6 GH/s", shares: "3.12" },
+    ],
+    pending: "142.50", pendingUsd: "$35.63",
+    effort: "51.2", earnedToday: "12.400", earnedTodayUsd: "$3.10",
+    poolHash: "14.2 GH/s", price: "$0.25", difficulty: "24.16 M",
+    networkHash: "1.8 PH/s", blockReward: "10000 DOGE", blockTime: "1m 0s",
+  },
+  DGB: {
+    hashrate: "312.4", hashUnit: "GH/s", trend: 0.9,
+    workers: [
+      { name: "antminer-s19-01", hash: "162.1 GH/s", shares: "4.82" },
+      { name: "antminer-s19-02", hash: "150.3 GH/s", shares: "4.51" },
+    ],
+    pending: "824.10", pendingUsd: "$8.24",
+    effort: "29.4", earnedToday: "48.200", earnedTodayUsd: "$0.48",
+    poolHash: "486.1 GH/s", price: "$0.01", difficulty: "2.41 M",
+    networkHash: "182.4 TH/s", blockReward: "665 DGB", blockTime: "15s",
+  },
+};
 
 const NAV_GROUPS = [
   {
@@ -136,7 +211,8 @@ const CoinsIcon = <svg className="h-3.5 w-3.5 text-muted-foreground" fill="none"
 
 /* ─── Page: Dashboard ─── */
 
-function DashboardView() {
+function DashboardView({ coin, onCoinChange }: { coin: Coin; onCoinChange: (c: Coin) => void }) {
+  const d = COIN_DATA[coin];
   return (
     <div className="space-y-4">
       {/* Page header */}
@@ -150,11 +226,21 @@ function DashboardView() {
       {/* Filter bar */}
       <div className="flex flex-wrap items-center gap-2">
         <div className="inline-flex items-center gap-0.5">
-          <span className="flex items-center gap-1 rounded-md bg-background px-1.5 py-0.5 text-[10px] font-medium shadow-sm border border-border/40">
-            <Image src="/coins/btc.svg" alt="BTC" width={12} height={12} className="rounded-full" />BTC
-          </span>
-          {["BCH", "LTC", "DOGE", "DGB"].map((c) => (
-            <span key={c} className="px-1.5 py-0.5 text-[10px] text-muted-foreground/50">{c}</span>
+          {COINS.map((c) => (
+            <button
+              key={c.symbol}
+              onClick={() => onCoinChange(c.symbol)}
+              className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-colors ${
+                coin === c.symbol
+                  ? "bg-background shadow-sm border border-border/40"
+                  : "text-muted-foreground/50 hover:text-muted-foreground"
+              }`}
+            >
+              {coin === c.symbol && (
+                <Image src={`/coins/${c.symbol.toLowerCase()}.svg`} alt={c.symbol} width={12} height={12} className="rounded-full" />
+              )}
+              {c.symbol}
+            </button>
           ))}
         </div>
         <div className="h-3 w-px bg-border hidden sm:block" />
@@ -167,14 +253,14 @@ function DashboardView() {
 
       {/* 5 stat cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-        <MiniStatCard title="Your Hashrate" value="142.8 TH/s" subtitle="Updated 5s ago" trend={2.1} icon={ActivityIcon} iconBg="bg-primary/10" live />
-        <MiniStatCard title="Your Workers" value="3" icon={HardDriveIcon} iconBg="bg-primary/10" />
-        <MiniStatCard title="Pending Balance" value="0.0041 BTC" subtitle="&asymp; $421.12" icon={WalletIcon} iconBg="bg-muted/60" />
+        <MiniStatCard title="Your Hashrate" value={`${d.hashrate} ${d.hashUnit}`} subtitle="Updated 5s ago" trend={d.trend} icon={ActivityIcon} iconBg="bg-primary/10" live />
+        <MiniStatCard title="Your Workers" value={String(d.workers.length)} icon={HardDriveIcon} iconBg="bg-primary/10" />
+        <MiniStatCard title="Pending Balance" value={`${d.pending} ${coin}`} subtitle={`&asymp; ${d.pendingUsd}`} icon={WalletIcon} iconBg="bg-muted/60" />
         <div className="hidden sm:block">
-          <MiniStatCard title="Current Effort" value="67.3%" subtitle="Mining" icon={PickaxeIcon} iconBg="bg-muted/60" />
+          <MiniStatCard title="Current Effort" value={`${d.effort}%`} subtitle="Mining" icon={PickaxeIcon} iconBg="bg-muted/60" />
         </div>
         <div className="hidden lg:block">
-          <MiniStatCard title="Earned Today" value="0.00018 BTC" subtitle="&asymp; $18.47" icon={DollarIcon} iconBg="bg-muted/60" />
+          <MiniStatCard title="Earned Today" value={`${d.earnedToday} ${coin}`} subtitle={`&asymp; ${d.earnedTodayUsd}`} icon={DollarIcon} iconBg="bg-muted/60" />
         </div>
       </div>
 
@@ -237,11 +323,7 @@ function DashboardView() {
               </tr>
             </thead>
             <tbody>
-              {[
-                { name: "antminer-s21-01", hash: "52.4 TH/s", shares: "1.82" },
-                { name: "antminer-s21-02", hash: "51.8 TH/s", shares: "1.79" },
-                { name: "antminer-s19-03", hash: "38.6 TH/s", shares: "1.34" },
-              ].map((w) => (
+              {d.workers.map((w) => (
                 <tr key={w.name} className="border-b border-border/20 last:border-0">
                   <td className="py-1.5 font-mono">
                     <span className="flex items-center gap-1">
@@ -255,7 +337,7 @@ function DashboardView() {
               ))}
             </tbody>
           </table>
-          <p className="mt-2 text-center text-[10px] text-muted-foreground">View all 3 workers &rsaquo;</p>
+          <p className="mt-2 text-center text-[10px] text-muted-foreground">View all {d.workers.length} workers &rsaquo;</p>
         </SectionCard>
 
         <SectionCard title="Recent Earnings" icon={CoinsIcon}>
@@ -291,7 +373,8 @@ function DashboardView() {
 
 /* ─── Page: Miners ─── */
 
-function MinersView() {
+function MinersView({ coin }: { coin: Coin }) {
+  const d = COIN_DATA[coin];
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -309,8 +392,8 @@ function MinersView() {
       {/* Workers stats bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
         {[
-          { label: "Total Workers", value: "3", iconBg: "bg-muted/60", color: "" },
-          { label: "Online", value: "3", iconBg: "bg-primary/10", color: "text-primary" },
+          { label: "Total Workers", value: String(d.workers.length), iconBg: "bg-muted/60", color: "" },
+          { label: "Online", value: String(d.workers.length), iconBg: "bg-primary/10", color: "text-primary" },
           { label: "Offline", value: "0", iconBg: "bg-red-500/10", color: "text-red-500" },
         ].map((s) => (
           <div key={s.label} className="flex items-center gap-2 rounded-lg border border-border/40 bg-card p-2.5">
@@ -329,7 +412,7 @@ function MinersView() {
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <p className="font-mono text-lg font-bold">142.8 TH/s</p>
+              <p className="font-mono text-lg font-bold">{d.hashrate} {d.hashUnit}</p>
               <span className="relative flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
@@ -367,11 +450,7 @@ function MinersView() {
             </tr>
           </thead>
           <tbody>
-            {[
-              { name: "antminer-s21-01", hash: "52.4 TH/s", avg: "51.9 TH/s", reject: "0.0%", last: "12s ago" },
-              { name: "antminer-s21-02", hash: "51.8 TH/s", avg: "51.2 TH/s", reject: "0.1%", last: "8s ago" },
-              { name: "antminer-s19-03", hash: "38.6 TH/s", avg: "38.1 TH/s", reject: "0.0%", last: "22s ago" },
-            ].map((w) => (
+            {d.workers.map((w) => ({ name: w.name, hash: w.hash, avg: w.hash.replace(/[\d.]+/, (m: string) => (parseFloat(m) * 0.99).toFixed(1)), reject: "0.0%", last: `${Math.floor(Math.random() * 25 + 5)}s ago` })).map((w) => (
               <tr key={w.name} className="border-b border-border/20 last:border-0 hover:bg-muted/50 transition-colors cursor-pointer">
                 <td className="px-3 py-2">
                   <span className="font-mono text-primary">{w.name}</span>
@@ -397,7 +476,8 @@ function MinersView() {
 
 /* ─── Page: Earnings ─── */
 
-function EarningsView() {
+function EarningsView({ coin }: { coin: Coin }) {
+  const d = COIN_DATA[coin];
   const barData = [
     { day: "2/11", h: 35 }, { day: "2/12", h: 55 }, { day: "2/13", h: 42 },
     { day: "2/14", h: 68 }, { day: "2/15", h: 48 }, { day: "2/16", h: 58 }, { day: "2/17", h: 42 },
@@ -411,9 +491,9 @@ function EarningsView() {
 
       {/* 3 stat cards */}
       <div className="grid grid-cols-3 gap-2">
-        <MiniStatCard title="Pending Balance" value="0.0041 BTC" icon={CoinsIcon} iconBg="bg-muted/60" />
-        <MiniStatCard title="Total Paid" value="0.0312 BTC" icon={<svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>} iconBg="bg-muted/60" />
-        <MiniStatCard title="Today Paid" value="0.00018 BTC" icon={WalletIcon} iconBg="bg-muted/60" />
+        <MiniStatCard title="Pending Balance" value={`${d.pending} ${coin}`} icon={CoinsIcon} iconBg="bg-muted/60" />
+        <MiniStatCard title="Total Paid" value={`${(parseFloat(d.pending) * 7.6).toFixed(4)} ${coin}`} icon={<svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>} iconBg="bg-muted/60" />
+        <MiniStatCard title="Today Paid" value={`${d.earnedToday} ${coin}`} icon={WalletIcon} iconBg="bg-muted/60" />
       </div>
 
       {/* Revenue bar chart */}
@@ -479,7 +559,8 @@ function EarningsView() {
 
 /* ─── Page: Payouts ─── */
 
-function PayoutsView() {
+function PayoutsView({ coin }: { coin: Coin }) {
+  const d = COIN_DATA[coin];
   return (
     <div className="space-y-4">
       <div>
@@ -492,13 +573,13 @@ function PayoutsView() {
         <SectionCard title="Balance" icon={WalletIcon}>
           <div className="space-y-2">
             {[
-              { label: "Pending Balance", value: "0.00410000", highlight: true },
-              { label: "Total Paid", value: "0.03120000" },
-              { label: "Today Paid", value: "0.00018000" },
+              { label: "Pending Balance", value: d.pending, highlight: true },
+              { label: "Total Paid", value: (parseFloat(d.pending) * 7.6).toFixed(4) },
+              { label: "Today Paid", value: d.earnedToday },
             ].map((r) => (
               <div key={r.label} className="flex items-center justify-between text-[11px]">
                 <span className="text-muted-foreground">{r.label}</span>
-                <span className={`font-mono ${r.highlight ? "text-primary" : ""}`}>{r.value} <Image src="/coins/btc.svg" alt="BTC" width={10} height={10} className="inline-block align-text-bottom mx-0.5" />BTC</span>
+                <span className={`font-mono ${r.highlight ? "text-primary" : ""}`}>{r.value} <Image src={`/coins/${coin.toLowerCase()}.svg`} alt={coin} width={10} height={10} className="inline-block align-text-bottom mx-0.5" />{coin}</span>
               </div>
             ))}
           </div>
@@ -567,7 +648,8 @@ function PayoutsView() {
 
 /* ─── Page: Pool Stats ─── */
 
-function PoolStatsView() {
+function PoolStatsView({ coin }: { coin: Coin }) {
+  const d = COIN_DATA[coin];
   return (
     <div className="space-y-4">
       <div>
@@ -577,7 +659,7 @@ function PoolStatsView() {
 
       {/* 5 stat cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-        <MiniStatCard title="Pool Hashrate" value="213.9 TH/s" icon={ActivityIcon} iconBg="bg-primary/10" />
+        <MiniStatCard title="Pool Hashrate" value={d.poolHash} icon={ActivityIcon} iconBg="bg-primary/10" />
         <MiniStatCard title="Miners" value="2" icon={<svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>} iconBg="bg-muted/60" />
         <MiniStatCard title="Blocks Found" value="0" icon={<svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>} iconBg="bg-muted/60" />
         <div className="hidden sm:block">
@@ -626,12 +708,12 @@ function PoolStatsView() {
           </div>
           <div className="p-3 space-y-1.5 text-[11px]">
             {[
-              { label: "BTC Price", value: "$102,614" },
+              { label: `${coin} Price`, value: d.price },
               { label: "Block Height", value: "883,241" },
-              { label: "Difficulty", value: "110.45 T" },
-              { label: "Network Hashrate", value: "789.2 EH/s" },
-              { label: "Block Reward", value: "3.125 BTC" },
-              { label: "Block Time", value: "10m 0s" },
+              { label: "Difficulty", value: d.difficulty },
+              { label: "Network Hashrate", value: d.networkHash },
+              { label: "Block Reward", value: d.blockReward },
+              { label: "Block Time", value: d.blockTime },
             ].map((s) => (
               <div key={s.label} className="flex justify-between">
                 <span className="text-muted-foreground">{s.label}</span>
@@ -755,25 +837,47 @@ function AlertsView() {
 
 /* ─── Main Component ─── */
 
-const PAGE_VIEWS: Record<Page, () => React.ReactNode> = {
-  dashboard: DashboardView,
-  miners: MinersView,
-  earnings: EarningsView,
-  payouts: PayoutsView,
-  pool: PoolStatsView,
-  alerts: AlertsView,
-};
-
 export function DashboardPreview() {
   const [activePage, setActivePage] = useState<Page>("dashboard");
+  const [activeCoin, setActiveCoin] = useState<Coin>("BTC");
   const [hasClicked, setHasClicked] = useState(false);
+  const [coinDropdownOpen, setCoinDropdownOpen] = useState(false);
+  const coinDropdownRef = useRef<HTMLDivElement>(null);
 
   function handleNav(page: Page) {
     setActivePage(page);
     if (!hasClicked) setHasClicked(true);
   }
 
-  const ActiveContent = PAGE_VIEWS[activePage];
+  function handleCoinChange(coin: Coin) {
+    setActiveCoin(coin);
+    setCoinDropdownOpen(false);
+    if (!hasClicked) setHasClicked(true);
+  }
+
+  // Close coin dropdown on outside click
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (coinDropdownRef.current && !coinDropdownRef.current.contains(e.target as Node)) {
+        setCoinDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  const coinInfo = COINS.find((c) => c.symbol === activeCoin)!;
+
+  function renderPage() {
+    switch (activePage) {
+      case "dashboard": return <DashboardView coin={activeCoin} onCoinChange={handleCoinChange} />;
+      case "miners": return <MinersView coin={activeCoin} />;
+      case "earnings": return <EarningsView coin={activeCoin} />;
+      case "payouts": return <PayoutsView coin={activeCoin} />;
+      case "pool": return <PoolStatsView coin={activeCoin} />;
+      case "alerts": return <AlertsView />;
+    }
+  }
 
   return (
     <section>
@@ -788,7 +892,15 @@ export function DashboardPreview() {
           </p>
         </div>
 
-        <div className="gradient-border">
+        <div className="gradient-border relative">
+          {/* Click to explore — top center, overlapping border */}
+          {!hasClicked && (
+            <div className="absolute -top-4 left-1/2 z-10 -translate-x-1/2 animate-hint-pulse">
+              <div className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary shadow-lg backdrop-blur-sm">
+                Click to explore &rarr;
+              </div>
+            </div>
+          )}
           <div className="browser-frame">
             {/* Browser bar */}
             <div className="browser-frame-bar">
@@ -829,14 +941,36 @@ export function DashboardPreview() {
                     height={32}
                     className="h-5 w-auto"
                   />
-                  {/* Coin selector trigger (like real app) */}
-                  <div className="mt-2.5 flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-[oklch(0.2_0_0)] transition-colors cursor-default">
-                    <div className="flex items-center gap-1.5">
-                      <Image src="/coins/btc.svg" alt="BTC" width={16} height={16} className="rounded-full" />
-                      <span className="text-xs font-medium">BTC</span>
-                      <span className="text-[11px] text-muted-foreground">Bitcoin</span>
-                    </div>
-                    <svg className="h-3 w-3 text-muted-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                  {/* Coin selector trigger */}
+                  <div className="relative mt-2.5" ref={coinDropdownRef}>
+                    <button
+                      onClick={() => setCoinDropdownOpen(!coinDropdownOpen)}
+                      className="w-full flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-[oklch(0.2_0_0)] transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <Image src={`/coins/${activeCoin.toLowerCase()}.svg`} alt={activeCoin} width={16} height={16} className="rounded-full" />
+                        <span className="text-xs font-medium">{activeCoin}</span>
+                        <span className="text-[11px] text-muted-foreground">{coinInfo.name}</span>
+                      </div>
+                      <svg className={`h-3 w-3 text-muted-foreground transition-transform ${coinDropdownOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                    </button>
+                    {coinDropdownOpen && (
+                      <div className="absolute left-0 right-0 top-full z-10 mt-1 rounded-md border border-border/40 bg-[oklch(0.15_0_0)] py-1 shadow-lg">
+                        {COINS.map((c) => (
+                          <button
+                            key={c.symbol}
+                            onClick={() => handleCoinChange(c.symbol)}
+                            className={`w-full flex items-center gap-2 px-2 py-1.5 text-left transition-colors hover:bg-[oklch(0.2_0_0)] ${
+                              activeCoin === c.symbol ? "bg-[oklch(0.2_0_0)]" : ""
+                            }`}
+                          >
+                            <Image src={`/coins/${c.symbol.toLowerCase()}.svg`} alt={c.symbol} width={14} height={14} className="rounded-full" />
+                            <span className="text-[11px] font-medium">{c.symbol}</span>
+                            <span className="text-[10px] text-muted-foreground">{c.name}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -866,14 +1000,6 @@ export function DashboardPreview() {
                     </div>
                   ))}
 
-                  {/* Click to explore indicator */}
-                  {!hasClicked && (
-                    <div className="animate-hint-pulse mt-2">
-                      <div className="flex items-center justify-center gap-1 rounded-full bg-primary/15 border border-primary/30 px-2.5 py-1 text-[10px] text-primary font-medium">
-                        Click to explore &rarr;
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* User footer */}
@@ -891,7 +1017,7 @@ export function DashboardPreview() {
 
               {/* Main content */}
               <div className="flex-1 p-3 sm:p-4 overflow-auto">
-                <ActiveContent />
+                {renderPage()}
               </div>
             </div>
           </div>
