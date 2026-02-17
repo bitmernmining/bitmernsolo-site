@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Space_Grotesk, Manrope, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
@@ -48,6 +49,21 @@ export default function RootLayout({
       lang="en"
       className={`dark ${spaceGrotesk.variable} ${manrope.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/react-grab/dist/index.global.js"
+            crossOrigin="anonymous"
+            strategy="beforeInteractive"
+          />
+        )}
+        {process.env.NODE_ENV === "development" && (
+          <Script
+            src="//unpkg.com/@react-grab/mcp/dist/client.global.js"
+            strategy="lazyOnload"
+          />
+        )}
+      </head>
       <body className="min-h-screen bg-background antialiased">
         <Navbar />
         <main>{children}</main>

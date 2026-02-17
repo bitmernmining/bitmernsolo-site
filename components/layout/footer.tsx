@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Pickaxe } from "lucide-react";
+import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 
 const footerLinks = {
@@ -22,25 +22,24 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/40 bg-background">
+    <footer className="border-t border-border/40">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Brand */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <Pickaxe className="h-4.5 w-4.5 text-primary-foreground" />
-              </div>
-              <span className="text-lg font-bold tracking-tight" style={{ fontFamily: "var(--font-space-grotesk)" }}>
-                Bitmern<span className="text-primary">Solo</span>
-              </span>
+            <Link href="/">
+              <Image
+                src="/logo-light.svg"
+                alt="Bitmern Solo"
+                width={140}
+                height={38}
+                className="h-7 w-auto"
+              />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Solo mining pool with real-time dashboards, multi-coin support, and zero pool fees.
+              Solo mining pool for BTC, LTC, DOGE, BCH, and DGB. Real-time dashboards and enterprise infrastructure.
             </p>
           </div>
 
-          {/* Link columns */}
           {Object.entries(footerLinks).map(([heading, links]) => (
             <div key={heading}>
               <h3 className="mb-3 text-sm font-semibold">{heading}</h3>

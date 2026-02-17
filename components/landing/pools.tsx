@@ -21,21 +21,61 @@ const COIN_MAP: Record<string, { symbol: string; icon: string }> = {
   "digibyte-solo": { symbol: "DGB", icon: "/coins/dgb.svg" },
 };
 
+interface TopMiner {
+  miner: string;
+  hashrate: number;
+  sharesPerSecond: number;
+}
+
 interface PoolData {
   id: string;
   coin: { name: string; symbol: string; algorithm: string };
   poolStats: { poolHashrate: number; connectedMiners: number };
   networkStats: { networkHashrate: number; blockHeight: number };
+  topMiners: TopMiner[];
 }
 
-async function fetchPools(): Promise<PoolData[]> {
+interface PoolWithWorkers extends PoolData {
+  workerCount: number;
+}
+
+async function fetchPools(): Promise<PoolWithWorkers[]> {
   try {
     const res = await fetch("http://207.148.13.103:4000/api/pools", {
       next: { revalidate: 60 },
     });
     if (!res.ok) return [];
     const data = await res.json();
-    return data.pools ?? [];
+    const pools: PoolData[] = data.pools ?? [];
+
+    // For each pool, fetch individual miner details to count workers
+    const poolsWithWorkers = await Promise.all(
+      pools.map(async (pool) => {
+        const miners = pool.topMiners ?? [];
+        if (miners.length === 0) return { ...pool, workerCount: 0 };
+
+        const workerCounts = await Promise.all(
+          miners.map(async (m) => {
+            try {
+              const minerRes = await fetch(
+                `http://207.148.13.103:4000/api/pools/${pool.id}/miners/${encodeURIComponent(m.miner)}`,
+                { next: { revalidate: 60 } }
+              );
+              if (!minerRes.ok) return 0;
+              const minerData = await minerRes.json();
+              const workers = minerData?.performance?.workers;
+              return workers ? Object.keys(workers).length : 0;
+            } catch {
+              return 0;
+            }
+          })
+        );
+
+        return { ...pool, workerCount: workerCounts.reduce((a, b) => a + b, 0) };
+      })
+    );
+
+    return poolsWithWorkers;
   } catch {
     return [];
   }
@@ -48,7 +88,7 @@ export async function Pools() {
   const order = ["bitcoin-solo", "litecoin-solo", "dogecoin-solo", "bitcoincash-solo", "digibyte-solo"];
   const sorted = order
     .map((id) => pools.find((p) => p.id === id))
-    .filter((p): p is PoolData => !!p);
+    .filter((p): p is PoolWithWorkers => !!p);
 
   return (
     <section id="pools">
@@ -67,7 +107,7 @@ export async function Pools() {
             const meta = COIN_MAP[pool.id];
             const hr = formatHashrate(pool.poolStats.poolHashrate);
             const netHr = formatHashrate(pool.networkStats.networkHashrate);
-            const miners = pool.poolStats.connectedMiners;
+            const workers = pool.workerCount;
             const isActive = pool.poolStats.poolHashrate > 0;
 
             return (
@@ -110,10 +150,10 @@ export async function Pools() {
                 {/* Miners & Network */}
                 <div className="grid grid-cols-2 gap-2">
                   <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[9px] text-muted-foreground">Miners</p>
+                    <p className="text-[9px] text-muted-foreground">Workers</p>
                     <div className="flex items-center gap-1">
                       <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-green-500" : "bg-muted-foreground/30"}`} />
-                      <span className="font-mono text-xs font-medium">{miners}</span>
+                      <span className="font-mono text-xs font-medium">{workers}</span>
                     </div>
                   </div>
                   <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
