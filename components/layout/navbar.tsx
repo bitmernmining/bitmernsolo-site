@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Pickaxe, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { label: "Features", href: "#features" },
+  { label: "Pools", href: "#pools" },
   { label: "Coins", href: "#coins" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
@@ -18,15 +20,16 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <Pickaxe className="h-4.5 w-4.5 text-primary-foreground" />
-          </div>
-          <span className="text-lg font-bold tracking-tight" style={{ fontFamily: "var(--font-space-grotesk)" }}>
-            Bitmern<span className="text-primary">Solo</span>
-          </span>
+      <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-4 sm:px-6">
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/logo-light.svg"
+            alt="Bitmern Solo"
+            width={160}
+            height={44}
+            className="h-8 w-auto"
+            priority
+          />
         </Link>
 
         {/* Desktop nav */}
@@ -42,17 +45,15 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* CTA */}
         <div className="hidden items-center gap-3 md:flex">
           <Button variant="ghost" size="sm" asChild>
             <a href="https://app.bitmernsolo.com/login">Log in</a>
           </Button>
-          <Button size="sm" asChild>
+          <Button size="sm" className="glow" asChild>
             <a href="https://app.bitmernsolo.com/signup">Start Mining</a>
           </Button>
         </div>
 
-        {/* Mobile toggle */}
         <button
           className="md:hidden p-2 text-muted-foreground"
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -62,7 +63,6 @@ export function Navbar() {
         </button>
       </div>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="border-t border-border/40 bg-background px-4 pb-4 md:hidden">
           <nav className="flex flex-col gap-3 pt-3">
