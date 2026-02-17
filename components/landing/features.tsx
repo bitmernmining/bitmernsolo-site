@@ -29,10 +29,10 @@ export function Features() {
       <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <div className="text-center mb-14">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            What you get
+            Built for serious miners
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Everything a solo miner needs. Nothing they don&apos;t.
+            Whether you run one machine or a full farm, these tools keep you in control.
           </p>
         </div>
 
@@ -40,10 +40,10 @@ export function Features() {
         <div className="grid gap-4 lg:grid-cols-2">
           {/* 5 coins */}
           <div className="flex flex-col rounded-xl border border-border/40 bg-card/30 p-6 transition-colors hover:border-border/60">
-            <h3 className="text-base font-semibold">5 coins, one dashboard</h3>
+            <h3 className="text-base font-semibold">Five coins, one account</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              BTC, LTC, DOGE, BCH, and DGB. Switch between coins from a single
-              account. Each with dedicated stratum endpoints and VarDiff ports.
+              Mine Bitcoin, Litecoin, Dogecoin, Bitcoin Cash, or DigiByte. Switch
+              coins anytime from a single dashboard with dedicated stratum endpoints.
             </p>
             <div className="mt-auto pt-4 flex items-center gap-3">
               {coins.map((coin) => (
@@ -71,9 +71,9 @@ export function Features() {
                 <BarChart3 className="h-4 w-4 text-primary" />
               </div>
               <div className="flex-1">
-                <h3 className="text-base font-semibold">Live hashrate & workers</h3>
+                <h3 className="text-base font-semibold">Real-time monitoring</h3>
                 <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  SSE-powered real-time updates. Per-worker charts, shares/sec, effort tracking.
+                  See your hashrate, workers, shares, and effort update live. No refreshing needed.
                 </p>
               </div>
             </div>
@@ -132,16 +132,16 @@ export function Features() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Bell className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-sm font-semibold">Email & in-app alerts</h3>
+            <h3 className="text-sm font-semibold">Instant alerts</h3>
             <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-              Worker offline, hashrate drop, payout sent. Configure thresholds per alert type.
+              Get notified by email when a worker goes offline, your hashrate drops, or a payout is sent.
             </p>
             <div className="mt-auto pt-3 relative h-[40px]">
               <div className="animate-notify-1 absolute inset-x-0 top-0 z-[3] rounded-md border border-red-500/30 bg-[oklch(0.16_0.01_20)] px-2.5 py-2 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
                 <div>
                   <p className="text-[10px] font-medium">Worker Offline</p>
-                  <p className="text-[9px] text-muted-foreground">antminer-s19-03 — just now</p>
+                  <p className="text-[9px] text-muted-foreground">antminer-s19-03 &middot; just now</p>
                 </div>
               </div>
               <div className="animate-notify-2 absolute inset-x-0 top-0 z-[2] rounded-md border border-yellow-500/30 bg-[oklch(0.16_0.01_85)] px-2.5 py-2 flex items-center gap-2">
@@ -166,9 +166,9 @@ export function Features() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Gauge className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-sm font-semibold">VarDiff stratum</h3>
+            <h3 className="text-sm font-semibold">Smart difficulty</h3>
             <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-              Automatic difficulty adjustment. Multiple ports per coin for every hashrate level.
+              VarDiff automatically matches the difficulty to your hashrate. Pick the port that fits your setup.
             </p>
             <div className="mt-auto pt-3 grid grid-cols-2 gap-1.5">
               {[
@@ -190,9 +190,9 @@ export function Features() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Lock className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-sm font-semibold">Your keys, your coins</h3>
+            <h3 className="text-sm font-semibold">Direct to your wallet</h3>
             <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-              Payouts go directly to your wallets. No custodial balances, no holding periods.
+              Block rewards are sent straight to your wallet address. Nothing is held on our side.
             </p>
             <div className="mt-auto pt-3 space-y-1.5">
               {wallets.map((w) => (
@@ -216,9 +216,9 @@ export function Features() {
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Cpu className="h-4 w-4 text-primary" />
             </div>
-            <h3 className="text-sm font-semibold">Miningcore backend</h3>
+            <h3 className="text-sm font-semibold">Reliable infrastructure</h3>
             <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-              Enterprise-grade pool engine with DDoS protection and high-availability infrastructure.
+              Powered by Miningcore with DDoS protection and redundant systems designed for continuous uptime.
             </p>
             <div className="mt-auto pt-3 grid grid-cols-2 gap-1.5 text-[10px]">
               {["99.9% uptime", "DDoS protected", "Live pool stats", "Open API"].map((item) => (

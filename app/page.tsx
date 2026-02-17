@@ -26,12 +26,12 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 text-center">
           <h2 className="text-4xl font-bold tracking-tight lg:text-5xl">
-            Ready to mine{" "}
-            <span className="text-gradient">solo</span>?
+            Start mining{" "}
+            <span className="text-gradient">solo</span> today
           </h2>
           <p className="mt-4 mx-auto max-w-lg text-muted-foreground">
-            Create a free account, configure your ASIC, and start submitting
-            shares in minutes.
+            Create a free account, point your miner at our stratum, and start
+            submitting shares in minutes.
           </p>
           <Button size="lg" className="mt-8 glow" asChild>
             <a href="https://app.bitmernsolo.com/signup">

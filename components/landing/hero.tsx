@@ -20,22 +20,22 @@ export function Hero() {
         {/* Badge */}
         <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-border/60 bg-card/50 px-3 py-1 text-xs text-muted-foreground mb-8">
           <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-          Solo mining — 5 coins, 1% fee
+          5 supported coins. 1% pool fee. That&apos;s it.
         </div>
 
         <h1
           className="animate-fade-up-d1 font-bold tracking-tight leading-[1.08]"
           style={{ fontSize: "clamp(2.75rem, 6.5vw, 5.5rem)" }}
         >
-          Solo mining pool{" "}
+          The solo mining pool{" "}
           <span className="text-gradient">
-            for the patient&nbsp;miner
+            built for&nbsp;everyone
           </span>
         </h1>
 
         <p className="animate-fade-up-d2 mt-6 mx-auto max-w-xl text-lg leading-relaxed text-muted-foreground">
-          Point your ASICs at Bitmern Solo. When you hit a block, the full
-          reward goes to your wallet — minus a flat 1% fee.
+          Connect your miner to Bitmern Solo and keep the entire block reward
+          to yourself. Just a flat 1% fee, no shared payouts, and no middlemen.
         </p>
 
         <div className="animate-fade-up-d3 mt-8 flex flex-wrap justify-center gap-3">

@@ -6,10 +6,10 @@ export function DashboardPreview() {
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            See what you get
+            Your mining dashboard
           </h2>
           <p className="mt-2 text-muted-foreground">
-            A full dashboard purpose-built for solo miners.
+            Everything you need to track performance, manage workers, and monitor earnings in one place.
           </p>
         </div>
 

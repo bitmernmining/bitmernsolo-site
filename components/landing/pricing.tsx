@@ -2,12 +2,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Check } from "lucide-react";
 
 const included = [
-  "Real-time hashrate monitoring with SSE",
-  "Email alerts for offline workers & payouts",
-  "Multi-coin support (5 coins)",
-  "VarDiff stratum with multiple ports",
-  "Mining profitability calculator",
-  "Earnings history & block explorer links",
+  "Live hashrate and worker monitoring",
+  "Email alerts for downtime and payouts",
+  "Support for five coins from one account",
+  "VarDiff stratum with multiple port options",
+  "Built-in mining profitability calculator",
+  "Full earnings history with explorer links",
 ];
 
 export function Pricing() {
@@ -15,10 +15,10 @@ export function Pricing() {
     <section id="pricing">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          Pricing
+          Simple, transparent pricing
         </h2>
         <p className="mt-2 text-muted-foreground">
-          One fee. No subscriptions, no tiers, no hidden costs.
+          One flat fee on block rewards. No subscriptions, no tiers, no surprises.
         </p>
 
         <div className="mt-12 flex flex-col items-center">
@@ -31,11 +31,11 @@ export function Pricing() {
                 <span className="text-gradient">%</span>
               </p>
               <p className="mt-2 text-sm text-muted-foreground">
-                vs. 2–3% at shared pools
+                compared to 2-3% at most shared pools
               </p>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground max-w-sm mx-auto">
-                When your miner solves a block, 99% of the block reward goes directly
-                to your wallet. No fee on transactions that don&apos;t find a block.
+                You keep 99% of every block you find. There are no charges while
+                you mine, only when a block reward is paid out.
               </p>
 
               <Button className="mt-6 glow" asChild>
@@ -49,7 +49,7 @@ export function Pricing() {
 
           {/* Included — 2-col grid below */}
           <div className="mt-10 w-full max-w-lg">
-            <h3 className="text-sm font-semibold mb-4">Included for every miner</h3>
+            <h3 className="text-sm font-semibold mb-4">Included with every account</h3>
             <div className="grid gap-3 sm:grid-cols-2">
               {included.map((item) => (
                 <div key={item} className="flex items-start gap-2 text-sm text-muted-foreground">

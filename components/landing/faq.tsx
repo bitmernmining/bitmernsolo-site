@@ -9,37 +9,37 @@ const faqs = [
   {
     question: "What is solo mining?",
     answer:
-      "Solo mining means your miner works independently to find a block. Unlike pooled mining (PPLNS, PPS) where rewards are split among all participants, solo mining gives you the entire block reward when you find one. The trade-off is higher variance — you may wait longer between blocks, but each payout is the full reward.",
+      "Solo mining means your hardware works independently to find a block. Unlike shared pools where rewards are split among all participants, solo mining pays the entire block reward to you when your miner finds one. The trade-off is higher variance. You may wait longer between blocks, but each payout is the full reward.",
   },
   {
     question: "What equipment do I need?",
     answer:
-      "You need an ASIC miner compatible with the algorithm of the coin you're mining. BTC, BCH, and DGB use SHA-256 ASICs (Antminer S19/S21, Whatsminer M50/M60). LTC and DOGE use Scrypt ASICs (Antminer L7/L9). GPUs are not competitive for these coins.",
+      "You need an ASIC miner that supports the algorithm of the coin you want to mine. Bitcoin, Bitcoin Cash, and DigiByte use SHA-256 machines like the Antminer S19 or S21. Litecoin and Dogecoin use Scrypt machines like the Antminer L7 or L9. GPU mining is not competitive for any of these coins.",
   },
   {
     question: "How do payouts work?",
     answer:
-      "When your miner solves a block, the block reward minus the 1% pool fee is sent directly to the wallet address you configured. There's no minimum payout threshold and no holding period — the reward arrives as soon as the network confirms the block.",
+      "When your miner solves a block, the reward (minus the 1% pool fee) is sent directly to the wallet address you set in your account. There is no minimum payout threshold and no holding period. The reward arrives as soon as the network confirms the block.",
   },
   {
-    question: "What's the pool fee?",
+    question: "What is the pool fee?",
     answer:
-      "1% flat on block rewards. If your miner finds a block worth 3.125 BTC, you receive ~3.09375 BTC. No fees are charged on failed attempts or while mining without finding a block.",
+      "A flat 1% on block rewards. For example, if your miner finds a Bitcoin block worth 3.125 BTC, you receive approximately 3.094 BTC. No fees are charged while you mine without finding a block.",
   },
   {
     question: "How do I connect my miner?",
     answer:
-      "Set your miner's stratum URL to the appropriate endpoint (e.g. stratum+tcp://btc.bitmernsolo.com:3102 for BTC). Use your wallet address as the username and 'x' as the password. Pick the port closest to your hashrate for optimal VarDiff. Our Getting Started guide covers it step by step.",
+      "Set your stratum URL to the endpoint for your coin (for example, stratum+tcp://btc.bitmernsolo.com:3102 for Bitcoin). Use your wallet address as the username and \"x\" as the password. Choose the port that best matches your hashrate for optimal difficulty. Our Getting Started guide walks through the full process.",
   },
   {
-    question: "Can I mine multiple coins?",
+    question: "Can I mine multiple coins at the same time?",
     answer:
-      "Yes — you can run different miners on different coins simultaneously. Each coin has its own stratum endpoint. Your dashboard shows all workers across all coins in one place.",
+      "Yes. You can run different miners on different coins simultaneously. Each coin has its own stratum endpoint, and your dashboard shows all of your workers and earnings across every coin in one place.",
   },
   {
-    question: "What happens when a worker goes offline?",
+    question: "What happens if a worker goes offline?",
     answer:
-      "If you have alerts enabled, you'll get an email notification when a worker disconnects. You can configure the offline detection threshold (how many minutes before alerting) in your alert settings. Your balance and earnings history are preserved regardless.",
+      "If you have alerts enabled, you will receive an email as soon as a worker disconnects. You can set how long to wait before being notified in your alert settings. Your balance and earnings history are always preserved regardless of worker status.",
   },
 ];
 
@@ -48,7 +48,7 @@ export function FAQ() {
     <section id="faq">
       <div className="mx-auto max-w-3xl px-4 py-20 sm:px-6 sm:py-24">
         <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-          FAQ
+          Frequently asked questions
         </h2>
 
         <Accordion type="single" collapsible className="mt-8">

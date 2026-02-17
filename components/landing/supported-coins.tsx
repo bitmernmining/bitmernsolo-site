@@ -51,7 +51,7 @@ export function SupportedCoins() {
           Supported coins
         </h2>
         <p className="mt-2 text-muted-foreground">
-          Dedicated stratum endpoints and VarDiff ports for each coin.
+          Each coin has its own stratum endpoint and a range of VarDiff ports to match your hardware.
         </p>
 
         <div className="mt-12 overflow-x-auto">

@@ -55,10 +55,10 @@ export async function Pools() {
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Live pools
+            Pool stats
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Real-time stats from our Miningcore backend. Updated every 60 seconds.
+            Live data pulled directly from our mining infrastructure, refreshed every 60 seconds.
           </p>
         </div>
 
