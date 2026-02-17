@@ -896,8 +896,9 @@ export function DashboardPreview() {
           {/* Click to explore — top center, overlapping border */}
           {!hasClicked && (
             <div className="absolute -top-4 left-1/2 z-10 -translate-x-1/2 animate-hint-pulse">
-              <div className="flex items-center gap-1 rounded-full border border-primary/30 bg-primary/15 px-3 py-1.5 text-xs font-medium text-primary shadow-lg backdrop-blur-sm">
-                Click to explore &rarr;
+              <div className="flex items-center gap-1.5 rounded-full border border-primary/40 bg-background px-3 py-1.5 text-xs font-medium text-primary shadow-lg">
+                Click to explore
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z" /><path strokeLinecap="round" strokeLinejoin="round" d="M13 13l6 6" /></svg>
               </div>
             </div>
           )}

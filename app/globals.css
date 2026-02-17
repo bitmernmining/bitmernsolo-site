@@ -290,13 +290,7 @@
 .animate-coin-5 { animation: coin-float 3s ease-in-out 1.6s infinite; }
 
 /* Hint pulse for dashboard preview explore indicator */
-@keyframes hint-pulse {
-  0%, 100% { opacity: 1; transform: translateX(0); }
-  50% { opacity: 0.7; transform: translateX(3px); }
-}
-
 .animate-hint-pulse {
-  animation: hint-pulse 1.5s ease-in-out infinite;
 }
 
 /* Custom scrollbar */
