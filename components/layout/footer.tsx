@@ -1,34 +1,34 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const linkColumns = {
   Product: [
     { label: "Features", href: "/#features" },
-    { label: "Supported Coins", href: "/#coins" },
-    { label: "Pool Stats", href: "/#pools" },
+    { label: "Pool Stats", href: "/pool-stats" },
     { label: "Pricing", href: "/#pricing" },
-    { label: "FAQ", href: "/#faq" },
+    { label: "FAQ", href: "/faq" },
   ],
-  Resources: [
+  Mining: [
     { label: "Getting Started", href: "/getting-started" },
-    { label: "Documentation", href: "https://app.bitmernsolo.com/docs" },
-    { label: "Calculator", href: "https://app.bitmernsolo.com/calculator" },
-    { label: "How It Works", href: "/#how-it-works" },
+    { label: "Recommended Miners", href: "/miners" },
+    { label: "Calculator", href: "https://app.bitmernsolo.com/calculator", external: true },
+    { label: "Shop", href: "https://shop.bitmernmining.com", external: true },
   ],
   Company: [
-    { label: "Contact", href: "mailto:support@bitmernsolo.com" },
-    { label: "Status", href: "https://app.bitmernsolo.com" },
+    { label: "About", href: "/about" },
+    { label: "Contact", href: "/contact" },
+    { label: "Hosting", href: "https://bitmernmining.com", external: true },
   ],
 };
 
-const coins = [
-  { symbol: "BTC", icon: "/coins/btc.svg" },
-  { symbol: "LTC", icon: "/coins/ltc.svg" },
-  { symbol: "DOGE", icon: "/coins/doge.svg" },
-  { symbol: "BCH", icon: "/coins/bch.svg" },
-  { symbol: "DGB", icon: "/coins/dgb.svg" },
+const coinLinks = [
+  { symbol: "BTC", icon: "/coins/btc.svg", href: "/coins/btc" },
+  { symbol: "LTC", icon: "/coins/ltc.svg", href: "/coins/ltc" },
+  { symbol: "DOGE", icon: "/coins/doge.svg", href: "/coins/doge" },
+  { symbol: "BCH", icon: "/coins/bch.svg", href: "/coins/bch" },
+  { symbol: "DGB", icon: "/coins/dgb.svg", href: "/coins/dgb" },
 ];
 
 export function Footer() {
@@ -53,17 +53,18 @@ export function Footer() {
               entire block reward. No shared payouts.
             </p>
 
-            {/* Coin icons */}
+            {/* Coin icons — now linked to coin pages */}
             <div className="mt-4 flex items-center gap-2">
-              {coins.map((c) => (
-                <Image
-                  key={c.symbol}
-                  src={c.icon}
-                  alt={c.symbol}
-                  width={20}
-                  height={20}
-                  className="h-5 w-5 opacity-60"
-                />
+              {coinLinks.map((c) => (
+                <Link key={c.symbol} href={c.href} title={c.symbol}>
+                  <Image
+                    src={c.icon}
+                    alt={c.symbol}
+                    width={20}
+                    height={20}
+                    className="h-5 w-5 opacity-60 transition-opacity hover:opacity-100"
+                  />
+                </Link>
               ))}
             </div>
 
@@ -92,25 +93,47 @@ export function Footer() {
                 </h3>
                 <ul className="space-y-2">
                   {links.map((link) => {
+                    const isExternal = "external" in link && link.external;
                     const isInternal =
                       link.href.startsWith("/") || link.href.startsWith("#");
-                    return (
-                      <li key={link.label}>
-                        {isInternal ? (
+
+                    if (isExternal) {
+                      return (
+                        <li key={link.label}>
+                          <a
+                            href={link.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                          >
+                            {link.label}
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </li>
+                      );
+                    }
+
+                    if (isInternal) {
+                      return (
+                        <li key={link.label}>
                           <Link
                             href={link.href}
                             className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                           >
                             {link.label}
                           </Link>
-                        ) : (
-                          <a
-                            href={link.href}
-                            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                          >
-                            {link.label}
-                          </a>
-                        )}
+                        </li>
+                      );
+                    }
+
+                    return (
+                      <li key={link.label}>
+                        <a
+                          href={link.href}
+                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        >
+                          {link.label}
+                        </a>
                       </li>
                     );
                   })}

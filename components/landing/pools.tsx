@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const HASH_UNITS = ["H/s", "KH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s"];
 
@@ -169,6 +171,16 @@ export async function Pools() {
               </div>
             );
           })}
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link
+            href="/pool-stats"
+            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+          >
+            View full pool stats
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
       </div>
     </section>

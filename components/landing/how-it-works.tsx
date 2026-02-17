@@ -1,4 +1,5 @@
-import { UserPlus, Cpu, BarChart3 } from "lucide-react";
+import Link from "next/link";
+import { UserPlus, Cpu, BarChart3, ArrowRight } from "lucide-react";
 
 export function HowItWorks() {
   return (
@@ -147,6 +148,16 @@ export function HowItWorks() {
               </div>
             </div>
           </div>
+        </div>
+
+        <div className="mt-8 text-center">
+          <Link
+            href="/how-it-works"
+            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+          >
+            Learn more about how it works
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
       </div>
     </section>

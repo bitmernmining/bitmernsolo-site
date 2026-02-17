@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -63,6 +65,16 @@ export function FAQ() {
             </AccordionItem>
           ))}
         </Accordion>
+
+        <div className="mt-8">
+          <Link
+            href="/faq"
+            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+          >
+            View all FAQs
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
     </section>
   );
