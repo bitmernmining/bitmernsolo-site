@@ -145,10 +145,11 @@
 
 /* Gradient text (white to gold) */
 .text-gradient {
-  background: linear-gradient(135deg, oklch(0.95 0 0) 0%, oklch(0.795 0.153 78) 100%);
+  background-image: linear-gradient(135deg, oklch(0.95 0 0) 0%, oklch(0.795 0.153 78) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
 /* Browser frame styles */
@@ -287,6 +288,16 @@
 .animate-coin-3 { animation: coin-float 3s ease-in-out 0.8s infinite; }
 .animate-coin-4 { animation: coin-float 3s ease-in-out 1.2s infinite; }
 .animate-coin-5 { animation: coin-float 3s ease-in-out 1.6s infinite; }
+
+/* Hint pulse for dashboard preview explore indicator */
+@keyframes hint-pulse {
+  0%, 100% { opacity: 1; transform: translateX(0); }
+  50% { opacity: 0.7; transform: translateX(3px); }
+}
+
+.animate-hint-pulse {
+  animation: hint-pulse 1.5s ease-in-out infinite;
+}
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {

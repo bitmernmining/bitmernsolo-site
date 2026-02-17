@@ -39,7 +39,7 @@ export function Features() {
         {/* Row 1 — Two hero feature cards */}
         <div className="grid gap-4 lg:grid-cols-2">
           {/* 5 coins */}
-          <div className="flex flex-col rounded-xl border border-border/40 bg-card/30 p-6 transition-colors hover:border-border/60">
+          <div className="flex flex-col rounded-xl border border-border/40 bg-card p-6 transition-colors hover:border-border/60">
             <h3 className="text-base font-semibold">Five coins, one account</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
               Mine Bitcoin, Litecoin, Dogecoin, Bitcoin Cash, or DigiByte. Switch
@@ -58,14 +58,14 @@ export function Features() {
                     height={24}
                     className="h-6 w-6"
                   />
-                  <span className="text-[10px] font-medium text-muted-foreground">{coin.symbol}</span>
+                  <span className="text-[11px] font-medium text-muted-foreground">{coin.symbol}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Live hashrate — animated morphing chart */}
-          <div className="rounded-xl border border-border/40 bg-card/30 p-6 transition-colors hover:border-border/60">
+          <div className="rounded-xl border border-border/40 bg-card p-6 transition-colors hover:border-border/60">
             <div className="flex items-start gap-4">
               <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-border/40 bg-background/50">
                 <BarChart3 className="h-4 w-4 text-primary" />
@@ -79,8 +79,8 @@ export function Features() {
             </div>
             <div className="mt-4 rounded-lg border border-border/40 bg-background/30 p-3">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] text-muted-foreground">24h Hashrate</span>
-                <span className="text-[10px] font-mono text-primary">142.8 TH/s</span>
+                <span className="text-[11px] text-muted-foreground">24h Hashrate</span>
+                <span className="text-[11px] font-mono text-primary">142.8 TH/s</span>
               </div>
               <svg viewBox="0 0 300 55" className="w-full" preserveAspectRatio="none">
                 <defs>
@@ -128,7 +128,7 @@ export function Features() {
         {/* Row 2 — Four uniform feature cards */}
         <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {/* Alerts — animated popping notifications */}
-          <div className="flex flex-col rounded-xl border border-border/40 bg-card/30 p-5 transition-colors hover:border-border/60">
+          <div className="flex flex-col rounded-xl border border-border/40 bg-card p-5 transition-colors hover:border-border/60">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Bell className="h-4 w-4 text-primary" />
             </div>
@@ -140,29 +140,29 @@ export function Features() {
               <div className="animate-notify-1 absolute inset-x-0 top-0 z-[3] rounded-md border border-red-500/30 bg-[oklch(0.16_0.01_20)] px-2.5 py-2 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
                 <div>
-                  <p className="text-[10px] font-medium">Worker Offline</p>
-                  <p className="text-[9px] text-muted-foreground">antminer-s19-03 &middot; just now</p>
+                  <p className="text-[11px] font-medium">Worker Offline</p>
+                  <p className="text-[10px] text-muted-foreground">antminer-s19-03 &middot; just now</p>
                 </div>
               </div>
               <div className="animate-notify-2 absolute inset-x-0 top-0 z-[2] rounded-md border border-yellow-500/30 bg-[oklch(0.16_0.01_85)] px-2.5 py-2 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-yellow-500 shrink-0" />
                 <div>
-                  <p className="text-[10px] font-medium">Hashrate Drop</p>
-                  <p className="text-[9px] text-muted-foreground">-15% in the last hour</p>
+                  <p className="text-[11px] font-medium">Hashrate Drop</p>
+                  <p className="text-[10px] text-muted-foreground">-15% in the last hour</p>
                 </div>
               </div>
               <div className="animate-notify-3 absolute inset-x-0 top-0 z-[1] rounded-md border border-green-500/30 bg-[oklch(0.16_0.01_150)] px-2.5 py-2 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-green-500 shrink-0" />
                 <div>
-                  <p className="text-[10px] font-medium">Payout Sent</p>
-                  <p className="text-[9px] text-muted-foreground">3.09 BTC → bc1q...m9f4</p>
+                  <p className="text-[11px] font-medium">Payout Sent</p>
+                  <p className="text-[10px] text-muted-foreground">3.09 BTC → bc1q...m9f4</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* VarDiff */}
-          <div className="flex flex-col rounded-xl border border-border/40 bg-card/30 p-5 transition-colors hover:border-border/60">
+          <div className="flex flex-col rounded-xl border border-border/40 bg-card p-5 transition-colors hover:border-border/60">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Gauge className="h-4 w-4 text-primary" />
             </div>
@@ -178,15 +178,15 @@ export function Features() {
                 { port: "3132", diff: "10k" },
               ].map((p) => (
                 <div key={p.port} className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5 text-center">
-                  <span className="text-[10px] font-mono text-muted-foreground">:{p.port}</span>
-                  <span className="ml-1 text-[9px] text-primary">{p.diff}</span>
+                  <span className="text-[11px] font-mono text-muted-foreground">:{p.port}</span>
+                  <span className="ml-1 text-[10px] text-primary">{p.diff}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Your keys — multiple wallets with coin indicators */}
-          <div className="flex flex-col rounded-xl border border-border/40 bg-card/30 p-5 transition-colors hover:border-border/60">
+          <div className="flex flex-col rounded-xl border border-border/40 bg-card p-5 transition-colors hover:border-border/60">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Lock className="h-4 w-4 text-primary" />
             </div>
@@ -204,7 +204,7 @@ export function Features() {
                     height={14}
                     className="h-3.5 w-3.5 shrink-0"
                   />
-                  <span className="font-mono text-[10px] text-muted-foreground flex-1 truncate">{w.addr}</span>
+                  <span className="font-mono text-[11px] text-muted-foreground flex-1 truncate">{w.addr}</span>
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500 shrink-0" />
                 </div>
               ))}
@@ -212,7 +212,7 @@ export function Features() {
           </div>
 
           {/* Miningcore */}
-          <div className="flex flex-col rounded-xl border border-border/40 bg-card/30 p-5 transition-colors hover:border-border/60">
+          <div className="flex flex-col rounded-xl border border-border/40 bg-card p-5 transition-colors hover:border-border/60">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-background/50 mb-3">
               <Cpu className="h-4 w-4 text-primary" />
             </div>
@@ -220,7 +220,7 @@ export function Features() {
             <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
               Powered by Miningcore with DDoS protection and redundant systems designed for continuous uptime.
             </p>
-            <div className="mt-auto pt-3 grid grid-cols-2 gap-1.5 text-[10px]">
+            <div className="mt-auto pt-3 grid grid-cols-2 gap-1.5 text-[11px]">
               {["99.9% uptime", "DDoS protected", "Live pool stats", "Open API"].map((item) => (
                 <div key={item} className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5 flex items-center gap-1.5">
                   <span className="h-1.5 w-1.5 rounded-full bg-green-500 shrink-0" />

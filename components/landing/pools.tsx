@@ -113,7 +113,7 @@ export async function Pools() {
             return (
               <div
                 key={pool.id}
-                className="rounded-xl border border-border/40 bg-card/30 p-5 transition-colors hover:border-border/60"
+                className="rounded-xl border border-border/40 bg-card p-5 transition-colors hover:border-border/60"
               >
                 {/* Coin header */}
                 <div className="flex items-center gap-3 mb-4">
@@ -128,13 +128,13 @@ export async function Pools() {
                   )}
                   <div>
                     <p className="text-sm font-semibold">{pool.coin.name}</p>
-                    <p className="text-[10px] text-muted-foreground font-mono">{pool.coin.algorithm}</p>
+                    <p className="text-[11px] text-muted-foreground font-mono">{pool.coin.algorithm}</p>
                   </div>
                 </div>
 
                 {/* Pool hashrate */}
                 <div className="mb-3">
-                  <p className="text-[10px] text-muted-foreground mb-0.5">Pool Hashrate</p>
+                  <p className="text-[11px] text-muted-foreground mb-0.5">Pool Hashrate</p>
                   <div className="flex items-baseline gap-1">
                     {isActive ? (
                       <>
@@ -150,20 +150,20 @@ export async function Pools() {
                 {/* Miners & Network */}
                 <div className="grid grid-cols-2 gap-2">
                   <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[9px] text-muted-foreground">Workers</p>
+                    <p className="text-[10px] text-muted-foreground">Workers</p>
                     <div className="flex items-center gap-1">
                       <span className={`h-1.5 w-1.5 rounded-full ${isActive ? "bg-green-500" : "bg-muted-foreground/30"}`} />
                       <span className="font-mono text-xs font-medium">{workers}</span>
                     </div>
                   </div>
                   <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[9px] text-muted-foreground">Network</p>
-                    <span className="font-mono text-[10px] text-muted-foreground">{netHr.value} {netHr.unit}</span>
+                    <p className="text-[10px] text-muted-foreground">Network</p>
+                    <span className="font-mono text-[11px] text-muted-foreground">{netHr.value} {netHr.unit}</span>
                   </div>
                 </div>
 
                 {/* Block height */}
-                <div className="mt-2 text-[10px] text-muted-foreground font-mono text-center">
+                <div className="mt-2 text-[11px] text-muted-foreground font-mono text-center">
                   Block #{pool.networkStats.blockHeight.toLocaleString()}
                 </div>
               </div>

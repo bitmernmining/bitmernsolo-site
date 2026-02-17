@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Pools", href: "#pools" },
   { label: "Coins", href: "#coins" },
   { label: "How It Works", href: "#how-it-works" },
+  { label: "Solo Chances", href: "#chances" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
