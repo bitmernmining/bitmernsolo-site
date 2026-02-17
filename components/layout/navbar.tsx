@@ -97,6 +97,10 @@ const mobileGroups: { label: string; links: NavLink[] }[] = [
 
 const topLevelLinks = [
   {
+    label: "Docs",
+    href: "/docs",
+  },
+  {
     label: "Shop",
     href: "https://shop.bitmernmining.com",
     external: true,
