@@ -10,13 +10,15 @@ const footerLinks = {
     { label: "FAQ", href: "#faq" },
   ],
   Resources: [
-    { label: "Getting Started", href: "https://app.bitmernsolo.com/getting-started" },
+    { label: "Getting Started", href: "/getting-started" },
     { label: "Documentation", href: "https://app.bitmernsolo.com/docs" },
     { label: "Calculator", href: "https://app.bitmernsolo.com/calculator" },
   ],
   Company: [
-    { label: "About", href: "#" },
     { label: "Contact", href: "mailto:support@bitmernsolo.com" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Service", href: "/terms" },
+    { label: "Cookie Policy", href: "/cookies" },
   ],
 };
 
@@ -46,12 +48,21 @@ export function Footer() {
               <ul className="space-y-2">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      {link.label}
-                    </a>
+                    {link.href.startsWith("/") ? (
+                      <Link
+                        href={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -66,12 +77,15 @@ export function Footer() {
             &copy; {new Date().getFullYear()} Bitmern Solo. All rights reserved.
           </p>
           <div className="flex gap-6">
-            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Terms of Service
-            </a>
+            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Terms
+            </Link>
+            <Link href="/cookies" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Cookies
+            </Link>
           </div>
         </div>
       </div>
