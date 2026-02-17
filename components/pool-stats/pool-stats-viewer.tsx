@@ -73,10 +73,12 @@ export function PoolStatsViewer({ pools }: Props) {
   return (
     <div className="space-y-6">
       {/* Coin switcher */}
-      <div className="flex items-center gap-1.5 rounded-lg border border-border/40 bg-card p-1.5">
+      <div role="tablist" aria-label="Select coin" className="flex items-center gap-1.5 rounded-lg border border-border/40 bg-card p-1.5">
         {pools.map((p, i) => (
           <button
             key={p.id}
+            role="tab"
+            aria-selected={i === selected}
             onClick={() => setSelected(i)}
             className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors flex-1 justify-center ${
               i === selected
@@ -92,7 +94,7 @@ export function PoolStatsViewer({ pools }: Props) {
       </div>
 
       {/* Chart + stats */}
-      <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
+      <div role="tabpanel" aria-label={`${pool.name} pool stats`} className="rounded-xl border border-border/40 bg-card overflow-hidden">
         {/* Chart header */}
         <div className="flex items-center justify-between border-b border-border/40 px-5 py-4">
           <div className="flex items-center gap-3">

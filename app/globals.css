@@ -15,7 +15,7 @@
   --secondary: oklch(0.22 0 0);
   --secondary-foreground: oklch(0.925 0 0);
   --muted: oklch(0.22 0 0);
-  --muted-foreground: oklch(0.556 0 0);
+  --muted-foreground: oklch(0.6 0 0);
   --accent: oklch(0.22 0 0);
   --accent-foreground: oklch(0.925 0 0);
   --destructive: oklch(0.577 0.245 27.325);
@@ -307,4 +307,14 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background: oklch(0.4 0 0);
+}
+
+/* Respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

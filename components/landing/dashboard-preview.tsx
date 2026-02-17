@@ -233,7 +233,7 @@ function DashboardView({ coin, onCoinChange }: { coin: Coin; onCoinChange: (c: C
               className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-medium transition-colors ${
                 coin === c.symbol
                   ? "bg-background shadow-sm border border-border/40"
-                  : "text-muted-foreground/50 hover:text-muted-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               {coin === c.symbol && (
@@ -979,7 +979,7 @@ export function DashboardPreview() {
                 <div className="flex-1 overflow-auto p-2 space-y-3">
                   {NAV_GROUPS.map((group) => (
                     <div key={group.label}>
-                      <p className="px-2 mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60">
+                      <p className="px-2 mb-1 text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
                         {group.label}
                       </p>
                       <div className="space-y-0.5">

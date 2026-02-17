@@ -185,10 +185,11 @@ export function SoloChancesClient({ networkData, prices }: SoloChancesClientProp
             <div className="rounded-xl border border-border/40 bg-card p-5">
               <p className="text-sm font-semibold mb-3">Your Hashrate</p>
               <div className="space-y-1.5">
-                <label className="text-xs text-muted-foreground">
+                <label htmlFor="hashrate-input" className="text-xs text-muted-foreground">
                   Hashrate ({coin.hashUnit})
                 </label>
                 <input
+                  id="hashrate-input"
                   type="number"
                   value={hashrate}
                   onChange={(e) => setHashrate(e.target.value)}

@@ -236,7 +236,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav — centered */}
-          <nav className="absolute left-1/2 -translate-x-1/2 hidden items-center gap-1 md:flex">
+          <nav aria-label="Main navigation" className="absolute left-1/2 -translate-x-1/2 hidden items-center gap-1 md:flex">
             {/* Mining dropdown trigger */}
             <div
               className="relative"
@@ -246,13 +246,15 @@ export function Navbar() {
               <button
                 ref={triggerRef}
                 onClick={() => setDropdownOpen((o) => !o)}
+                aria-expanded={dropdownOpen}
+                aria-haspopup="true"
                 className={`flex items-center gap-1 rounded-md px-3 py-1.5 text-sm transition-colors ${
                   dropdownOpen
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                <Pickaxe className="h-3.5 w-3.5" />
+                <Pickaxe className="h-3.5 w-3.5" aria-hidden="true" />
                 Mining
                 <ChevronDown
                   className={`h-3.5 w-3.5 transition-transform duration-200 ${
@@ -278,7 +280,8 @@ export function Navbar() {
                     className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {link.label}
-                    <ExternalLink className="h-3 w-3" />
+                    <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                    <span className="sr-only">(opens in new tab)</span>
                   </a>
                 );
               }
@@ -316,7 +319,8 @@ export function Navbar() {
           <button
             className="p-2 text-muted-foreground md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
+            aria-label={mobileOpen ? "Close menu" : "Open menu"}
+            aria-expanded={mobileOpen}
           >
             {mobileOpen ? (
               <X className="h-5 w-5" />
@@ -331,6 +335,7 @@ export function Navbar() {
           ref={dropdownRef}
           onMouseEnter={cancelClose}
           onMouseLeave={scheduleClose}
+          aria-hidden={!dropdownOpen}
           className={`absolute left-0 right-0 mx-auto max-w-5xl px-4 sm:px-6 transition-all duration-200 hidden md:block ${
             dropdownOpen
               ? "pointer-events-auto translate-y-0 opacity-100"
@@ -341,7 +346,7 @@ export function Navbar() {
             <div className="grid grid-cols-3 gap-8">
               {dropdownColumns.map((col) => (
                 <div key={col.heading}>
-                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                     {col.heading}
                   </h3>
                   <ul className="space-y-1.5">
@@ -360,10 +365,11 @@ export function Navbar() {
                             >
                               <span className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
                                 {link.label}
-                                <ExternalLink className="h-3 w-3" />
+                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                <span className="sr-only">(opens in new tab)</span>
                               </span>
                               {link.description && (
-                                <span className="text-xs text-muted-foreground/60">{link.description}</span>
+                                <span className="text-xs text-muted-foreground">{link.description}</span>
                               )}
                             </a>
                           </li>
@@ -389,7 +395,7 @@ export function Navbar() {
                             <div className="flex flex-col">
                               <span className="text-sm text-muted-foreground group-hover:text-foreground">{link.label}</span>
                               {link.description && (
-                                <span className="text-xs text-muted-foreground/60">{link.description}</span>
+                                <span className="text-xs text-muted-foreground">{link.description}</span>
                               )}
                             </div>
                           </Link>
@@ -431,7 +437,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile links */}
-        <nav className="flex-1 overflow-y-auto px-6 py-4">
+        <nav aria-label="Mobile navigation" className="flex-1 overflow-y-auto px-6 py-4">
           {/* Accordion groups */}
           {mobileGroups.map((group) => {
             const isExpanded = mobileExpanded === group.label;
@@ -441,6 +447,7 @@ export function Navbar() {
                   onClick={() =>
                     setMobileExpanded(isExpanded ? null : group.label)
                   }
+                  aria-expanded={isExpanded}
                   className="flex w-full items-center justify-between py-4 text-left"
                 >
                   <span className="text-base font-medium">{group.label}</span>
@@ -452,7 +459,7 @@ export function Navbar() {
                 </button>
                 <div
                   className={`overflow-hidden transition-all duration-200 ${
-                    isExpanded ? "max-h-96 pb-3" : "max-h-0"
+                    isExpanded ? "max-h-96 pb-3" : "max-h-0 invisible"
                   }`}
                 >
                   <div className="space-y-1 pl-2">
@@ -482,10 +489,11 @@ export function Navbar() {
                             <div className="flex flex-col">
                               <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
                                 {link.label}
-                                <ExternalLink className="h-3 w-3" />
+                                <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                                <span className="sr-only">(opens in new tab)</span>
                               </span>
                               {link.description && (
-                                <span className="text-xs text-muted-foreground/60">{link.description}</span>
+                                <span className="text-xs text-muted-foreground">{link.description}</span>
                               )}
                             </div>
                           </a>
@@ -511,7 +519,7 @@ export function Navbar() {
                           <div className="flex flex-col">
                             <span className="text-sm text-muted-foreground">{link.label}</span>
                             {link.description && (
-                              <span className="text-xs text-muted-foreground/60">{link.description}</span>
+                              <span className="text-xs text-muted-foreground">{link.description}</span>
                             )}
                           </div>
                         </Link>
@@ -536,7 +544,8 @@ export function Navbar() {
                   className="flex items-center gap-2 border-b border-border/20 py-4 text-base font-medium"
                 >
                   {link.label}
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" />
+                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+                  <span className="sr-only">(opens in new tab)</span>
                 </a>
               );
             }

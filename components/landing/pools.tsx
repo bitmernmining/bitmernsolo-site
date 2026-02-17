@@ -144,7 +144,7 @@ export async function Pools() {
                         <span className="text-[10px] text-muted-foreground">{hr.unit}</span>
                       </>
                     ) : (
-                      <span className="font-mono text-lg leading-none text-muted-foreground/50">—</span>
+                      <span className="font-mono text-lg leading-none text-muted-foreground">—</span>
                     )}
                   </div>
                 </div>

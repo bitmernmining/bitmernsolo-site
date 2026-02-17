@@ -33,7 +33,7 @@ const coinLinks = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/40">
+    <footer aria-label="Site footer" className="border-t border-border/40">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-12">
         {/* Top section */}
         <div className="grid gap-10 lg:grid-cols-[1.2fr_1fr]">
@@ -88,7 +88,7 @@ export function Footer() {
           <div className="grid grid-cols-3 gap-6">
             {Object.entries(linkColumns).map(([heading, links]) => (
               <div key={heading}>
-                <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
+                <h3 className="mb-2.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {heading}
                 </h3>
                 <ul className="space-y-2">
@@ -107,7 +107,8 @@ export function Footer() {
                             className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
                           >
                             {link.label}
-                            <ExternalLink className="h-3 w-3" />
+                            <ExternalLink className="h-3 w-3" aria-hidden="true" />
+                            <span className="sr-only">(opens in new tab)</span>
                           </a>
                         </li>
                       );

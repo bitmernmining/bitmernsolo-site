@@ -110,7 +110,7 @@ export function Hero() {
                   {/* Nav groups */}
                   <div className="flex-1 p-2 space-y-2.5">
                     <div>
-                      <p className="px-1.5 mb-0.5 text-[8px] font-medium uppercase tracking-wider text-muted-foreground/60">Mining</p>
+                      <p className="px-1.5 mb-0.5 text-[8px] font-medium uppercase tracking-wider text-muted-foreground">Mining</p>
                       <div className="space-y-0.5">
                         {[
                           { label: "Dashboard", icon: ICON.dashboard, active: true },
@@ -126,14 +126,14 @@ export function Hero() {
                       </div>
                     </div>
                     <div>
-                      <p className="px-1.5 mb-0.5 text-[8px] font-medium uppercase tracking-wider text-muted-foreground/60">Pool</p>
+                      <p className="px-1.5 mb-0.5 text-[8px] font-medium uppercase tracking-wider text-muted-foreground">Pool</p>
                       <div className="flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[10px] text-muted-foreground">
                         <I d={ICON.barChart} className="h-3 w-3" />
                         Pool Stats
                       </div>
                     </div>
                     <div>
-                      <p className="px-1.5 mb-0.5 text-[8px] font-medium uppercase tracking-wider text-muted-foreground/60">Account</p>
+                      <p className="px-1.5 mb-0.5 text-[8px] font-medium uppercase tracking-wider text-muted-foreground">Account</p>
                       <div className="flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[10px] text-muted-foreground">
                         <I d={ICON.bell} className="h-3 w-3" />
                         Alerts
@@ -167,7 +167,7 @@ export function Hero() {
                         <Image src="/coins/btc.svg" alt="BTC" width={10} height={10} className="rounded-full" />BTC
                       </span>
                       {["BCH", "LTC", "DOGE", "DGB"].map((c) => (
-                        <span key={c} className="px-1 py-0.5 text-[8px] text-muted-foreground/50">{c}</span>
+                        <span key={c} className="px-1 py-0.5 text-[8px] text-muted-foreground">{c}</span>
                       ))}
                     </div>
                     <div className="h-2.5 w-px bg-border hidden sm:block" />
@@ -185,7 +185,7 @@ export function Hero() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-0.5">
                           <p className="text-[8px] text-muted-foreground">Your Hashrate</p>
-                          <span className="flex items-center gap-0.5">
+                          <span className="flex items-center gap-0.5" aria-hidden="true">
                             <span className="relative flex h-1 w-1">
                               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
                               <span className="relative inline-flex h-1 w-1 rounded-full bg-primary" />
@@ -265,7 +265,7 @@ export function Hero() {
                       </div>
                     </div>
                     <div className="p-2.5">
-                      <svg viewBox="0 0 500 90" className="w-full" preserveAspectRatio="none">
+                      <svg viewBox="0 0 500 90" className="w-full" preserveAspectRatio="none" role="img" aria-label="24-hour hashrate trend chart">
                         <defs>
                           <linearGradient id="hcGrad" x1="0" y1="0" x2="0" y2="1">
                             <stop offset="0%" stopColor="oklch(0.795 0.153 78)" stopOpacity="0.25" />

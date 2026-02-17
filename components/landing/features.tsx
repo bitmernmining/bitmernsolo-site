@@ -82,7 +82,7 @@ export function Features() {
                 <span className="text-[11px] text-muted-foreground">24h Hashrate</span>
                 <span className="text-[11px] font-mono text-primary">142.8 TH/s</span>
               </div>
-              <svg viewBox="0 0 300 55" className="w-full" preserveAspectRatio="none">
+              <svg viewBox="0 0 300 55" className="w-full" preserveAspectRatio="none" role="img" aria-label="Real-time hashrate monitoring chart">
                 <defs>
                   <linearGradient id="fSparkGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="oklch(0.795 0.153 78)" stopOpacity="0.25" />
@@ -136,7 +136,7 @@ export function Features() {
             <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
               Get notified by email when a worker goes offline, your hashrate drops, or a payout is sent.
             </p>
-            <div className="mt-auto pt-3 relative h-[40px]">
+            <div className="mt-auto pt-3 relative h-[40px]" aria-hidden="true">
               <div className="animate-notify-1 absolute inset-x-0 top-0 z-[3] rounded-md border border-red-500/30 bg-[oklch(0.16_0.01_20)] px-2.5 py-2 flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-red-500 shrink-0" />
                 <div>

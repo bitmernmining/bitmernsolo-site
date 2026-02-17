@@ -127,7 +127,7 @@ export function HowItWorks() {
               </div>
               {/* Mini chart */}
               <div className="rounded-md border border-border/40 bg-background/30 p-2">
-                <svg viewBox="0 0 200 35" className="w-full" preserveAspectRatio="none">
+                <svg viewBox="0 0 200 35" className="w-full" preserveAspectRatio="none" aria-hidden="true">
                   <defs>
                     <linearGradient id="hiwGrad" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="0%" stopColor="oklch(0.795 0.153 78)" stopOpacity="0.2" />
