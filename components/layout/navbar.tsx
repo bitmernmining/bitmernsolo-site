@@ -11,7 +11,7 @@ const navLinks = [
   { label: "Pools", href: "#pools" },
   { label: "How It Works", href: "#how-it-works" },
   { label: "Pricing", href: "#pricing" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Getting Started", href: "/getting-started" },
 ];
 
 export function Navbar() {
@@ -91,24 +91,28 @@ export function Navbar() {
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-6 md:flex">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className={`relative py-1 text-sm transition-colors ${
-                  activeSection === link.href
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {link.label}
-                <span
-                  className={`absolute -bottom-1 left-0 h-0.5 rounded-full bg-primary transition-all duration-300 ${
-                    activeSection === link.href ? "w-full" : "w-0"
+            {navLinks.map((link) => {
+              const isRoute = link.href.startsWith("/");
+              const Tag = isRoute ? Link : "a";
+              return (
+                <Tag
+                  key={link.href}
+                  href={link.href}
+                  className={`relative py-1 text-sm transition-colors ${
+                    activeSection === link.href
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
-                />
-              </a>
-            ))}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute -bottom-1 left-0 h-0.5 rounded-full bg-primary transition-all duration-300 ${
+                      activeSection === link.href ? "w-full" : "w-0"
+                    }`}
+                  />
+                </Tag>
+              );
+            })}
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
@@ -164,20 +168,24 @@ export function Navbar() {
 
         {/* Links centered in remaining space */}
         <nav className="flex flex-1 flex-col items-center justify-center gap-6">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileOpen(false)}
-              className={`text-lg font-medium transition-colors ${
-                activeSection === link.href
-                  ? "text-foreground"
-                  : "text-muted-foreground"
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const isRoute = link.href.startsWith("/");
+            const Tag = isRoute ? Link : "a";
+            return (
+              <Tag
+                key={link.href}
+                href={link.href}
+                onClick={() => setMobileOpen(false)}
+                className={`text-lg font-medium transition-colors ${
+                  activeSection === link.href
+                    ? "text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                {link.label}
+              </Tag>
+            );
+          })}
         </nav>
 
         {/* CTAs at bottom */}
