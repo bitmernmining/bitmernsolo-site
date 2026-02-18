@@ -4,6 +4,8 @@ import { DashboardPreview } from "@/components/landing/dashboard-preview";
 import { Pools } from "@/components/landing/pools";
 import { SupportedCoins } from "@/components/landing/supported-coins";
 import { HowItWorks } from "@/components/landing/how-it-works";
+import { RecommendedMiners } from "@/components/landing/recommended-miners";
+import { Hosting } from "@/components/landing/hosting";
 import { Pricing } from "@/components/landing/pricing";
 import { SoloChances } from "@/components/landing/solo-chances";
 import { FAQ } from "@/components/landing/faq";
@@ -19,6 +21,8 @@ export default function HomePage() {
       <DashboardPreview />
       <HowItWorks />
       <SupportedCoins />
+      <RecommendedMiners />
+      <Hosting />
       <SoloChances />
       <Pricing />
       <FAQ />

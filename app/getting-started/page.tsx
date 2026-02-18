@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { STRATUM, WALLETS, type CoinSymbol } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Getting Started — Bitmern Solo",
@@ -42,112 +43,6 @@ const STEPS = [
     title: "Start mining",
     description:
       "Once connected, your hashrate, workers, and stats show up in your dashboard in real time. That's it — you're solo mining.",
-  },
-];
-
-const WALLETS: Record<string, { coin: string; wallets: { name: string; type: string; url: string; note: string }[] }> = {
-  BTC: {
-    coin: "Bitcoin",
-    wallets: [
-      { name: "Electrum", type: "Desktop", url: "https://electrum.org", note: "Lightweight, battle-tested" },
-      { name: "Sparrow Wallet", type: "Desktop", url: "https://sparrowwallet.com", note: "Privacy-focused, full-featured" },
-      { name: "Ledger / Trezor / Coldcard", type: "Hardware", url: "", note: "Best security for large holdings" },
-    ],
-  },
-  LTC: {
-    coin: "Litecoin",
-    wallets: [
-      { name: "Litecoin Core", type: "Desktop", url: "https://litecoin.org", note: "Official full-node wallet" },
-      { name: "Electrum-LTC", type: "Desktop", url: "https://electrum-ltc.org", note: "Lightweight SPV wallet" },
-      { name: "Ledger / Trezor", type: "Hardware", url: "", note: "With LTC app installed" },
-    ],
-  },
-  DOGE: {
-    coin: "Dogecoin",
-    wallets: [
-      { name: "Dogecoin Core", type: "Desktop", url: "https://dogecoin.com", note: "Official full-node wallet" },
-      { name: "MultiDoge", type: "Desktop", url: "https://multidoge.org", note: "Lightweight client" },
-      { name: "Ledger / Trezor", type: "Hardware", url: "", note: "With DOGE app installed" },
-    ],
-  },
-  BCH: {
-    coin: "Bitcoin Cash",
-    wallets: [
-      { name: "Electron Cash", type: "Desktop", url: "https://electroncash.org", note: "Lightweight SPV wallet" },
-      { name: "Bitcoin Cash Node", type: "Desktop", url: "https://bitcoincash.org/wallets", note: "Official full-node wallet" },
-      { name: "Ledger / Trezor", type: "Hardware", url: "", note: "With BCH app installed" },
-    ],
-  },
-  DGB: {
-    coin: "DigiByte",
-    wallets: [
-      { name: "DigiByte Core", type: "Desktop", url: "https://digibyte.org/#download", note: "Official full-node wallet" },
-      { name: "DigiWallet", type: "Mobile", url: "https://digibyte.org/#download", note: "iOS and Android" },
-      { name: "Ledger / Trezor", type: "Hardware", url: "", note: "With DGB app installed" },
-    ],
-  },
-};
-
-const STRATUM = [
-  {
-    coin: "BTC",
-    name: "Bitcoin",
-    icon: "/coins/btc.svg",
-    algo: "SHA-256d",
-    host: "stratum+tcp://btc.bitmernsolo.com",
-    ports: [
-      { port: 3102, diff: "25k", label: "Default — works with any SHA-256 ASIC" },
-      { port: 3112, diff: "20k", label: "Slightly lower start difficulty" },
-      { port: 3122, diff: "15k", label: "For smaller/older ASICs" },
-      { port: 3132, diff: "10k", label: "Lowest — entry-level hardware" },
-    ],
-  },
-  {
-    coin: "LTC",
-    name: "Litecoin",
-    icon: "/coins/ltc.svg",
-    algo: "Scrypt",
-    host: "stratum+tcp://ltc.bitmernsolo.com",
-    ports: [
-      { port: 3032, diff: "25k", label: "Default — works with any Scrypt ASIC" },
-      { port: 3042, diff: "10k", label: "For smaller ASICs" },
-      { port: 3052, diff: "1k", label: "Lowest — entry-level / GPU" },
-    ],
-  },
-  {
-    coin: "DOGE",
-    name: "Dogecoin",
-    icon: "/coins/doge.svg",
-    algo: "Scrypt",
-    host: "stratum+tcp://doge.bitmernsolo.com",
-    ports: [
-      { port: 3062, diff: "25k", label: "Default — works with any Scrypt ASIC" },
-      { port: 3072, diff: "10k", label: "For smaller ASICs" },
-    ],
-  },
-  {
-    coin: "BCH",
-    name: "Bitcoin Cash",
-    icon: "/coins/bch.svg",
-    algo: "SHA-256d",
-    host: "stratum+tcp://bch.bitmernsolo.com",
-    ports: [
-      { port: 13103, diff: "500k", label: "Default — high-throughput SHA-256 ASICs" },
-      { port: 13113, diff: "100k", label: "For mid-range ASICs" },
-      { port: 13123, diff: "10k", label: "For smaller/older hardware" },
-    ],
-  },
-  {
-    coin: "DGB",
-    name: "DigiByte",
-    icon: "/coins/dgb.svg",
-    algo: "SHA-256d",
-    host: "stratum+tcp://dgb.bitmernsolo.com",
-    ports: [
-      { port: 4032, diff: "500k", label: "Default — works with any SHA-256 ASIC" },
-      { port: 4042, diff: "100k", label: "For mid-range ASICs" },
-      { port: 4052, diff: "10k", label: "For smaller/older hardware" },
-    ],
   },
 ];
 
@@ -257,7 +152,7 @@ export default function GettingStartedPage() {
         </div>
       </div>
 
-      {/* ── Wallet recommendations ── */}
+      {/* ── Wallet recommendations (from shared data) ── */}
       <div className="space-y-6 mb-16">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
@@ -270,7 +165,7 @@ export default function GettingStartedPage() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {Object.entries(WALLETS).map(([symbol, { coin, wallets }]) => (
+          {(Object.entries(WALLETS) as [CoinSymbol, typeof WALLETS[CoinSymbol]][]).map(([symbol, { coin, wallets }]) => (
             <div
               key={symbol}
               className="rounded-xl border border-border/40 bg-card p-4"
@@ -313,7 +208,7 @@ export default function GettingStartedPage() {
         </div>
       </div>
 
-      {/* ── Stratum endpoints ── */}
+      {/* ── Stratum endpoints (from shared data) ── */}
       <div className="space-y-6 mb-16">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
