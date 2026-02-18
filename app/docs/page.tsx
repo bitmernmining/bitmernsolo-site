@@ -14,14 +14,14 @@ export const metadata: Metadata = {
 
 /* ── Static data ── */
 
-const API_BASE = "https://api.bitmernsolo.com";
+const API_BASE = "http://api.bitmernsolo.com";
 
 const POOL_IDS = [
-  { coin: "Bitcoin", id: "btc" },
-  { coin: "Litecoin", id: "ltc" },
-  { coin: "Dogecoin", id: "doge" },
-  { coin: "Bitcoin Cash", id: "bch" },
-  { coin: "DigiByte", id: "dgb" },
+  { coin: "Bitcoin", id: "bitcoin-solo" },
+  { coin: "Litecoin", id: "litecoin-solo" },
+  { coin: "Dogecoin", id: "dogecoin-solo" },
+  { coin: "Bitcoin Cash", id: "bitcoincash-solo" },
+  { coin: "DigiByte", id: "digibyte-solo" },
 ];
 
 const API_ENDPOINTS = [
@@ -30,40 +30,64 @@ const API_ENDPOINTS = [
     path: "/api/pools",
     description: "List all available pools with basic configuration.",
     example: `curl ${API_BASE}/api/pools`,
-    response: `[
-  {
-    "id": "btc",
-    "coin": { "type": "BTC", "name": "Bitcoin", "algorithm": "SHA256d" },
-    "ports": { ... },
-    "paymentProcessing": { ... },
-    "poolStats": { "connectedMiners": 12, "poolHashrate": 845000000000000 },
-    "networkStats": { ... }
-  },
-  ...
-]`,
+    response: `{
+  "pools": [
+    {
+      "id": "bitcoin-solo",
+      "coin": {
+        "type": "BTC",
+        "name": "Bitcoin",
+        "symbol": "BTC",
+        "algorithm": "Sha256D"
+      },
+      "ports": { ... },
+      "paymentProcessing": { "enabled": true, "minimumPayment": 0.001, "payoutScheme": "SOLO" },
+      "poolStats": { "connectedMiners": 2, "poolHashrate": 258956978573803.5, "sharesPerSecond": 0.115 },
+      "networkStats": { ... },
+      "totalPaid": 0,
+      "totalBlocks": 0
+    },
+    ...
+  ]
+}`,
   },
   {
     method: "GET",
     path: "/api/pools/{id}",
     description:
       "Detailed stats for a specific pool — hashrate, connected miners, network difficulty, and available ports.",
-    example: `curl ${API_BASE}/api/pools/btc`,
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo`,
     response: `{
-  "id": "btc",
-  "coin": { "type": "BTC", "name": "Bitcoin", "algorithm": "SHA256d" },
-  "ports": {
-    "3102": { "difficulty": 25000, "varDiff": { "minDiff": 25000, "maxDiff": 1000000 } }
-  },
-  "poolStats": {
-    "connectedMiners": 12,
-    "poolHashrate": 845000000000000,
-    "sharesPerSecond": 0.42
-  },
-  "networkStats": {
-    "networkHashrate": 8.5e20,
-    "networkDifficulty": 1.13e14,
-    "blockHeight": 892341,
-    "lastNetworkBlockTime": "2025-03-15T12:34:56Z"
+  "pool": {
+    "id": "bitcoin-solo",
+    "coin": {
+      "type": "BTC",
+      "name": "Bitcoin",
+      "symbol": "BTC",
+      "algorithm": "Sha256D"
+    },
+    "ports": {
+      "3102": {
+        "difficulty": 25000,
+        "varDiff": { "minDiff": 10000, "maxDelta": 1000, "targetTime": 15, "retargetTime": 90 }
+      }
+    },
+    "poolStats": {
+      "connectedMiners": 2,
+      "poolHashrate": 258956978573803.5,
+      "sharesPerSecond": 0.115
+    },
+    "networkStats": {
+      "networkType": "Main",
+      "networkHashrate": 8.82e+20,
+      "networkDifficulty": 125864590119494.27,
+      "lastNetworkBlockTime": "2026-02-18T07:42:27Z",
+      "blockHeight": 937195,
+      "connectedPeers": 10,
+      "rewardType": "POW"
+    },
+    "totalPaid": 0,
+    "totalBlocks": 0
   }
 }`,
   },
@@ -71,13 +95,16 @@ const API_ENDPOINTS = [
     method: "GET",
     path: "/api/pools/{id}/performance",
     description: "Pool-level hashrate history. Returns hourly samples.",
-    example: `curl ${API_BASE}/api/pools/btc/performance`,
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo/performance`,
     response: `{
   "stats": [
     {
-      "created": "2025-03-15T12:00:00Z",
-      "poolHashrate": 845000000000000,
-      "connectedMiners": 12
+      "poolHashrate": 245248104708080.78,
+      "connectedMiners": 2,
+      "validSharesPerSecond": 0,
+      "networkHashrate": 9.97e+20,
+      "networkDifficulty": 125864590119494.11,
+      "created": "2026-02-17T08:00:00Z"
     },
     ...
   ]
@@ -86,17 +113,18 @@ const API_ENDPOINTS = [
   {
     method: "GET",
     path: "/api/pools/{id}/blocks",
-    description: "Blocks found by the pool, newest first.",
-    example: `curl ${API_BASE}/api/pools/btc/blocks`,
+    description: "Blocks found by the pool, newest first. Returns an empty array if no blocks found yet.",
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo/blocks`,
     response: `[
   {
-    "blockHeight": 892340,
+    "blockHeight": 937100,
     "status": "confirmed",
     "confirmationProgress": 1.0,
     "effort": 0.85,
     "reward": 3.125,
     "miner": "bc1q...",
-    "created": "2025-03-15T10:22:00Z"
+    "created": "2026-02-15T10:22:00Z",
+    "hash": "00000000000000000002..."
   },
   ...
 ]`,
@@ -105,53 +133,62 @@ const API_ENDPOINTS = [
     method: "GET",
     path: "/api/pools/{id}/miners/{address}",
     description:
-      "Stats for a specific miner — pending balance, effort, and per-worker performance snapshot.",
-    example: `curl ${API_BASE}/api/pools/btc/miners/bc1qexample...`,
+      "Stats for a specific miner — pending shares, balance, effort, per-worker performance snapshot, and hourly performance samples.",
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo/miners/bc1qexample...`,
     response: `{
-  "pendingShares": 128,
-  "pendingBalance": 0.0,
-  "totalPaid": 6.1875,
-  "todayPaid": 0.0,
-  "lastPayment": "2025-03-10T08:15:00Z",
+  "pendingShares": 8563687424,
+  "pendingBalance": 0,
+  "totalPaid": 0,
+  "todayPaid": 0,
+  "minerEffort": 0,
   "performance": {
+    "created": "2026-02-18T07:42:32Z",
     "workers": {
-      "worker1": { "hashrate": 234000000000000, "sharesPerSecond": 0.12 }
+      "worker1": { "hashrate": 108836990994786.98, "sharesPerSecond": 0.048 }
     }
   },
-  "performanceSamples": [ ... ]
+  "performanceSamples": [
+    {
+      "created": "2026-02-17T07:00:00Z",
+      "workers": {
+        "worker1": { "hashrate": 103436841441597.45, "sharesPerSecond": 0.046 }
+      }
+    },
+    ...
+  ],
+  "totalConfirmedBlocks": 0,
+  "totalPendingBlocks": 0
 }`,
   },
   {
     method: "GET",
     path: "/api/pools/{id}/miners/{address}/performance",
     description:
-      "Miner hashrate history with per-worker breakdown. Hourly samples.",
-    example: `curl ${API_BASE}/api/pools/btc/miners/bc1qexample.../performance`,
-    response: `{
-  "stats": [
-    {
-      "created": "2025-03-15T12:00:00Z",
-      "workers": {
-        "worker1": { "hashrate": 234000000000000, "sharesPerSecond": 0.12 },
-        "worker2": { "hashrate": 120000000000000, "sharesPerSecond": 0.06 }
-      }
-    },
-    ...
-  ]
-}`,
+      "Miner hashrate history with per-worker breakdown. Hourly samples returned as an array.",
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo/miners/bc1qexample.../performance`,
+    response: `[
+  {
+    "created": "2026-02-17T07:00:00Z",
+    "workers": {
+      "worker1": { "hashrate": 103436841441597.45, "sharesPerSecond": 0.046 },
+      "worker2": { "hashrate": 120000000000000, "sharesPerSecond": 0.053 }
+    }
+  },
+  ...
+]`,
   },
   {
     method: "GET",
     path: "/api/pools/{id}/miners/{address}/payments",
-    description: "Payment history for a miner address.",
-    example: `curl ${API_BASE}/api/pools/btc/miners/bc1qexample.../payments`,
+    description: "Payment history for a miner address. Returns an empty array if no payments yet.",
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo/miners/bc1qexample.../payments`,
     response: `[
   {
     "coin": "BTC",
     "address": "bc1q...",
     "amount": 3.09375,
     "transactionConfirmationData": "txid...",
-    "created": "2025-03-10T08:15:00Z"
+    "created": "2026-02-10T08:15:00Z"
   },
   ...
 ]`,
@@ -159,10 +196,10 @@ const API_ENDPOINTS = [
   {
     method: "GET",
     path: "/api/pools/{id}/miners/{address}/earnings/daily",
-    description: "Daily earnings breakdown for a miner address.",
-    example: `curl ${API_BASE}/api/pools/btc/miners/bc1qexample.../earnings/daily`,
+    description: "Daily earnings breakdown for a miner address. Returns an empty array if no earnings yet.",
+    example: `curl ${API_BASE}/api/pools/bitcoin-solo/miners/bc1qexample.../earnings/daily`,
     response: `[
-  { "date": "2025-03-15", "amount": 0.0, "status": "pending" },
+  { "date": "2026-02-17", "amount": 0.0, "status": "pending" },
   ...
 ]`,
   },
@@ -360,11 +397,41 @@ bc1q...abc.bitaxe`}</CodeBlock>
 
               <div className="rounded-lg border border-border/40 p-5">
                 <h3 className="text-sm font-semibold mb-2">Dashboard visibility</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">
                   Each worker appears as a separate row in your Miners page with its own hashrate, shares per second, and online/offline status.
                   Click into any worker to see its 24-hour hashrate chart and connection details.
                   Workers are automatically detected when they connect — no manual registration required.
                 </p>
+                <div className="space-y-4">
+                  <figure>
+                    <div className="overflow-hidden rounded-lg border border-border/40">
+                      <Image
+                        src="/docs/workers-table.png"
+                        alt="Bitmern miners page showing a table of 8 workers, each with name, online status, current hashrate, 24-hour average, reject rate, and last share time"
+                        width={1567}
+                        height={620}
+                        className="w-full"
+                      />
+                    </div>
+                    <figcaption className="mt-2 text-center text-xs text-muted-foreground">
+                      The Miners page lists every connected worker with live stats.
+                    </figcaption>
+                  </figure>
+                  <figure>
+                    <div className="overflow-hidden rounded-lg border border-border/40">
+                      <Image
+                        src="/docs/worker-detail.png"
+                        alt="Worker detail view for s9vbos showing current hashrate of 10.82 TH/s, 1h and 24h averages, shares per second, last share time, and a 24-hour hashrate area chart"
+                        width={1373}
+                        height={920}
+                        className="w-full"
+                      />
+                    </div>
+                    <figcaption className="mt-2 text-center text-xs text-muted-foreground">
+                      Click into any worker to see its 24-hour hashrate chart and detailed stats.
+                    </figcaption>
+                  </figure>
+                </div>
               </div>
             </div>
           </section>
