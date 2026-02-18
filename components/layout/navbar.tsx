@@ -44,7 +44,7 @@ const dropdownColumns: { heading: string; links: NavLink[] }[] = [
       { label: "Pool Stats", href: "/pool-stats", description: "Live hashrate & network data" },
       { label: "How It Works", href: "/how-it-works", description: "Solo mining explained" },
       { label: "FAQ", href: "/faq", description: "Common questions answered" },
-      { label: "Pricing", href: "/#pricing", description: "Simple 1% fee on blocks" },
+      { label: "Pricing", href: "/pricing", description: "Simple 1% fee on blocks" },
     ],
   },
   {
@@ -80,7 +80,7 @@ const mobileGroups: { label: string; links: NavLink[] }[] = [
       { label: "Pool Stats", href: "/pool-stats", description: "Live hashrate & network data" },
       { label: "How It Works", href: "/how-it-works", description: "Solo mining explained" },
       { label: "FAQ", href: "/faq", description: "Common questions answered" },
-      { label: "Pricing", href: "/#pricing", description: "Simple 1% fee on blocks" },
+      { label: "Pricing", href: "/pricing", description: "Simple 1% fee on blocks" },
     ],
   },
   {

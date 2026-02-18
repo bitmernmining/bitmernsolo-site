@@ -7,7 +7,7 @@ const linkColumns = {
   Product: [
     { label: "Features", href: "/#features" },
     { label: "Pool Stats", href: "/pool-stats" },
-    { label: "Pricing", href: "/#pricing" },
+    { label: "Pricing", href: "/pricing" },
     { label: "FAQ", href: "/faq" },
   ],
   Mining: [
