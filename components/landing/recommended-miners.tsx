@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ExternalLink, Cpu, Zap, Home } from "lucide-react";
+import { ArrowRight, Cpu, Zap, Home } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const tiers = [
@@ -85,14 +85,10 @@ export function RecommendedMiners() {
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" asChild>
-                  <a
-                    href="https://shop.bitmernmining.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Link href="/shop">
                     Shop Hardware
-                    <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
-                  </a>
+                    <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                  </Link>
                 </Button>
               </div>
             </div>

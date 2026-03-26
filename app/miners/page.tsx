@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -169,14 +169,10 @@ export default function MinersPage() {
         </p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
           <Button size="lg" className="glow" asChild>
-            <a
-              href="https://shop.bitmernmining.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <Link href="/shop">
               Buy from Our Shop
-              <ExternalLink className="ml-2 h-4 w-4" />
-            </a>
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
           <Button variant="outline" size="lg" asChild>
             <Link href="/getting-started">

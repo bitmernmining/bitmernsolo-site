@@ -31,7 +31,7 @@ const ecosystem = [
     name: "Bitmern Shop",
     description:
       "Hardware sales for mining equipment. From flagship ASICs to solo miners, find the right hardware for your setup.",
-    href: "https://shop.bitmernmining.com",
+    href: "/shop",
     linkLabel: "Browse Shop",
   },
 ];

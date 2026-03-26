@@ -13,6 +13,7 @@ import {
   ExternalLink,
   Pickaxe,
 } from "lucide-react";
+import { CartButton } from "@/components/layout/cart-button";
 
 /* ── Dropdown menu data ── */
 
@@ -102,8 +103,7 @@ const topLevelLinks = [
   },
   {
     label: "Shop",
-    href: "https://shop.bitmernmining.com",
-    external: true,
+    href: "/shop",
   },
   {
     label: "Hosting",
@@ -310,6 +310,7 @@ export function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
+            <CartButton />
             <Button variant="ghost" size="sm" asChild>
               <a href="https://app.bitmernsolo.com/login">Log in</a>
             </Button>
@@ -569,6 +570,7 @@ export function Navbar() {
 
         {/* CTAs at bottom */}
         <div className="flex flex-col gap-3 px-6 pb-8">
+          <CartButton />
           <Button variant="outline" size="lg" className="w-full" asChild>
             <a href="https://app.bitmernsolo.com/login">Log in</a>
           </Button>

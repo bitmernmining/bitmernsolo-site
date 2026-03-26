@@ -15,7 +15,7 @@ const linkColumns = {
     { label: "Recommended Miners", href: "/miners" },
     { label: "Calculator", href: "https://app.bitmernsolo.com/calculator", external: true },
     { label: "Docs", href: "/docs" },
-    { label: "Shop", href: "https://shop.bitmernmining.com", external: true },
+    { label: "Shop", href: "/shop" },
   ],
   Company: [
     { label: "About", href: "/about" },
