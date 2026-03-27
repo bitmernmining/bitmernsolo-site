@@ -8,6 +8,7 @@ import { RecommendedMiners } from "@/components/landing/recommended-miners";
 import { Hosting } from "@/components/landing/hosting";
 import { Pricing } from "@/components/landing/pricing";
 import { SoloChances } from "@/components/landing/solo-chances";
+import { FeaturedProducts } from "@/components/landing/featured-products";
 import { FAQ } from "@/components/landing/faq";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -25,6 +26,7 @@ export default function HomePage() {
       <Hosting />
       <SoloChances />
       <Pricing />
+      <FeaturedProducts />
       <FAQ />
 
       {/* Final CTA */}
