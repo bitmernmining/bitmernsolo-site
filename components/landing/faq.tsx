@@ -48,7 +48,7 @@ const faqs = [
 
 export function FAQ() {
   return (
-    <section id="faq" className="relative">
+    <section id="faq" className="relative bg-card/30">
       <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 sm:py-24">
         {/* Header */}
         <div className="text-center mb-12">
