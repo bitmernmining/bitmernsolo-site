@@ -34,6 +34,16 @@ function EmptyCart(): React.ReactNode {
   );
 }
 
+function buildCheckoutUrl(items: ReturnType<typeof useCartContext>["items"]): string {
+  try {
+    const entries = items.map((i) => ({ productId: i.productId, quantity: i.quantity }));
+    const encoded = btoa(JSON.stringify(entries));
+    return `https://app.bitmernsolo.com/shop/cart/import?cart=${encoded}`;
+  } catch {
+    return "https://app.bitmernsolo.com/shop/checkout";
+  }
+}
+
 export default function CartPage(): React.ReactNode {
   const { items, itemCount, subtotalCents, updateQuantity, removeFromCart } =
     useCartContext();
@@ -188,9 +198,7 @@ export default function CartPage(): React.ReactNode {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Shipping</span>
-                <span className="text-muted-foreground text-xs">
-                  Calculated at checkout
-                </span>
+                <span className="text-green-400">Free</span>
               </div>
               <div className="border-t border-border/20 pt-2.5">
                 <div className="flex justify-between text-base font-bold">
@@ -202,7 +210,7 @@ export default function CartPage(): React.ReactNode {
               </div>
             </div>
 
-            <a href="https://app.bitmernsolo.com/shop/checkout" className="block">
+            <a href={buildCheckoutUrl(items)} className="block">
               <Button className="w-full gap-2 h-11">
                 Proceed to Checkout
                 <ExternalLink className="h-4 w-4" />
