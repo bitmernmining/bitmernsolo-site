@@ -2,9 +2,9 @@
 
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import { fetchProductBySlug } from "@/lib/products";
+import { ProductImageGallery } from "@/components/shop/product-image-gallery";
 import { formatPriceCents, formatHashrate, formatWatts, formatEfficiency } from "@/lib/format";
 import { useCartContext } from "@/contexts/cart-context";
 import { Badge } from "@/components/ui/badge";
@@ -23,7 +23,6 @@ import {
   Wind,
   Gauge,
   Check,
-  Box,
   ArrowRight,
 } from "lucide-react";
 
@@ -101,24 +100,11 @@ export default function ProductDetailPage({
       <div className="grid gap-8 lg:grid-cols-[1fr_420px] items-start">
         {/* Left: image + description */}
         <div className="space-y-6">
-          {/* Product image */}
-          <div className="relative aspect-[4/3] rounded-xl border border-border/20 bg-gradient-to-b from-background/80 to-muted/20 overflow-hidden">
-            {product.images.length > 0 ? (
-              <Image
-                src={product.images[0]}
-                alt={product.name}
-                fill
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-contain p-8 lg:p-12"
-                priority
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Box className="h-20 w-20 text-muted-foreground/15" />
-              </div>
-            )}
+          {/* Product image gallery */}
+          <div className="relative">
+            <ProductImageGallery images={product.images} productName={product.name} />
             {hasDiscount && (
-              <span className="absolute top-4 right-4 rounded-md bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground">
+              <span className="absolute top-4 right-4 z-10 rounded-md bg-primary px-2.5 py-1 text-xs font-bold text-primary-foreground">
                 SALE
               </span>
             )}
