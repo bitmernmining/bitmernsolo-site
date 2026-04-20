@@ -1,15 +1,37 @@
-import { describe, test } from "bun:test";
-
-// Tests will be implemented once lib/schemas/coin.ts exists (created in plan 01-03).
+import { describe, test, expect } from "bun:test";
+import { CoinSymbolSchema } from "@/lib/schemas/coin";
+import { SlugSchema } from "@/lib/schemas/slug";
 
 describe("CoinSymbolSchema", () => {
-  test.todo("accepts valid uppercase coin symbols: BTC, BCH, LTC, DOGE, DGB");
-  test.todo("rejects lowercase coin symbol 'btc'");
-  test.todo("rejects unknown symbol 'XRP'");
+  test("accepts valid uppercase coin symbols: BTC, BCH, LTC, DOGE, DGB", () => {
+    for (const sym of ["BTC", "BCH", "LTC", "DOGE", "DGB"]) {
+      expect(CoinSymbolSchema.safeParse(sym).success).toBe(true);
+    }
+  });
+
+  test("rejects lowercase coin symbol 'btc'", () => {
+    expect(CoinSymbolSchema.safeParse("btc").success).toBe(false);
+  });
+
+  test("rejects unknown symbol 'XRP'", () => {
+    expect(CoinSymbolSchema.safeParse("XRP").success).toBe(false);
+  });
 });
 
 describe("SlugSchema", () => {
-  test.todo("accepts a valid slug like 'antminer-s19-pro'");
-  test.todo("rejects a slug with script injection '<script>'");
-  test.todo("rejects a slug exceeding 100 characters");
+  test("accepts a valid slug like 'antminer-s19-pro'", () => {
+    expect(SlugSchema.safeParse("antminer-s19-pro").success).toBe(true);
+  });
+
+  test("rejects a slug with script injection '<script>'", () => {
+    expect(SlugSchema.safeParse("<script>alert(1)</script>").success).toBe(false);
+  });
+
+  test("rejects a slug exceeding 100 characters", () => {
+    expect(SlugSchema.safeParse("a".repeat(101)).success).toBe(false);
+  });
+
+  test("rejects an empty slug", () => {
+    expect(SlugSchema.safeParse("").success).toBe(false);
+  });
 });
