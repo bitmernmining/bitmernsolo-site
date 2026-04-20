@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { fetchProducts } from "@/lib/products";
 import type { Product } from "@/types/shop";
 
 interface CartEntry {
@@ -37,7 +36,13 @@ export function useCart() {
   const isInitialRender = useRef(true);
 
   useEffect(() => {
-    fetchProducts().then(setCatalog);
+    fetch("/api/products")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json() as Promise<Product[]>;
+      })
+      .then(setCatalog)
+      .catch(() => {});
   }, []);
 
   useEffect(() => {

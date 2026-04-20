@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import { fetchProducts } from "@/lib/products";
 import type { Product } from "@/types/shop";
 import type { CoinSymbol } from "@/types/coin";
 
@@ -35,10 +34,16 @@ export function useProducts(options: UseProductsOptions = {}): {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProducts().then((data) => {
-      setAllProducts(data);
-      setLoading(false);
-    });
+    fetch("/api/products")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json() as Promise<Product[]>;
+      })
+      .then((data) => {
+        setAllProducts(data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   const products = useMemo(() => {
