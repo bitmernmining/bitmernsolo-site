@@ -11,7 +11,7 @@ const COINGECKO_IDS: Record<string, string> = {
 
 async function fetchNetworkData(): Promise<CoinNetworkData[]> {
   try {
-    const res = await fetch("http://207.148.13.103:4000/api/pools", {
+    const res = await fetch(`${process.env.MININGCORE_API_URL ?? ""}/api/pools`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) return [];

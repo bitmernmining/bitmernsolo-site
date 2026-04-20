@@ -1,116 +1,14 @@
 import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { PoolStatsViewer, type PoolInfo } from "@/components/pool-stats/pool-stats-viewer";
+import { PoolStatsViewer } from "@/components/pool-stats/pool-stats-viewer";
+import { fetchPoolData } from "@/lib/pool-stats";
 
 export const metadata: Metadata = {
   title: "Pool Stats — Bitmern Solo",
   description:
     "Live pool hashrate, connected workers, network data, and block heights for all five coins on Bitmern Solo.",
 };
-
-/* ── Miningcore fetch ── */
-
-const COIN_MAP: Record<string, { symbol: string; icon: string; algo: string }> = {
-  "bitcoin-solo": { symbol: "BTC", icon: "/coins/btc.svg", algo: "SHA-256d" },
-  "litecoin-solo": { symbol: "LTC", icon: "/coins/ltc.svg", algo: "Scrypt" },
-  "dogecoin-solo": { symbol: "DOGE", icon: "/coins/doge.svg", algo: "Scrypt" },
-  "bitcoincash-solo": { symbol: "BCH", icon: "/coins/bch.svg", algo: "SHA-256d" },
-  "digibyte-solo": { symbol: "DGB", icon: "/coins/dgb.svg", algo: "SHA-256d" },
-};
-
-const POOL_ORDER = ["bitcoin-solo", "litecoin-solo", "dogecoin-solo", "bitcoincash-solo", "digibyte-solo"];
-
-interface MiningcorePool {
-  id: string;
-  coin: { name: string; symbol: string; algorithm: string };
-  poolStats: { poolHashrate: number; connectedMiners: number };
-  networkStats: { networkHashrate: number; blockHeight: number; networkDifficulty: number };
-  topMiners: { miner: string; hashrate: number; sharesPerSecond: number }[];
-}
-
-interface PerformanceSample {
-  created: string;
-  poolHashrate: number;
-  connectedMiners: number;
-  networkHashrate: number;
-  networkDifficulty: number;
-}
-
-async function fetchPoolData(): Promise<PoolInfo[]> {
-  try {
-    const res = await fetch("http://207.148.13.103:4000/api/pools", {
-      next: { revalidate: 60 },
-    });
-    if (!res.ok) return [];
-    const data = await res.json();
-    const pools: MiningcorePool[] = data.pools ?? [];
-
-    const results = await Promise.all(
-      POOL_ORDER.map(async (poolId) => {
-        const pool = pools.find((p) => p.id === poolId);
-        if (!pool) return null;
-        const meta = COIN_MAP[poolId];
-        if (!meta) return null;
-
-        // Fetch performance history
-        let performance: PerformanceSample[] = [];
-        try {
-          const perfRes = await fetch(
-            `http://207.148.13.103:4000/api/pools/${poolId}/performance`,
-            { next: { revalidate: 60 } }
-          );
-          if (perfRes.ok) {
-            const perfData = await perfRes.json();
-            performance = perfData.stats ?? [];
-          }
-        } catch { /* ignore */ }
-
-        // Count workers across all top miners
-        const miners = pool.topMiners ?? [];
-        let workerCount = 0;
-        if (miners.length > 0) {
-          const counts = await Promise.all(
-            miners.map(async (m) => {
-              try {
-                const minerRes = await fetch(
-                  `http://207.148.13.103:4000/api/pools/${poolId}/miners/${encodeURIComponent(m.miner)}`,
-                  { next: { revalidate: 60 } }
-                );
-                if (!minerRes.ok) return 0;
-                const minerData = await minerRes.json();
-                const workers = minerData?.performance?.workers;
-                return workers ? Object.keys(workers).length : 0;
-              } catch {
-                return 0;
-              }
-            })
-          );
-          workerCount = counts.reduce((a, b) => a + b, 0);
-        }
-
-        return {
-          id: poolId,
-          symbol: meta.symbol,
-          name: pool.coin.name,
-          icon: meta.icon,
-          algo: meta.algo,
-          poolHashrate: pool.poolStats.poolHashrate,
-          connectedMiners: pool.poolStats.connectedMiners,
-          workerCount,
-          networkHashrate: pool.networkStats.networkHashrate,
-          networkDifficulty: pool.networkStats.networkDifficulty,
-          blockHeight: pool.networkStats.blockHeight,
-          performance,
-        } satisfies PoolInfo;
-      })
-    );
-
-    return results.filter((p): p is PoolInfo => p !== null);
-  } catch {
-    return [];
-  }
-}
 
 /* ── Page ── */
 

@@ -43,7 +43,8 @@ interface PoolWithWorkers extends PoolData {
 
 async function fetchPools(): Promise<PoolWithWorkers[]> {
   try {
-    const res = await fetch("http://207.148.13.103:4000/api/pools", {
+    const BASE = process.env.MININGCORE_API_URL ?? "";
+    const res = await fetch(`${BASE}/api/pools`, {
       next: { revalidate: 60 },
     });
     if (!res.ok) return [];
@@ -60,7 +61,7 @@ async function fetchPools(): Promise<PoolWithWorkers[]> {
           miners.map(async (m) => {
             try {
               const minerRes = await fetch(
-                `http://207.148.13.103:4000/api/pools/${pool.id}/miners/${encodeURIComponent(m.miner)}`,
+                `${BASE}/api/pools/${pool.id}/miners/${encodeURIComponent(m.miner)}`,
                 { next: { revalidate: 60 } }
               );
               if (!minerRes.ok) return 0;
