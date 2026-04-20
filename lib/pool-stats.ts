@@ -23,6 +23,17 @@ export interface PoolInfo {
   performance: PerformanceSample[];
 }
 
+export interface PoolErrorInfo {
+  id: string;
+  symbol: string;
+  name: string;
+  icon: string;
+  algo: string;
+  error: true;
+}
+
+export type PoolResult = PoolInfo | PoolErrorInfo;
+
 interface MiningcorePool {
   id: string;
   coin: { name: string; symbol: string; algorithm: string };
@@ -49,22 +60,40 @@ export const POOL_ORDER = [
 
 const BASE = process.env.MININGCORE_API_URL ?? "";
 
-export async function fetchPoolData(): Promise<PoolInfo[]> {
+export async function fetchPoolData(): Promise<PoolResult[]> {
+  let pools: MiningcorePool[] = [];
+
   try {
     const res = await fetch(`${BASE}/api/pools`, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) return [];
-    const data = await res.json();
-    const pools: MiningcorePool[] = data.pools ?? [];
+    if (res.ok) {
+      const data = await res.json();
+      pools = data.pools ?? [];
+    }
+  } catch (err) {
+    Sentry.captureException(err);
+    console.warn("[fetchPoolData] outer fetch failed", { err });
+    // pools stays [] — all pools below will return PoolErrorInfo
+  }
 
-    const results = await Promise.all(
-      POOL_ORDER.map(async (poolId) => {
-        const pool = pools.find((p) => p.id === poolId);
-        if (!pool) return null;
-        const meta = COIN_MAP[poolId];
-        if (!meta) return null;
+  const results = await Promise.all(
+    POOL_ORDER.map(async (poolId) => {
+      const pool = pools.find((p) => p.id === poolId);
+      const meta = COIN_MAP[poolId];
 
+      if (!pool || !meta) {
+        return {
+          id: poolId,
+          symbol: meta?.symbol ?? poolId.toUpperCase().split("-")[0],
+          name: poolId,
+          icon: meta?.icon ?? "",
+          algo: meta?.algo ?? "",
+          error: true,
+        } satisfies PoolErrorInfo;
+      }
+
+      try {
         // Fetch performance history
         let performance: PerformanceSample[] = [];
         try {
@@ -115,13 +144,20 @@ export async function fetchPoolData(): Promise<PoolInfo[]> {
           blockHeight: pool.networkStats.blockHeight,
           performance,
         } satisfies PoolInfo;
-      })
-    );
+      } catch (err) {
+        Sentry.captureException(err);
+        console.warn("[fetchPoolData] per-pool fetch failed", { poolId, err });
+        return {
+          id: poolId,
+          symbol: meta.symbol,
+          name: pool.coin.name,
+          icon: meta.icon,
+          algo: meta.algo,
+          error: true,
+        } satisfies PoolErrorInfo;
+      }
+    })
+  );
 
-    return results.filter((p): p is PoolInfo => p !== null);
-  } catch (err) {
-    Sentry.captureException(err);
-    console.warn("[fetchPoolData] outer fetch failed", { err });
-    return [];
-  }
+  return results;
 }
