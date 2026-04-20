@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ProductCard } from "@/components/shop/product-card";
 import { MinerQuiz } from "@/components/shop/miner-quiz";
 import { useProducts, type SortOption } from "@/hooks/use-products";
+import { useCatalogContext } from "@/contexts/catalog-context";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -21,6 +22,7 @@ import {
   SlidersHorizontal,
   X,
   Compass,
+  AlertCircle,
 } from "lucide-react";
 
 export default function ShopPage(): React.ReactNode {
@@ -38,6 +40,8 @@ export default function ShopPage(): React.ReactNode {
     sort,
     inStockOnly,
   });
+
+  const { error: catalogError, retry: catalogRetry } = useCatalogContext();
 
   return (
     <div className="space-y-6">
@@ -143,8 +147,26 @@ export default function ShopPage(): React.ReactNode {
         </span>
       </div>
 
-      {/* Product grid */}
-      {products.length === 0 ? (
+      {/* Product grid — or error state */}
+      {catalogError ? (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="rounded-full bg-destructive/10 p-4 mb-4">
+            <AlertCircle className="h-8 w-8 text-destructive/60" />
+          </div>
+          <h3 className="font-heading font-medium">Failed to load products</h3>
+          <p className="mt-1 text-sm text-muted-foreground max-w-xs">
+            Unable to reach the product catalog. Check your connection and try again.
+          </p>
+          <Button
+            onClick={catalogRetry}
+            size="sm"
+            variant="outline"
+            className="mt-4"
+          >
+            Retry
+          </Button>
+        </div>
+      ) : products.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="rounded-full bg-muted/30 p-4 mb-4">
             <SearchX className="h-8 w-8 text-muted-foreground/40" />
