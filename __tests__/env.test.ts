@@ -9,6 +9,7 @@ describe("validateEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = "https://example.supabase.co";
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
     process.env.MININGCORE_API_URL = "http://test-miningcore:4000";
+    process.env.CART_SESSION_SECRET = "test-cart-session-secret-32-chars!!";
   });
 
   afterEach(() => {
@@ -16,6 +17,7 @@ describe("validateEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_URL = originalEnv.NEXT_PUBLIC_SUPABASE_URL;
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = originalEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     process.env.MININGCORE_API_URL = originalEnv.MININGCORE_API_URL;
+    process.env.CART_SESSION_SECRET = originalEnv.CART_SESSION_SECRET;
   });
 
   test("throws with message naming the missing var when NEXT_PUBLIC_SUPABASE_URL is unset", () => {
@@ -40,6 +42,13 @@ describe("validateEnv", () => {
     delete process.env.MININGCORE_API_URL;
     expect(() => validateEnv()).toThrow(
       "Missing required environment variable: MININGCORE_API_URL"
+    );
+  });
+
+  test("throws when CART_SESSION_SECRET is missing", () => {
+    delete process.env.CART_SESSION_SECRET;
+    expect(() => validateEnv()).toThrow(
+      "Missing required environment variable: CART_SESSION_SECRET"
     );
   });
 });
