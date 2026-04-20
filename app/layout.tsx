@@ -3,7 +3,9 @@ import Script from "next/script";
 import { Space_Grotesk, Manrope, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { CatalogProvider } from "@/contexts/catalog-context";
 import { CartProvider } from "@/contexts/cart-context";
+import { Toaster } from "@/components/ui/toast";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -66,11 +68,15 @@ export default function RootLayout({
         )}
       </head>
       <body className="min-h-screen bg-background antialiased">
-        <CartProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-        </CartProvider>
+        <CatalogProvider>
+          <Toaster>
+            <CartProvider>
+              <Navbar />
+              <main>{children}</main>
+              <Footer />
+            </CartProvider>
+          </Toaster>
+        </CatalogProvider>
       </body>
     </html>
   );

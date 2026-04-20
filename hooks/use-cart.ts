@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import type { Product } from "@/types/shop";
-
-interface CartEntry {
-  productId: string;
-  quantity: number;
-}
+import { useCatalogContext } from "@/contexts/catalog-context";
+import { useToast } from "@/components/ui/toast";
+import type { CartEntry } from "@/lib/cart-session";
 
 export interface CartItemWithProduct {
   productId: string;
@@ -14,92 +12,89 @@ export interface CartItemWithProduct {
   product: Product;
 }
 
-const CART_KEY = "bitmern-cart";
-
-function loadCart(): CartEntry[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem(CART_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveCart(items: CartEntry[]): void {
-  localStorage.setItem(CART_KEY, JSON.stringify(items));
-}
-
 export function useCart() {
-  const [entries, setEntries] = useState<CartEntry[]>(loadCart);
-  const [catalog, setCatalog] = useState<Product[]>([]);
-  const isInitialRender = useRef(true);
+  const { products } = useCatalogContext();
+  const { toast } = useToast();
+  const [entries, setEntries] = useState<CartEntry[]>([]);
 
+  // Load initial cart from session on mount
   useEffect(() => {
-    fetch("/api/products")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch products");
-        return res.json() as Promise<Product[]>;
-      })
-      .then(setCatalog)
+    fetch("/api/cart")
+      .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+      .then((data: { cart: CartEntry[] }) => setEntries(data.cart))
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    if (isInitialRender.current) {
-      isInitialRender.current = false;
-      return;
-    }
-    saveCart(entries);
-  }, [entries]);
-
-  const addToCart = useCallback((productId: string, quantity = 1) => {
-    setEntries((prev) => {
-      const product = catalog.find((p) => p.id === productId);
-      const maxQty = product?.stock_count ?? Infinity;
-      const existing = prev.find((e) => e.productId === productId);
-      if (existing) {
-        return prev.map((e) =>
-          e.productId === productId
-            ? { ...e, quantity: Math.min(e.quantity + quantity, maxQty) }
-            : e
+  const addToCart = useCallback(
+    async (productId: string, quantity = 1) => {
+      const product = products.find((p) => p.id === productId);
+      const stockCount = product?.stock_count ?? 999;
+      const res = await fetch("/api/cart/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, quantity, stockCount }),
+      });
+      if (!res.ok) return;
+      const data: { cart: CartEntry[]; clamped: boolean; clampedTo: number | null } =
+        await res.json();
+      setEntries(data.cart);
+      if (data.clamped && data.clampedTo !== null) {
+        toast(
+          "Stock limit reached",
+          `Only ${data.clampedTo} left in stock — quantity adjusted`
         );
       }
-      return [...prev, { productId, quantity: Math.min(quantity, maxQty) }];
-    });
-  }, [catalog]);
+    },
+    [products, toast]
+  );
 
-  const removeFromCart = useCallback((productId: string) => {
-    setEntries((prev) => prev.filter((e) => e.productId !== productId));
+  const updateQuantity = useCallback(
+    async (productId: string, quantity: number) => {
+      const product = products.find((p) => p.id === productId);
+      const stockCount = product?.stock_count ?? 999;
+      const res = await fetch("/api/cart/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, quantity, stockCount }),
+      });
+      if (!res.ok) return;
+      const data: { cart: CartEntry[]; clamped: boolean; clampedTo: number | null } =
+        await res.json();
+      setEntries(data.cart);
+      if (data.clamped && data.clampedTo !== null) {
+        toast(
+          "Stock limit reached",
+          `Only ${data.clampedTo} left in stock — quantity adjusted`
+        );
+      }
+    },
+    [products, toast]
+  );
+
+  const removeFromCart = useCallback(async (productId: string) => {
+    const res = await fetch("/api/cart/remove", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productId }),
+    });
+    if (!res.ok) return;
+    const data: { cart: CartEntry[] } = await res.json();
+    setEntries(data.cart);
   }, []);
 
-  const updateQuantity = useCallback((productId: string, quantity: number) => {
-    if (quantity <= 0) {
-      setEntries((prev) => prev.filter((e) => e.productId !== productId));
-    } else {
-      const product = catalog.find((p) => p.id === productId);
-      const maxQty = product?.stock_count ?? Infinity;
-      setEntries((prev) =>
-        prev.map((e) =>
-          e.productId === productId ? { ...e, quantity: Math.min(quantity, maxQty) } : e
-        )
-      );
-    }
-  }, [catalog]);
-
-  const clearCart = useCallback(() => {
+  const clearCart = useCallback(async () => {
+    const res = await fetch("/api/cart/clear", { method: "POST" });
+    if (!res.ok) return;
     setEntries([]);
   }, []);
 
   const items: CartItemWithProduct[] = useMemo(() => {
     return entries.reduce<CartItemWithProduct[]>((acc, entry) => {
-      const product = catalog.find((p) => p.id === entry.productId);
-      if (product) {
-        acc.push({ ...entry, product });
-      }
+      const product = products.find((p) => p.id === entry.productId);
+      if (product) acc.push({ ...entry, product });
       return acc;
     }, []);
-  }, [entries, catalog]);
+  }, [entries, products]);
 
   const itemCount = useMemo(
     () => entries.reduce((sum, e) => sum + e.quantity, 0),
@@ -110,21 +105,11 @@ export function useCart() {
     () =>
       items.reduce(
         (sum, item) =>
-          sum +
-          (item.product.sale_price_cents ?? item.product.price_cents) *
-            item.quantity,
+          sum + (item.product.sale_price_cents ?? item.product.price_cents) * item.quantity,
         0
       ),
     [items]
   );
 
-  return {
-    items,
-    itemCount,
-    subtotalCents,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-  };
+  return { items, itemCount, subtotalCents, addToCart, removeFromCart, updateQuantity, clearCart };
 }

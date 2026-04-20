@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useMemo } from "react";
 import type { Product } from "@/types/shop";
 import type { CoinSymbol } from "@/types/coin";
+import { useCatalogContext } from "@/contexts/catalog-context";
 
 export type SortOption =
   | "price-asc"
@@ -30,21 +31,7 @@ export function useProducts(options: UseProductsOptions = {}): {
   brands: string[];
   algorithms: string[];
 } {
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("/api/products")
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch products");
-        return res.json() as Promise<Product[]>;
-      })
-      .then((data) => {
-        setAllProducts(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  const { products: allProducts, loading } = useCatalogContext();
 
   const products = useMemo(() => {
     let result = [...allProducts];
