@@ -33,4 +33,9 @@ describe("validateEnv", () => {
   test("does not throw when all required vars are present", () => {
     expect(() => validateEnv()).not.toThrow();
   });
+
+  // MININGCORE_API_URL will be added to REQUIRED_ENV_VARS in plan 02-02.
+  // Do not set it in beforeEach yet — afterEach restoration would fail for a var
+  // not yet in the env-validation list.
+  test.todo("throws when MININGCORE_API_URL is missing (added to REQUIRED_ENV_VARS in plan 02-02)");
 });
