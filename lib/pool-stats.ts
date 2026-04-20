@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/nextjs";
+
 export interface PerformanceSample {
   created: string;
   poolHashrate: number;
@@ -117,7 +119,9 @@ export async function fetchPoolData(): Promise<PoolInfo[]> {
     );
 
     return results.filter((p): p is PoolInfo => p !== null);
-  } catch {
+  } catch (err) {
+    Sentry.captureException(err);
+    console.warn("[fetchPoolData] outer fetch failed", { err });
     return [];
   }
 }
