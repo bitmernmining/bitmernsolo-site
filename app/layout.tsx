@@ -4,7 +4,7 @@ import { Space_Grotesk, Manrope, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
 import { CatalogProvider } from "@/contexts/catalog-context";
-import { CartProvider } from "@/contexts/cart-context";
+import { CartErrorBoundary } from "@/components/shop/cart-error-boundary";
 import { Toaster } from "@/components/ui/toast";
 import "./globals.css";
 
@@ -70,11 +70,11 @@ export default function RootLayout({
       <body className="min-h-screen bg-background antialiased">
         <CatalogProvider>
           <Toaster>
-            <CartProvider>
+            <CartErrorBoundary>
               <Navbar />
               <main>{children}</main>
               <Footer />
-            </CartProvider>
+            </CartErrorBoundary>
           </Toaster>
         </CatalogProvider>
       </body>
