@@ -12,8 +12,8 @@ import {
   MINERS_SCRYPT,
   WALLETS,
   TIER_LABELS,
-  type CoinSymbol,
 } from "@/lib/data";
+import { CoinSymbolSchema } from "@/lib/schemas/coin";
 
 const validCoins = ["btc", "ltc", "doge", "bch", "dgb"] as const;
 
@@ -27,7 +27,9 @@ export function generateMetadata({
   params: Promise<{ coin: string }>;
 }): Promise<Metadata> {
   return params.then(({ coin: slug }) => {
-    const symbol = slug.toUpperCase() as CoinSymbol;
+    const coinResult = CoinSymbolSchema.safeParse(slug.toUpperCase());
+    if (!coinResult.success) return { title: "Not Found — Bitmern Solo" };
+    const symbol = coinResult.data;
     const coinData = COINS.find((c) => c.symbol === symbol);
     if (!coinData) return { title: "Not Found — Bitmern Solo" };
     return {
@@ -43,7 +45,9 @@ export default async function CoinPage({
   params: Promise<{ coin: string }>;
 }) {
   const { coin: slug } = await params;
-  const symbol = slug.toUpperCase() as CoinSymbol;
+  const coinResult = CoinSymbolSchema.safeParse(slug.toUpperCase());
+  if (!coinResult.success) notFound();
+  const symbol = coinResult.data;
 
   const coinData = COINS.find((c) => c.symbol === symbol);
   if (!coinData) notFound();

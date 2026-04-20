@@ -4,6 +4,7 @@ import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchProductBySlug } from "@/lib/products";
+import { SlugSchema } from "@/lib/schemas/slug";
 import { ProductImageGallery } from "@/components/shop/product-image-gallery";
 import { formatPriceCents, formatHashrate, formatWatts, formatEfficiency } from "@/lib/format";
 import { useCartContext } from "@/contexts/cart-context";
@@ -38,10 +39,19 @@ export default function ProductDetailPage({
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
-    fetchProductBySlug(slug).then((p) => {
-      setProduct(p);
-      setPageLoading(false);
-    });
+    const slugResult = SlugSchema.safeParse(slug);
+    if (!slugResult.success) {
+      notFound();
+      return;
+    }
+
+    setPageLoading(true);
+    fetchProductBySlug(slug)
+      .then((data) => {
+        if (!data) notFound();
+        else setProduct(data);
+      })
+      .finally(() => setPageLoading(false));
   }, [slug]);
 
   const { addToCart, itemCount } = useCartContext();
