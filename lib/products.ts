@@ -1,4 +1,5 @@
-import { createClient } from "@/lib/supabase/client";
+import { createClient as createBrowserClient } from "@/lib/supabase/client";
+import { createClient as createServerClient } from "@/lib/supabase/server";
 import { ProductSchema } from "@/lib/schemas/product";
 import type { Product } from "@/lib/schemas/product";
 
@@ -16,7 +17,7 @@ function parseProductRow(row: unknown): Product | null {
 
 /** Fetch all active (non-draft) products */
 export async function fetchProducts(): Promise<Product[]> {
-  const supabase = createClient();
+  const supabase = createBrowserClient();
   const { data, error } = await supabase
     .from("products")
     .select("*")
@@ -33,7 +34,7 @@ export async function fetchProducts(): Promise<Product[]> {
 
 /** Fetch a single product by slug (non-draft only) */
 export async function fetchProductBySlug(slug: string): Promise<Product | null> {
-  const supabase = createClient();
+  const supabase = await createServerClient();
   const { data, error } = await supabase
     .from("products")
     .select("*")
@@ -47,7 +48,7 @@ export async function fetchProductBySlug(slug: string): Promise<Product | null> 
 
 /** Fetch a single product by ID */
 export async function fetchProductById(id: string): Promise<Product | null> {
-  const supabase = createClient();
+  const supabase = await createServerClient();
   const { data, error } = await supabase
     .from("products")
     .select("*")
