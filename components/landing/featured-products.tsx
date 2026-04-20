@@ -6,7 +6,6 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductCard } from "@/components/shop/product-card";
-import { fetchProducts } from "@/lib/products";
 import type { Product } from "@/types/shop";
 
 export function FeaturedProducts() {
@@ -14,13 +13,19 @@ export function FeaturedProducts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchProducts().then((all) => {
-      // Prioritize featured products, then fill with the rest
-      const featured = all.filter((p) => p.featured);
-      const rest = all.filter((p) => !p.featured);
-      setProducts([...featured, ...rest].slice(0, 6));
-      setLoading(false);
-    });
+    fetch("/api/products")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json() as Promise<Product[]>;
+      })
+      .then((all) => {
+        // Prioritize featured products, then fill with the rest
+        const featured = all.filter((p) => p.featured);
+        const rest = all.filter((p) => !p.featured);
+        setProducts([...featured, ...rest].slice(0, 6));
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
   }, []);
 
   return (

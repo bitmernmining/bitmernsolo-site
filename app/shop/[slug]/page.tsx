@@ -3,7 +3,6 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { fetchProductBySlug } from "@/lib/products";
 import { SlugSchema } from "@/lib/schemas/slug";
 import { ProductImageGallery } from "@/components/shop/product-image-gallery";
 import { formatPriceCents, formatHashrate, formatWatts, formatEfficiency } from "@/lib/format";
@@ -46,11 +45,17 @@ export default function ProductDetailPage({
     }
 
     setPageLoading(true);
-    fetchProductBySlug(slug)
-      .then((data) => {
-        if (!data) notFound();
-        else setProduct(data);
+    fetch("/api/products")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json() as Promise<import("@/types/shop").Product[]>;
       })
+      .then((all) => {
+        const found = all.find((p) => p.slug === slug) ?? null;
+        if (!found) notFound();
+        else setProduct(found);
+      })
+      .catch(() => notFound())
       .finally(() => setPageLoading(false));
   }, [slug]);
 

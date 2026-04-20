@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { COINS } from "@/lib/coins";
-import { fetchProducts } from "@/lib/products";
 import { formatPriceCents, formatHashrate, formatWatts } from "@/lib/format";
 import {
   scoreProducts,
@@ -58,7 +57,13 @@ export function MinerQuiz({ open, onOpenChange }: MinerQuizProps) {
   const [catalog, setCatalog] = useState<import("@/types/shop").Product[]>([]);
 
   useEffect(() => {
-    fetchProducts().then(setCatalog);
+    fetch("/api/products")
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch products");
+        return res.json() as Promise<import("@/types/shop").Product[]>;
+      })
+      .then(setCatalog)
+      .catch(() => {});
   }, []);
 
   const stepIndex = STEPS.indexOf(step);
