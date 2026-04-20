@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCartContext } from "@/contexts/cart-context";
@@ -34,19 +35,22 @@ function EmptyCart(): React.ReactNode {
   );
 }
 
-function buildCheckoutUrl(items: ReturnType<typeof useCartContext>["items"]): string {
-  try {
-    const entries = items.map((i) => ({ productId: i.productId, quantity: i.quantity }));
-    const encoded = btoa(JSON.stringify(entries));
-    return `https://app.bitmernsolo.com/shop/cart/import?cart=${encoded}`;
-  } catch {
-    return "https://app.bitmernsolo.com/shop/checkout";
-  }
-}
-
 export default function CartPage(): React.ReactNode {
   const { items, itemCount, subtotalCents, updateQuantity, removeFromCart } =
     useCartContext();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const handleCheckout = useCallback(async () => {
+    setCheckoutLoading(true);
+    try {
+      const res = await fetch("/api/cart/checkout-url");
+      if (!res.ok) throw new Error("Failed to get checkout URL");
+      const { url } = await res.json() as { url: string };
+      window.location.href = url;
+    } catch {
+      setCheckoutLoading(false);
+    }
+  }, []);
 
   if (items.length === 0) {
     return <EmptyCart />;
@@ -210,12 +214,14 @@ export default function CartPage(): React.ReactNode {
               </div>
             </div>
 
-            <a href={buildCheckoutUrl(items)} className="block">
-              <Button className="w-full gap-2 h-11">
-                Proceed to Checkout
-                <ExternalLink className="h-4 w-4" />
-              </Button>
-            </a>
+            <Button
+              className="w-full gap-2 h-11"
+              onClick={handleCheckout}
+              disabled={checkoutLoading}
+            >
+              {checkoutLoading ? "Preparing checkout..." : "Proceed to Checkout"}
+              <ExternalLink className="h-4 w-4" />
+            </Button>
             <p className="text-[10px] text-muted-foreground/50 text-center">
               You&apos;ll be redirected to complete your purchase
             </p>
