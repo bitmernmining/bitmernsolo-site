@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { type PoolResult, type PoolInfo } from "@/lib/pool-stats";
 import { PoolStatsChart } from "./pool-stats-chart";
 
 const HASH_UNITS = ["H/s", "KH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s"];
@@ -29,31 +30,8 @@ function formatDifficulty(d: number): string {
   return `${v.toFixed(2)}${units[i]}`;
 }
 
-interface PerformanceSample {
-  created: string;
-  poolHashrate: number;
-  connectedMiners: number;
-  networkHashrate: number;
-  networkDifficulty: number;
-}
-
-export interface PoolInfo {
-  id: string;
-  symbol: string;
-  name: string;
-  icon: string;
-  algo: string;
-  poolHashrate: number;
-  connectedMiners: number;
-  workerCount: number;
-  networkHashrate: number;
-  networkDifficulty: number;
-  blockHeight: number;
-  performance: PerformanceSample[];
-}
-
 interface Props {
-  pools: PoolInfo[];
+  pools: PoolResult[];
 }
 
 export function PoolStatsViewer({ pools }: Props) {
@@ -67,31 +45,56 @@ export function PoolStatsViewer({ pools }: Props) {
     );
   }
 
-  const pool = pools[selected];
+  const selectedPool = pools[selected];
+  const isSelectedError = !selectedPool || ("error" in selectedPool && selectedPool.error);
+
+  const tabs = (
+    <div role="tablist" aria-label="Select coin" className="flex items-center gap-1.5 rounded-lg border border-border/40 bg-card p-1.5">
+      {pools.map((p, i) => {
+        const isError = "error" in p && p.error;
+        return (
+          <button
+            key={p.id}
+            role="tab"
+            aria-selected={selected === i}
+            onClick={() => setSelected(i)}
+            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors flex-1 justify-center
+              ${isError ? "opacity-40 cursor-not-allowed" : ""}
+              ${selected === i && !isError ? "bg-primary/10 border border-primary/20 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}
+            `}
+          >
+            {p.icon && (
+              <Image src={p.icon} alt={p.name} width={18} height={18} className={`h-4.5 w-4.5${isError ? " grayscale" : ""}`} />
+            )}
+            <span className="hidden sm:inline">{p.name}</span>
+            <span className="sm:hidden">{p.symbol}</span>
+            {isError && (
+              <span className="text-[10px] font-medium text-destructive ml-0.5">Unavailable</span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  if (isSelectedError) {
+    return (
+      <div className="space-y-6">
+        {tabs}
+        <div className="rounded-xl border border-border/40 bg-card p-12 text-center text-muted-foreground">
+          <p className="text-sm">Pool data temporarily unavailable.</p>
+          <p className="text-xs mt-1">Other pools are unaffected. Try again later.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const pool = selectedPool as PoolInfo;
   const isActive = pool.poolHashrate > 0;
 
   return (
     <div className="space-y-6">
-      {/* Coin switcher */}
-      <div role="tablist" aria-label="Select coin" className="flex items-center gap-1.5 rounded-lg border border-border/40 bg-card p-1.5">
-        {pools.map((p, i) => (
-          <button
-            key={p.id}
-            role="tab"
-            aria-selected={i === selected}
-            onClick={() => setSelected(i)}
-            className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors flex-1 justify-center ${
-              i === selected
-                ? "bg-primary/10 border border-primary/20 text-foreground font-medium"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            }`}
-          >
-            <Image src={p.icon} alt={p.name} width={18} height={18} className="h-4.5 w-4.5" />
-            <span className="hidden sm:inline">{p.name}</span>
-            <span className="sm:hidden">{p.symbol}</span>
-          </button>
-        ))}
-      </div>
+      {tabs}
 
       {/* Chart + stats */}
       <div role="tabpanel" aria-label={`${pool.name} pool stats`} className="rounded-xl border border-border/40 bg-card overflow-hidden">
