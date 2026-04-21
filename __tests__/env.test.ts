@@ -10,6 +10,8 @@ describe("validateEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = "test-anon-key";
     process.env.MININGCORE_API_URL = "http://test-miningcore:4000";
     process.env.CART_SESSION_SECRET = "test-cart-session-secret-32-chars!!";
+    process.env.SENTRY_DSN = "https://test@sentry.io/123";
+    process.env.NEXT_PUBLIC_SENTRY_DSN = "https://test@sentry.io/123";
   });
 
   afterEach(() => {
@@ -18,6 +20,8 @@ describe("validateEnv", () => {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = originalEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     process.env.MININGCORE_API_URL = originalEnv.MININGCORE_API_URL;
     process.env.CART_SESSION_SECRET = originalEnv.CART_SESSION_SECRET;
+    process.env.SENTRY_DSN = originalEnv.SENTRY_DSN;
+    process.env.NEXT_PUBLIC_SENTRY_DSN = originalEnv.NEXT_PUBLIC_SENTRY_DSN;
   });
 
   test("throws with message naming the missing var when NEXT_PUBLIC_SUPABASE_URL is unset", () => {
