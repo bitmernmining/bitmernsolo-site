@@ -48,13 +48,15 @@ describe("PoolStatsViewer", () => {
 
   test("renders hashrate for healthy pool", () => {
     render(createElement(PoolStatsViewer, { pools: [healthyPool] }));
-    // 1e12 H/s = 1.00 TH/s
-    expect(screen.getByText("1.00 TH/s")).toBeTruthy();
+    // 1e12 H/s = 1.00 TH/s — getAllByText handles multiple occurrences
+    const hashrateEls = screen.getAllByText("1.00 TH/s");
+    expect(hashrateEls.length).toBeGreaterThan(0);
   });
 
   test("renders worker count for healthy pool", () => {
     render(createElement(PoolStatsViewer, { pools: [healthyPool] }));
-    expect(screen.getByText("5")).toBeTruthy();
+    const workerEls = screen.getAllByText("5");
+    expect(workerEls.length).toBeGreaterThan(0);
   });
 
   test("renders 'Unavailable' label on error pool tab", () => {
@@ -71,6 +73,7 @@ describe("PoolStatsViewer", () => {
 
   test("chart stub renders (no canvas errors)", () => {
     render(createElement(PoolStatsViewer, { pools: [healthyPool] }));
-    expect(screen.getByTestId("chart-stub")).toBeTruthy();
+    const stubs = screen.getAllByTestId("chart-stub");
+    expect(stubs.length).toBeGreaterThan(0);
   });
 });
