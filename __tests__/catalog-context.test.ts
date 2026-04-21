@@ -1,5 +1,5 @@
 import { describe, test, expect, mock, beforeEach, afterEach } from "bun:test";
-import { renderHook, waitFor } from "@testing-library/react";
+import { renderHook, waitFor, cleanup } from "@testing-library/react";
 import { createElement } from "react";
 import { CatalogProvider, useCatalogContext } from "@/contexts/catalog-context";
 
@@ -21,6 +21,11 @@ beforeEach(() => {
 
 afterEach(() => {
   globalThis.fetch = originalFetch;
+  cleanup();
+  // Remove all children from document.body to prevent DOM state leaking into subsequent test files
+  while (document.body.firstChild) {
+    document.body.removeChild(document.body.firstChild);
+  }
 });
 
 const wrapper = ({ children }: { children: React.ReactNode }) =>
@@ -62,10 +67,12 @@ describe("useCatalogContext", () => {
     expect(result.current.products[0].id).toBe("p1");
   });
 
-  test("provides loading: true before fetch completes", () => {
-    const { result } = renderHook(() => useCatalogContext(), { wrapper });
+  test("provides loading: true before fetch completes", async () => {
+    const { result, unmount } = renderHook(() => useCatalogContext(), { wrapper });
     // Immediately after mount, before fetch resolves, loading should be true
     expect(result.current.loading).toBe(true);
+    // Unmount before fetch resolves to prevent pending setState after test ends
+    unmount();
   });
 
   test("provides loading: false after fetch completes", async () => {
