@@ -1,5 +1,30 @@
-import { describe, test, expect } from "bun:test";
-import { useCatalogContext } from "@/contexts/catalog-context";
+import { describe, test, expect, mock, beforeEach, afterEach } from "bun:test";
+import { renderHook, waitFor } from "@testing-library/react";
+import { createElement } from "react";
+import { CatalogProvider, useCatalogContext } from "@/contexts/catalog-context";
+
+const mockProducts = [{ id: "p1", name: "Miner S21", slug: "miner-s21" }];
+
+let fetchCallCount = 0;
+const originalFetch = globalThis.fetch;
+
+beforeEach(() => {
+  fetchCallCount = 0;
+  globalThis.fetch = mock(async (url: string) => {
+    if (url.includes("/api/products")) {
+      fetchCallCount++;
+      return { ok: true, json: async () => mockProducts } as unknown as Response;
+    }
+    return { ok: false, json: async () => [] } as unknown as Response;
+  });
+});
+
+afterEach(() => {
+  globalThis.fetch = originalFetch;
+});
+
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  createElement(CatalogProvider, null, children);
 
 describe("useCatalogContext", () => {
   test("throws when used outside CatalogProvider", () => {
@@ -17,9 +42,34 @@ describe("useCatalogContext", () => {
     }
   });
 
-  test.todo("fetches /api/products exactly once on mount (BUG-02) — requires DOM environment (Phase 5)");
-  test.todo("does not re-fetch when child components re-render — requires DOM environment (Phase 5)");
-  test.todo("provides products array to consumers via useCatalogContext — requires DOM environment (Phase 5)");
-  test.todo("provides loading: true before fetch completes — requires DOM environment (Phase 5)");
-  test.todo("provides loading: false after fetch completes — requires DOM environment (Phase 5)");
+  test("fetches /api/products exactly once on mount", async () => {
+    const { result } = renderHook(() => useCatalogContext(), { wrapper });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(fetchCallCount).toBe(1);
+  });
+
+  test("does not re-fetch when child components re-render", async () => {
+    const { result, rerender } = renderHook(() => useCatalogContext(), { wrapper });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    rerender();
+    expect(fetchCallCount).toBe(1);
+  });
+
+  test("provides products array to consumers via useCatalogContext", async () => {
+    const { result } = renderHook(() => useCatalogContext(), { wrapper });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.products).toHaveLength(1);
+    expect(result.current.products[0].id).toBe("p1");
+  });
+
+  test("provides loading: true before fetch completes", () => {
+    const { result } = renderHook(() => useCatalogContext(), { wrapper });
+    // Immediately after mount, before fetch resolves, loading should be true
+    expect(result.current.loading).toBe(true);
+  });
+
+  test("provides loading: false after fetch completes", async () => {
+    const { result } = renderHook(() => useCatalogContext(), { wrapper });
+    await waitFor(() => expect(result.current.loading).toBe(false));
+  });
 });
