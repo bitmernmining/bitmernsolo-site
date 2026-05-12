@@ -1,8 +1,12 @@
-import { describe, expect, test } from "bun:test";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, test, beforeEach } from "bun:test";
+import { cleanup, render, screen } from "@testing-library/react";
 import ShippingPolicyPage, { metadata } from "@/app/shipping-policy/page";
 
 describe("ShippingPolicyPage", () => {
+  beforeEach(() => {
+    cleanup();
+  });
+
   test("exports SEO metadata with title and description", () => {
     expect(metadata.title).toBeDefined();
     expect(String(metadata.title)).toMatch(/Shipping Policy/i);
