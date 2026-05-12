@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description:
       "Shipping regions, processing times, carriers, costs, customs and duties for mining hardware orders.",
     url: "/shipping-policy",
-    type: "article",
+    type: "website",
   },
 };
 
