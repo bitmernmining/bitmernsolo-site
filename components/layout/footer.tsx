@@ -164,6 +164,12 @@ export function Footer() {
               Terms
             </Link>
             <Link
+              href="/shipping-policy"
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Shipping
+            </Link>
+            <Link
               href="/cookies"
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
