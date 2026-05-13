@@ -20,6 +20,16 @@ mock.module("next/link", () => ({
   }) => createElement("a", { href, className }, children),
 }));
 
+// Mock lucide-react to avoid loading 3500+ individual icon ESM files in bun:test
+mock.module("lucide-react", () => ({
+  Zap: () => null,
+  Cpu: () => null,
+  Gauge: () => null,
+  Wind: () => null,
+  ArrowRight: () => null,
+  Box: () => null,
+}));
+
 // Import component AFTER mocks
 const { ProductCard } = await import("@/components/shop/product-card");
 

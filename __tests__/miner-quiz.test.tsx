@@ -1,5 +1,5 @@
-import { describe, test, expect, mock, afterEach } from "bun:test";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { describe, test, expect, mock, afterEach, beforeEach } from "bun:test";
+import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import { createElement } from "react";
 
 // Mock next/image before component import
@@ -19,6 +19,22 @@ mock.module("next/link", () => ({
     children: React.ReactNode;
     className?: string;
   }) => createElement("a", { href, className }, children),
+}));
+
+// Mock lucide-react to avoid loading 3500+ individual icon ESM files in bun:test
+mock.module("lucide-react", () => ({
+  Monitor: () => null,
+  Sofa: () => null,
+  Warehouse: () => null,
+  Server: () => null,
+  Zap: () => null,
+  Cpu: () => null,
+  TrendingUp: () => null,
+  Wind: () => null,
+  ArrowLeft: () => null,
+  ArrowRight: () => null,
+  RotateCcw: () => null,
+  ChevronRight: () => null,
 }));
 
 // Mock radix-ui Dialog (Sheet) so portals render in happy-dom
@@ -74,6 +90,10 @@ globalThis.fetch = mock(
 );
 
 const { MinerQuiz } = await import("@/components/shop/miner-quiz");
+
+beforeEach(() => {
+  cleanup();
+});
 
 afterEach(() => {
   globalThis.fetch = originalFetch;

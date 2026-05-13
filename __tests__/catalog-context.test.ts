@@ -1,4 +1,4 @@
-import { describe, test, expect, mock, beforeEach, afterEach } from "bun:test";
+import { describe, test, expect, mock, beforeEach, afterEach, afterAll } from "bun:test";
 import { renderHook, waitFor, cleanup } from "@testing-library/react";
 import { createElement } from "react";
 import { CatalogProvider, useCatalogContext } from "@/contexts/catalog-context";
@@ -26,6 +26,10 @@ afterEach(() => {
   while (document.body.firstChild) {
     document.body.removeChild(document.body.firstChild);
   }
+});
+
+afterAll(() => {
+  cleanup();
 });
 
 const wrapper = ({ children }: { children: React.ReactNode }) =>

@@ -5,3 +5,5 @@ Sentry.init({
   // Basic capture only — no user context, no breadcrumbs (locked decision)
   tracesSampleRate: 0,
 });
+
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

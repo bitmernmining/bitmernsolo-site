@@ -1,5 +1,5 @@
-import { describe, test, expect, mock } from "bun:test";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, test, expect, mock, beforeEach } from "bun:test";
+import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { createElement } from "react";
 import type { PoolResult } from "@/lib/pool-stats";
 
@@ -15,6 +15,10 @@ mock.module("@/components/pool-stats/pool-stats-chart", () => ({
 const { PoolStatsViewer } = await import(
   "@/components/pool-stats/pool-stats-viewer"
 );
+
+beforeEach(() => {
+  cleanup();
+});
 
 const healthyPool: PoolResult = {
   id: "bitcoin-solo",
