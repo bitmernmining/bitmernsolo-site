@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/footer";
 import { CatalogProvider } from "@/contexts/catalog-context";
 import { CartErrorBoundary } from "@/components/shop/cart-error-boundary";
 import { Toaster } from "@/components/ui/toast";
+import { SupportBubble } from "@/components/support/support-bubble";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -76,6 +77,7 @@ export default function RootLayout({
               <Footer />
             </CartErrorBoundary>
           </Toaster>
+          <SupportBubble />
         </CatalogProvider>
       </body>
     </html>
