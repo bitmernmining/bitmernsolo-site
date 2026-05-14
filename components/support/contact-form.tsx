@@ -25,10 +25,9 @@ export function ContactForm({ onBack, onSuccess }: { onBack: () => void; onSucce
     const parsed = SupportTicketInputSchema.safeParse({ name, email, subject, message });
     if (!parsed.success) {
       const fe: FieldErrors = {};
-      const firstIssue = parsed.error.issues[0];
-      if (firstIssue) {
-        const k = firstIssue.path[0] as keyof SupportTicketInput;
-        if (k) fe[k] = firstIssue.message;
+      for (const issue of parsed.error.issues) {
+        const k = issue.path[0] as keyof SupportTicketInput;
+        if (k && !fe[k]) fe[k] = issue.message;
       }
       setErrors(fe);
       return;

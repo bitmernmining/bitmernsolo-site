@@ -31,7 +31,7 @@ describe("ContactForm", () => {
   test("validation error on empty submit", async () => {
     render(<ContactForm onBack={() => {}} onSuccess={() => {}} />);
     fireEvent.click(screen.getByRole("button", { name: /send/i }));
-    await waitFor(() => expect(screen.getByText(/required/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getAllByText(/required/i).length).toBeGreaterThanOrEqual(1));
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
