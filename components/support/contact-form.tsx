@@ -66,7 +66,7 @@ export function ContactForm({ onBack, onSuccess }: { onBack: () => void; onSucce
   if (done) {
     return (
       <div className="space-y-2 py-6 text-center">
-        <p className="text-sm font-medium">Got it — we'll reply by email.</p>
+        <p className="text-sm font-medium">Got it — we&apos;ll reply by email.</p>
         <p className="text-xs text-muted-foreground">Most tickets are answered within 24 hours.</p>
       </div>
     );
