@@ -15,3 +15,26 @@ export function renderFaqAnswer(source: string): string {
   });
   return cleaned.replace(/<a /g, '<a rel="noopener noreferrer" target="_blank" ');
 }
+
+const BLOG_ALLOWED_TAGS = [
+  "p", "br", "hr",
+  "b", "strong", "i", "em", "u",
+  "a",
+  "ul", "ol", "li",
+  "h2", "h3", "h4", "h5",
+  "blockquote",
+  "code", "pre",
+  "img",
+];
+const BLOG_ALLOWED_ATTR = ["href", "rel", "target", "src", "alt", "title", "loading"];
+
+export function renderBlogBody(html: string): string {
+  const cleaned = DOMPurify.sanitize(html, {
+    ALLOWED_TAGS: BLOG_ALLOWED_TAGS,
+    ALLOWED_ATTR: BLOG_ALLOWED_ATTR,
+    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|\/)/i,
+  });
+  return cleaned
+    .replace(/<a /g, '<a rel="noopener noreferrer" target="_blank" ')
+    .replace(/<img /g, '<img loading="lazy" ');
+}
