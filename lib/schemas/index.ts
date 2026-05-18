@@ -5,3 +5,4 @@ export * from "./order";
 export * from "./slug";
 export * from "./faq";
 export * from "./support-ticket";
+export * from "./blog";
