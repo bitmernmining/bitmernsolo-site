@@ -12,6 +12,9 @@ describe("validateEnv", () => {
     process.env.CART_SESSION_SECRET = "test-cart-session-secret-32-chars!!";
     process.env.SENTRY_DSN = "https://test@sentry.io/123";
     process.env.NEXT_PUBLIC_SENTRY_DSN = "https://test@sentry.io/123";
+    process.env.REVALIDATE_SECRET = "test-revalidate-secret";
+    process.env.ADMIN_NOTIFY_URL = "http://test-admin/api/support-tickets/notify";
+    process.env.ADMIN_NOTIFY_SECRET = "test-admin-notify-secret";
   });
 
   afterEach(() => {
@@ -22,6 +25,9 @@ describe("validateEnv", () => {
     process.env.CART_SESSION_SECRET = originalEnv.CART_SESSION_SECRET;
     process.env.SENTRY_DSN = originalEnv.SENTRY_DSN;
     process.env.NEXT_PUBLIC_SENTRY_DSN = originalEnv.NEXT_PUBLIC_SENTRY_DSN;
+    process.env.REVALIDATE_SECRET = originalEnv.REVALIDATE_SECRET;
+    process.env.ADMIN_NOTIFY_URL = originalEnv.ADMIN_NOTIFY_URL;
+    process.env.ADMIN_NOTIFY_SECRET = originalEnv.ADMIN_NOTIFY_SECRET;
   });
 
   test("throws with message naming the missing var when NEXT_PUBLIC_SUPABASE_URL is unset", () => {
