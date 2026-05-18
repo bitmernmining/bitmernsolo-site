@@ -121,3 +121,161 @@ describe("GET /api/blog/posts", () => {
     expect(res.status).toBe(500);
   });
 });
+
+// ------------------------------------------------------------------
+// Detail endpoint tests
+// ------------------------------------------------------------------
+
+const { GET: GET_DETAIL } = await import("@/app/api/blog/posts/[slug]/route");
+
+function makeDetailReq(slug: string): { req: Request; ctx: { params: Promise<{ slug: string }> } } {
+  return {
+    req: new Request(`http://localhost/api/blog/posts/${slug}`),
+    ctx: { params: Promise.resolve({ slug }) },
+  };
+}
+
+const samplePost = {
+  id: "p1",
+  slug: "intro-to-mining",
+  title: "Intro to Mining",
+  excerpt: "An excerpt",
+  body_html: "<p>Body</p>",
+  cover_image_url: null,
+  author_id: "a1",
+  status: "published",
+  scheduled_for: null,
+  published_at: "2026-05-18T00:00:00Z",
+  meta_title: null,
+  meta_description: null,
+  og_image_url: null,
+  read_time_minutes: 3,
+  created_at: "2026-05-18T00:00:00Z",
+  updated_at: "2026-05-18T00:00:00Z",
+};
+
+describe("GET /api/blog/posts/[slug]", () => {
+  test("400 on invalid slug format", async () => {
+    const { req, ctx } = makeDetailReq("INVALID SLUG");
+    const res = await GET_DETAIL(req, ctx);
+    expect(res.status).toBe(400);
+  });
+
+  test("404 when post not found", async () => {
+    // Main post fetch returns null
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          eq: () => ({
+            lte: () => ({
+              single: async () => ({ data: null, error: { message: "not found" } }),
+            }),
+          }),
+        }),
+      }),
+    }));
+    const { req, ctx } = makeDetailReq("missing-post");
+    const res = await GET_DETAIL(req, ctx);
+    expect(res.status).toBe(404);
+  });
+
+  test("200 with full detail payload", async () => {
+    // 1. Main post fetch
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          eq: () => ({
+            lte: () => ({
+              single: async () => ({ data: samplePost, error: null }),
+            }),
+          }),
+        }),
+      }),
+    }));
+    // 2. Author fetch
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          maybeSingle: async () => ({
+            data: { id: "a1", slug: "satoshi", name: "Satoshi", avatar_url: null },
+            error: null,
+          }),
+        }),
+      }),
+    }));
+    // 3. Categories (via post_categories join) — return one category
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          order: async () => ({
+            data: [{ blog_categories: { id: "c1", slug: "mining-guides", name: "Mining Guides", display_order: 0 } }],
+            error: null,
+          }),
+        }),
+      }),
+    }));
+    // 4. Tags (via post_tags join)
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: async () => ({
+          data: [{ blog_tags: { id: "t1", slug: "asic", name: "ASIC", created_at: "", updated_at: "" } }],
+          error: null,
+        }),
+      }),
+    }));
+    // 5. Related posts: empty
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          lte: () => ({
+            neq: () => ({
+              order: () => ({
+                limit: async () => ({ data: [], error: null }),
+              }),
+            }),
+          }),
+        }),
+      }),
+    }));
+    // 6. prev post: null
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          lt: () => ({
+            order: () => ({
+              limit: () => ({
+                maybeSingle: async () => ({ data: null, error: null }),
+              }),
+            }),
+          }),
+        }),
+      }),
+    }));
+    // 7. next post: null
+    fromMock.mockImplementationOnce(() => ({
+      select: () => ({
+        eq: () => ({
+          gt: () => ({
+            order: () => ({
+              limit: () => ({
+                maybeSingle: async () => ({ data: null, error: null }),
+              }),
+            }),
+          }),
+        }),
+      }),
+    }));
+
+    const { req, ctx } = makeDetailReq("intro-to-mining");
+    const res = await GET_DETAIL(req, ctx);
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.post.slug).toBe("intro-to-mining");
+    expect(json.author?.slug).toBe("satoshi");
+    expect(json.categories).toHaveLength(1);
+    expect(json.tags).toHaveLength(1);
+    expect(json.related).toHaveLength(0);
+    expect(json.prev).toBeNull();
+    expect(json.next).toBeNull();
+  });
+});
