@@ -145,7 +145,7 @@ export async function GET(req: Request): Promise<NextResponse<PostListResponse |
 
     // Hydrate author refs
     const authorIds = Array.from(new Set(posts.map((p) => p.author_id).filter((id): id is string => !!id)));
-    let authorMap = new Map<string, AuthorRef>();
+    const authorMap = new Map<string, AuthorRef>();
     if (authorIds.length > 0) {
       const { data: aRows, error: aErr } = await supabase
         .from("authors")
@@ -161,7 +161,7 @@ export async function GET(req: Request): Promise<NextResponse<PostListResponse |
     // Hydrate primary_category per post: join blog_post_categories to blog_categories,
     // pick the one with the lowest display_order per post.
     const postIds = posts.map((p) => p.id);
-    let primaryCategoryMap = new Map<string, BlogCategoryRef>();
+    const primaryCategoryMap = new Map<string, BlogCategoryRef>();
     if (postIds.length > 0) {
       const { data: pcRows, error: pcErr } = await supabase
         .from("blog_post_categories")
