@@ -10,15 +10,26 @@ import { Pricing } from "@/components/landing/pricing";
 import { SoloChances } from "@/components/landing/solo-chances";
 import { FeaturedProducts } from "@/components/landing/featured-products";
 import { FAQ } from "@/components/landing/faq";
+import { BlocksFound } from "@/components/landing/blocks-found";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { fetchBlocksSummary } from "@/lib/pool-blocks";
 
-export default function HomePage() {
+export default async function HomePage() {
+  let blocksFound: number | null = null;
+  try {
+    const summary = await fetchBlocksSummary();
+    blocksFound = summary.totalConfirmed > 0 ? summary.totalConfirmed : null;
+  } catch {
+    blocksFound = null;
+  }
+
   return (
     <>
-      <Hero />
+      <Hero blocksFound={blocksFound} />
       <Features />
       <Pools />
+      <BlocksFound />
       <DashboardPreview />
       <HowItWorks />
       <SupportedCoins />

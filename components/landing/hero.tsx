@@ -28,7 +28,11 @@ const ICON = {
   trendUp: "M13 7h8m0 0v8m0-8l-8 8-4-4-6 6",
 };
 
-export function Hero() {
+interface HeroProps {
+  blocksFound?: number | null;
+}
+
+export function Hero({ blocksFound }: HeroProps = {}) {
   return (
     <section className="relative overflow-hidden pb-0">
       {/* Dot-grid background */}
@@ -36,10 +40,21 @@ export function Hero() {
 
       {/* Centered text content */}
       <div className="relative mx-auto max-w-4xl px-4 pt-20 sm:px-6 sm:pt-28 lg:pt-32 text-center">
-        {/* Badge */}
-        <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1 text-xs text-muted-foreground mb-8">
-          <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-          5 supported coins. 1% pool fee. That&apos;s it.
+        {/* Badge row */}
+        <div className="animate-fade-up flex flex-wrap items-center justify-center gap-2 mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1 text-xs text-muted-foreground">
+            <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+            5 supported coins. 1% pool fee. That&apos;s it.
+          </div>
+          {blocksFound && blocksFound > 0 ? (
+            <a
+              href="#blocks-found"
+              className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+              <span className="font-medium text-foreground tabular-nums">{blocksFound.toLocaleString()}</span> blocks found
+            </a>
+          ) : null}
         </div>
 
         <h1
