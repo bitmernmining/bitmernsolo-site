@@ -51,14 +51,14 @@ export async function GET(req: Request): Promise<NextResponse<PostListResponse |
     // For now, since each filter requires its own prefetch, we run them sequentially and
     // intersect. If any filter matches zero IDs, short-circuit to empty result.
 
-    let filterPostIds: string[] | null = null;
+    const filterPostIdsRef: { value: string[] | null } = { value: null };
 
     async function intersectWith(ids: string[]): Promise<void> {
-      if (filterPostIds === null) {
-        filterPostIds = ids;
+      if (filterPostIdsRef.value === null) {
+        filterPostIdsRef.value = ids;
       } else {
         const set = new Set(ids);
-        filterPostIds = filterPostIds.filter((id) => set.has(id));
+        filterPostIdsRef.value = filterPostIdsRef.value.filter((id) => set.has(id));
       }
     }
 
@@ -117,7 +117,7 @@ export async function GET(req: Request): Promise<NextResponse<PostListResponse |
       await intersectWith((ap ?? []).map((r) => r.id));
     }
 
-    if (filterPostIds !== null && filterPostIds.length === 0) {
+    if (filterPostIdsRef.value !== null && filterPostIdsRef.value.length === 0) {
       return NextResponse.json({ posts: [], page, per_page, total: 0 });
     }
 
@@ -131,8 +131,8 @@ export async function GET(req: Request): Promise<NextResponse<PostListResponse |
       .eq("status", "published")
       .lte("published_at", new Date().toISOString());
 
-    if (filterPostIds !== null) {
-      query = query.in("id", filterPostIds);
+    if (filterPostIdsRef.value !== null) {
+      query = query.in("id", filterPostIdsRef.value);
     }
 
     const { data: postRows, count, error } = await query
@@ -168,12 +168,14 @@ export async function GET(req: Request): Promise<NextResponse<PostListResponse |
         .select("post_id, blog_categories!inner(id, slug, name, display_order)")
         .in("post_id", postIds);
       if (pcErr) throw pcErr;
-      // pcRows: each row has post_id + blog_categories (joined object)
+      // pcRows: each row has post_id + blog_categories (joined object or array under Supabase types)
       const byPost: Record<string, Array<{ id: string; slug: string; name: string; display_order: number }>> = {};
-      for (const row of pcRows ?? []) {
-        const cat = (row as { blog_categories: { id: string; slug: string; name: string; display_order: number } }).blog_categories;
+      type JoinedCat = { id: string; slug: string; name: string; display_order: number };
+      type PcRow = { post_id: string; blog_categories: JoinedCat | JoinedCat[] };
+      for (const row of (pcRows ?? []) as unknown as PcRow[]) {
+        const cat = Array.isArray(row.blog_categories) ? row.blog_categories[0] : row.blog_categories;
         if (!cat) continue;
-        const postId = (row as { post_id: string }).post_id;
+        const postId = row.post_id;
         if (!byPost[postId]) byPost[postId] = [];
         byPost[postId].push(cat);
       }

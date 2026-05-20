@@ -58,8 +58,9 @@ async function fetchDetail(slug: string): Promise<Detail | null> {
     .select("blog_categories!inner(id, slug, name, display_order)")
     .eq("post_id", post.id);
   const categories: BlogCategoryRef[] = [];
-  for (const r of (pcRows ?? []) as Array<{ blog_categories: { id: string; slug: string; name: string; display_order: number } }>) {
-    if (r.blog_categories) categories.push({ id: r.blog_categories.id, slug: r.blog_categories.slug, name: r.blog_categories.name });
+  for (const r of (pcRows ?? []) as unknown as Array<{ blog_categories: { id: string; slug: string; name: string; display_order: number } | { id: string; slug: string; name: string; display_order: number }[] }>) {
+    const c = Array.isArray(r.blog_categories) ? r.blog_categories[0] : r.blog_categories;
+    if (c) categories.push({ id: c.id, slug: c.slug, name: c.name });
   }
   categories.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -68,8 +69,9 @@ async function fetchDetail(slug: string): Promise<Detail | null> {
     .select("blog_tags!inner(id, slug, name, created_at, updated_at)")
     .eq("post_id", post.id);
   const tags: BlogTag[] = [];
-  for (const r of (ptRows ?? []) as Array<{ blog_tags: BlogTag }>) {
-    if (r.blog_tags) tags.push(r.blog_tags);
+  for (const r of (ptRows ?? []) as unknown as Array<{ blog_tags: BlogTag | BlogTag[] }>) {
+    const t = Array.isArray(r.blog_tags) ? r.blog_tags[0] : r.blog_tags;
+    if (t) tags.push(t);
   }
 
   // Related: 3 most-recent OTHER published posts (broad heuristic; can be refined later)

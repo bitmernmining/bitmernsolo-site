@@ -74,8 +74,8 @@ export async function GET(_req: Request, ctx: Ctx): Promise<NextResponse<PostDet
       .eq("post_id", post.id)
       .order("blog_categories(display_order)", { ascending: true });
     const categories: BlogCategoryRef[] = [];
-    for (const row of (pcRows ?? []) as Array<{ blog_categories: { id: string; slug: string; name: string; display_order: number } }>) {
-      const c = row.blog_categories;
+    for (const row of (pcRows ?? []) as unknown as Array<{ blog_categories: { id: string; slug: string; name: string; display_order: number } | { id: string; slug: string; name: string; display_order: number }[] }>) {
+      const c = Array.isArray(row.blog_categories) ? row.blog_categories[0] : row.blog_categories;
       if (!c) continue;
       const parsed = BlogCategoryRefSchema.safeParse({ id: c.id, slug: c.slug, name: c.name });
       if (parsed.success) categories.push(parsed.data);
@@ -87,8 +87,8 @@ export async function GET(_req: Request, ctx: Ctx): Promise<NextResponse<PostDet
       .select("blog_tags!inner(id, slug, name, created_at, updated_at)")
       .eq("post_id", post.id);
     const tags: BlogTag[] = [];
-    for (const row of (ptRows ?? []) as Array<{ blog_tags: { id: string; slug: string; name: string; created_at: string; updated_at: string } }>) {
-      const t = row.blog_tags;
+    for (const row of (ptRows ?? []) as unknown as Array<{ blog_tags: { id: string; slug: string; name: string; created_at: string; updated_at: string } | { id: string; slug: string; name: string; created_at: string; updated_at: string }[] }>) {
+      const t = Array.isArray(row.blog_tags) ? row.blog_tags[0] : row.blog_tags;
       if (!t) continue;
       const parsed = BlogTagSchema.safeParse(t);
       if (parsed.success) tags.push(parsed.data);
