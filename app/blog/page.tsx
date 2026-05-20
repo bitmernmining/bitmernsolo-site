@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { PostCard } from "@/components/blog/post-card";
 import { PostPager } from "@/components/blog/post-pager";
 import { createClient } from "@/lib/supabase/server";
-import { PostListResponseSchema, type PostSummary, type AuthorRef, type BlogCategoryRef } from "@/lib/schemas/blog";
+import type { PostSummary, AuthorRef, BlogCategoryRef } from "@/lib/schemas/blog";
 
 export const metadata: Metadata = {
   title: "Blog — Bitmern Solo",

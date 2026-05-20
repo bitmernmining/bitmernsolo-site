@@ -11,7 +11,6 @@ import {
   Coins,
   Gauge,
   History,
-  X,
 } from "lucide-react";
 
 export const metadata: Metadata = {

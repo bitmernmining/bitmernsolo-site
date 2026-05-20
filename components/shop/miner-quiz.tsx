@@ -67,7 +67,6 @@ export function MinerQuiz({ open, onOpenChange }: MinerQuizProps) {
   }, []);
 
   const stepIndex = STEPS.indexOf(step);
-  const progress = ((stepIndex + 1) / STEPS.length) * 100;
 
   const resetAll = useCallback(() => {
     setStep("coin");
