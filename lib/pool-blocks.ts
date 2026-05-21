@@ -52,7 +52,7 @@ async function fetchPoolBlocks(poolId: string): Promise<MiningcoreBlock[]> {
     const url = `${BASE}/api/pools/${poolId}/blocks?page=${page}&pageSize=${PAGE_SIZE}`;
     let chunk: MiningcoreBlock[] = [];
     try {
-      const res = await fetch(url, { next: { revalidate: 60 } });
+      const res = await fetch(url, { next: { revalidate: 60, tags: ["blocks-found"] } });
       if (!res.ok) break;
       const data = (await res.json()) as unknown;
       chunk = Array.isArray(data) ? (data as MiningcoreBlock[]) : [];

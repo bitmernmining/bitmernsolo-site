@@ -11,6 +11,7 @@ import { SoloChances } from "@/components/landing/solo-chances";
 import { FeaturedProducts } from "@/components/landing/featured-products";
 import { FAQ } from "@/components/landing/faq";
 import { BlocksFound } from "@/components/landing/blocks-found";
+import { NewBlockBanner } from "@/components/landing/new-block-banner";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { fetchBlocksSummary } from "@/lib/pool-blocks";
@@ -26,6 +27,7 @@ export default async function HomePage() {
 
   return (
     <>
+      <NewBlockBanner />
       <Hero blocksFound={blocksFound} />
       <Features />
       <Pools />
