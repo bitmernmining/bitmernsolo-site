@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { PostCard } from "@/components/blog/post-card";
 import { PostPager } from "@/components/blog/post-pager";
 import { createClient } from "@/lib/supabase/server";
@@ -63,23 +66,57 @@ export default async function BlogIndexPage({ searchParams }: { searchParams: Pr
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Blog</h1>
-        <p className="mt-2 text-muted-foreground">
-          Mining guides, hardware reviews, and pool updates from the Bitmern Solo team.
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      {/* Header */}
+      <div className="text-center mb-16">
+        <h1
+          className="font-bold tracking-tight"
+          style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+        >
+          Blog
+        </h1>
+        <p className="mt-3 mx-auto max-w-xl text-muted-foreground leading-relaxed">
+          Mining guides, hardware reviews, and pool updates from the Bitmern
+          Solo team.
         </p>
-      </header>
+      </div>
+
       {posts.length === 0 ? (
-        <p className="text-center text-muted-foreground py-16">No posts yet — check back soon.</p>
+        <p className="text-center text-muted-foreground py-16">
+          No posts yet — check back soon.
+        </p>
       ) : (
-        <>
+        <div className="mb-16">
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((p) => (<PostCard key={p.id} post={p} />))}
+            {posts.map((p) => (
+              <PostCard key={p.id} post={p} />
+            ))}
           </div>
           <PostPager current={page} total={totalPages} basePath="/blog" />
-        </>
+        </div>
       )}
-    </main>
+
+      {/* CTA */}
+      <div className="text-center rounded-xl border border-primary/20 bg-primary/5 p-8">
+        <h2 className="text-2xl font-bold tracking-tight">
+          Ready to start mining?
+        </h2>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Connect your miner in minutes and keep the full block reward when you
+          win.
+        </p>
+        <div className="mt-5 flex flex-wrap justify-center gap-3">
+          <Button size="lg" className="glow" asChild>
+            <a href="https://app.bitmernsolo.com/signup">
+              Start Mining
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </a>
+          </Button>
+          <Button variant="outline" size="lg" asChild>
+            <Link href="/getting-started">Getting Started</Link>
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

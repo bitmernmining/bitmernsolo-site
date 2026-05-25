@@ -21,7 +21,7 @@ function truncate(s: string | null, max: number): string {
 export function PostCard({ post }: { post: PostSummary }) {
   const href = `/blog/${post.slug}`;
   return (
-    <article className="group flex flex-col overflow-hidden rounded-lg border border-border bg-background transition-colors hover:border-primary/40">
+    <article className="group flex flex-col overflow-hidden rounded-xl border border-border bg-background transition-colors hover:border-primary/40">
       {post.cover_image_url ? (
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-muted">
           <Image

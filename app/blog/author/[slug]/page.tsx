@@ -59,30 +59,79 @@ export default async function BlogAuthorPage({ params }: { params: Promise<{ slu
   const posts = await fetchAuthorPosts(author.id);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      <header className="mb-10 flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <div className="text-center mb-16 flex flex-col items-center gap-4">
         {author.avatar_url && (
-          <Image src={author.avatar_url} alt={author.name} width={96} height={96} className="rounded-full" />
+          <Image
+            src={author.avatar_url}
+            alt={author.name}
+            width={96}
+            height={96}
+            className="rounded-full"
+          />
         )}
         <div>
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{author.name}</h1>
-          {author.bio && <p className="mt-2 text-muted-foreground">{author.bio}</p>}
+          <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Author
+          </p>
+          <h1
+            className="mt-2 font-bold tracking-tight"
+            style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+          >
+            {author.name}
+          </h1>
+          {author.bio && (
+            <p className="mt-3 mx-auto max-w-xl text-muted-foreground leading-relaxed">
+              {author.bio}
+            </p>
+          )}
           {(author.twitter || author.github || author.website) && (
-            <div className="mt-3 flex gap-3 text-sm">
-              {author.twitter && <Link href={`https://twitter.com/${author.twitter}`} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Twitter</Link>}
-              {author.github && <Link href={`https://github.com/${author.github}`} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">GitHub</Link>}
-              {author.website && <Link href={author.website} className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">Website</Link>}
+            <div className="mt-4 flex justify-center gap-3 text-sm">
+              {author.twitter && (
+                <Link
+                  href={`https://twitter.com/${author.twitter}`}
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Twitter
+                </Link>
+              )}
+              {author.github && (
+                <Link
+                  href={`https://github.com/${author.github}`}
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub
+                </Link>
+              )}
+              {author.website && (
+                <Link
+                  href={author.website}
+                  className="text-primary hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Website
+                </Link>
+              )}
             </div>
           )}
         </div>
-      </header>
+      </div>
       {posts.length === 0 ? (
-        <p className="text-center text-muted-foreground py-16">No posts by this author yet.</p>
+        <p className="text-center text-muted-foreground py-16">
+          No posts by this author yet.
+        </p>
       ) : (
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {posts.map((p) => (<PostCard key={p.id} post={p} />))}
+          {posts.map((p) => (
+            <PostCard key={p.id} post={p} />
+          ))}
         </div>
       )}
-    </main>
+    </div>
   );
 }

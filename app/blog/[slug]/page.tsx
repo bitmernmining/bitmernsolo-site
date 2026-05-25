@@ -186,12 +186,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   };
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:py-16">
+    <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
 
       <article>
         {post.cover_image_url && (
-          <div className="relative -mx-4 mb-8 aspect-[2/1] overflow-hidden rounded-lg sm:mx-0">
+          <div className="relative -mx-4 mb-8 aspect-[2/1] overflow-hidden rounded-xl sm:mx-0">
             <Image src={post.cover_image_url} alt={post.title} fill priority sizes="(min-width: 768px) 768px, 100vw" className="object-cover" />
           </div>
         )}
@@ -272,6 +272,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           </div>
         </section>
       )}
-    </main>
+    </div>
   );
 }

@@ -86,21 +86,41 @@ export default async function BlogCategoryPage({
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">Posts in {cat.name}</h1>
-        {cat.description && <p className="mt-2 text-muted-foreground">{cat.description}</p>}
-      </header>
+    <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+      <div className="text-center mb-16">
+        <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          Category
+        </p>
+        <h1
+          className="mt-2 font-bold tracking-tight"
+          style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+        >
+          {cat.name}
+        </h1>
+        {cat.description && (
+          <p className="mt-3 mx-auto max-w-xl text-muted-foreground leading-relaxed">
+            {cat.description}
+          </p>
+        )}
+      </div>
       {posts.length === 0 ? (
-        <p className="text-center text-muted-foreground py-16">No posts in this category yet.</p>
+        <p className="text-center text-muted-foreground py-16">
+          No posts in this category yet.
+        </p>
       ) : (
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((p) => (<PostCard key={p.id} post={p} />))}
+            {posts.map((p) => (
+              <PostCard key={p.id} post={p} />
+            ))}
           </div>
-          <PostPager current={page} total={totalPages} basePath={`/blog/category/${cat.slug}`} />
+          <PostPager
+            current={page}
+            total={totalPages}
+            basePath={`/blog/category/${cat.slug}`}
+          />
         </>
       )}
-    </main>
+    </div>
   );
 }
