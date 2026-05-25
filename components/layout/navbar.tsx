@@ -102,6 +102,10 @@ const topLevelLinks = [
     href: "/docs",
   },
   {
+    label: "Blog",
+    href: "/blog",
+  },
+  {
     label: "Shop",
     href: "/shop",
   },

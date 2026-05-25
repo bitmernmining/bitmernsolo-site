@@ -19,6 +19,7 @@ const linkColumns = {
   ],
   Company: [
     { label: "About", href: "/about" },
+    { label: "Blog", href: "/blog" },
     { label: "Contact", href: "/contact" },
     { label: "Hosting", href: "https://bitmernmining.com", external: true },
   ],
