@@ -21,7 +21,7 @@ export function QuickConnectCard() {
   const [coin, setCoin] = useState<CoinSymbol>("BTC");
   const [copied, setCopied] = useState(false);
 
-  const endpoint = STRATUM.find((s) => s.coin === coin) ?? STRATUM[0];
+  const endpoint = STRATUM.find((s) => s.coin === coin)!;
   const defaultPort = endpoint.ports[0];
   const configText = buildConfigText(endpoint.host, defaultPort.port);
 
@@ -35,13 +35,12 @@ export function QuickConnectCard() {
     <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 sm:p-8">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <h2 className="text-lg font-semibold">Quick Connect</h2>
-        <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Choose coin">
+        <div className="flex flex-wrap gap-1.5" aria-label="Choose coin">
           {STRATUM.map((s) => (
             <button
               key={s.coin}
               type="button"
-              role="tab"
-              aria-selected={coin === s.coin}
+              aria-pressed={coin === s.coin}
               onClick={() => setCoin(s.coin)}
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
                 coin === s.coin
