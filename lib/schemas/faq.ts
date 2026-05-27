@@ -24,9 +24,12 @@ export const FaqSchema = z.object({
 });
 export type Faq = z.infer<typeof FaqSchema>;
 
+export const FaqWithHtmlSchema = FaqSchema.extend({ answer_html: z.string() });
+export type FaqWithHtml = z.infer<typeof FaqWithHtmlSchema>;
+
 export const FaqGroupSchema = z.object({
   category: FaqCategorySchema.nullable(),
-  faqs: z.array(FaqSchema),
+  faqs: z.array(FaqWithHtmlSchema),
 });
 export type FaqGroup = z.infer<typeof FaqGroupSchema>;
 

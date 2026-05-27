@@ -9,13 +9,13 @@ const groups: FaqGroup[] = [
   {
     category: { id: "c1", name: "Shipping", slug: "shipping", display_order: 0, created_at: "", updated_at: "" },
     faqs: [
-      { id: "f1", question: "When does my order ship?", answer: "Within 1-3 days.", category_id: "c1", display_order: 0, is_published: true, created_at: "", updated_at: "" },
-      { id: "f2", question: "Do you ship to Europe?", answer: "Yes, via DHL.", category_id: "c1", display_order: 1, is_published: true, created_at: "", updated_at: "" },
+      { id: "f1", question: "When does my order ship?", answer: "Within 1-3 days.", answer_html: "<p>Within 1-3 days.</p>", category_id: "c1", display_order: 0, is_published: true, created_at: "", updated_at: "" },
+      { id: "f2", question: "Do you ship to Europe?", answer: "Yes, via DHL.", answer_html: "<p>Yes, via DHL.</p>", category_id: "c1", display_order: 1, is_published: true, created_at: "", updated_at: "" },
     ],
   },
   {
     category: { id: "c2", name: "Returns", slug: "returns", display_order: 1, created_at: "", updated_at: "" },
-    faqs: [{ id: "f3", question: "How long is the return window?", answer: "30 days.", category_id: "c2", display_order: 0, is_published: true, created_at: "", updated_at: "" }],
+    faqs: [{ id: "f3", question: "How long is the return window?", answer: "30 days.", answer_html: "<p>30 days.</p>", category_id: "c2", display_order: 0, is_published: true, created_at: "", updated_at: "" }],
   },
 ];
 

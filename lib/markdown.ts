@@ -1,40 +1,50 @@
 import { marked } from "marked";
-import DOMPurify from "isomorphic-dompurify";
-
-const ALLOWED_TAGS = ["p", "br", "b", "strong", "i", "em", "a", "ul", "ol", "li"];
-const ALLOWED_ATTR = ["href", "rel", "target"];
+import sanitizeHtml from "sanitize-html";
 
 marked.setOptions({ breaks: true, gfm: true });
 
+const SAFE_URL_SCHEMES = ["http", "https", "mailto"];
+
+const FAQ_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: ["p", "br", "b", "strong", "i", "em", "a", "ul", "ol", "li"],
+  allowedAttributes: { a: ["href", "rel", "target"] },
+  allowedSchemes: SAFE_URL_SCHEMES,
+  allowedSchemesAppliedToAttributes: ["href"],
+  allowProtocolRelative: false,
+  transformTags: {
+    a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer", target: "_blank" }),
+  },
+};
+
 export function renderFaqAnswer(source: string): string {
   const rawHtml = marked.parse(source, { async: false }) as string;
-  const cleaned = DOMPurify.sanitize(rawHtml, {
-    ALLOWED_TAGS,
-    ALLOWED_ATTR,
-    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|\/)/i,
-  });
-  return cleaned.replace(/<a /g, '<a rel="noopener noreferrer" target="_blank" ');
+  return sanitizeHtml(rawHtml, FAQ_SANITIZE_OPTIONS);
 }
 
-const BLOG_ALLOWED_TAGS = [
-  "p", "br", "hr",
-  "b", "strong", "i", "em", "u",
-  "a",
-  "ul", "ol", "li",
-  "h2", "h3", "h4", "h5",
-  "blockquote",
-  "code", "pre",
-  "img",
-];
-const BLOG_ALLOWED_ATTR = ["href", "rel", "target", "src", "alt", "title", "loading"];
+const BLOG_SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
+    "p", "br", "hr",
+    "b", "strong", "i", "em", "u",
+    "a",
+    "ul", "ol", "li",
+    "h2", "h3", "h4", "h5",
+    "blockquote",
+    "code", "pre",
+    "img",
+  ],
+  allowedAttributes: {
+    a: ["href", "rel", "target"],
+    img: ["src", "alt", "title", "loading"],
+  },
+  allowedSchemes: SAFE_URL_SCHEMES,
+  allowedSchemesAppliedToAttributes: ["href", "src"],
+  allowProtocolRelative: false,
+  transformTags: {
+    a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer", target: "_blank" }),
+    img: sanitizeHtml.simpleTransform("img", { loading: "lazy" }),
+  },
+};
 
 export function renderBlogBody(html: string): string {
-  const cleaned = DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: BLOG_ALLOWED_TAGS,
-    ALLOWED_ATTR: BLOG_ALLOWED_ATTR,
-    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|\/)/i,
-  });
-  return cleaned
-    .replace(/<a /g, '<a rel="noopener noreferrer" target="_blank" ')
-    .replace(/<img /g, '<img loading="lazy" ');
+  return sanitizeHtml(html, BLOG_SANITIZE_OPTIONS);
 }

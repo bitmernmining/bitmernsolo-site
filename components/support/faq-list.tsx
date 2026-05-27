@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { FaqGroup } from "@/lib/schemas/faq";
-import { renderFaqAnswer } from "@/lib/markdown";
 
 function matchesQuery(q: string, question: string, answer: string): boolean {
   if (q.trim() === "") return true;
@@ -33,7 +32,7 @@ export function FaqList({ groups, query }: { groups: FaqGroup[]; query: string }
           )}
           <ul className="divide-y divide-border/40">
             {g.faqs.map((faq) => (
-              <FaqItem key={faq.id} question={faq.question} answer={faq.answer} />
+              <FaqItem key={faq.id} question={faq.question} answerHtml={faq.answer_html} />
             ))}
           </ul>
         </section>
@@ -42,13 +41,12 @@ export function FaqList({ groups, query }: { groups: FaqGroup[]; query: string }
   );
 }
 
-function FaqItem({ question, answer }: { question: string; answer: string }) {
+function FaqItem({ question, answerHtml }: { question: string; answerHtml: string }) {
   const [open, setOpen] = useState(false);
-  // SECURITY: sanitizedHtml is the DOMPurify-sanitized output of renderFaqAnswer.
-  // This is the ONLY HTML-injection site in the project. The input is plain Markdown
-  // from admin-authored FAQ rows; the sanitizer enforces a strict tag/attr allow-list.
-  const sanitizedHtml = useMemo(() => renderFaqAnswer(answer), [answer]);
-  const htmlProp = { __html: sanitizedHtml };
+  // SECURITY: answerHtml is sanitized server-side in /api/faqs via renderFaqAnswer
+  // (sanitize-html with a strict tag/attr allow-list). This is the ONLY HTML-injection
+  // site in the project; the input is admin-authored Markdown.
+  const htmlProp = useMemo(() => ({ __html: answerHtml }), [answerHtml]);
   return (
     <li>
       <button

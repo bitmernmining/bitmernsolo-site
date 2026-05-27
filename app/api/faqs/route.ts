@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import * as Sentry from "@sentry/nextjs";
 import { createClient } from "@/lib/supabase/server";
-import { FaqCategorySchema, FaqSchema, type FaqGroup, type FaqListResponse } from "@/lib/schemas/faq";
+import { FaqCategorySchema, FaqSchema, type FaqGroup, type FaqListResponse, type FaqWithHtml } from "@/lib/schemas/faq";
+import { renderFaqAnswer } from "@/lib/markdown";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,10 @@ export async function GET(): Promise<NextResponse<FaqListResponse | { error: str
     if (faqErr) throw faqErr;
 
     const categories = (catRows ?? []).map((r) => FaqCategorySchema.safeParse(r)).filter((p) => p.success).map((p) => p.data);
-    const faqs = (faqRows ?? []).map((r) => FaqSchema.safeParse(r)).filter((p) => p.success).map((p) => p.data);
+    const faqs: FaqWithHtml[] = (faqRows ?? [])
+      .map((r) => FaqSchema.safeParse(r))
+      .filter((p) => p.success)
+      .map((p) => ({ ...p.data, answer_html: renderFaqAnswer(p.data.answer) }));
 
     const groups: FaqGroup[] = [];
     for (const cat of categories) {
