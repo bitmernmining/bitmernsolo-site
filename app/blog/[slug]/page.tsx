@@ -190,13 +190,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
 
       <article>
-        {post.cover_image_url && (
-          <div className="relative -mx-4 mb-8 aspect-[2/1] overflow-hidden rounded-xl sm:mx-0">
-            <Image src={post.cover_image_url} alt={post.title} fill priority sizes="(min-width: 768px) 768px, 100vw" className="object-cover" />
-          </div>
-        )}
-
-        <header className="mb-8 space-y-4">
+        <header className="mb-10 space-y-5">
+          <Link href="/blog" className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-primary">
+            ← Back to blog
+          </Link>
           {categories.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {categories.map((c) => (
@@ -206,33 +203,48 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               ))}
             </div>
           )}
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{post.title}</h1>
-          {post.excerpt && <p className="text-lg leading-relaxed text-muted-foreground">{post.excerpt}</p>}
-          <div className="flex flex-wrap items-center gap-3 border-t border-border/40 pt-4 text-sm text-muted-foreground">
+          <h1
+            className="font-bold tracking-tight"
+            style={{ fontSize: "clamp(1.875rem, 4.5vw, 3rem)", lineHeight: 1.1 }}
+          >
+            {post.title}
+          </h1>
+          {post.excerpt && (
+            <p className="text-lg leading-relaxed text-muted-foreground sm:text-xl">
+              {post.excerpt}
+            </p>
+          )}
+          <div className="flex flex-wrap items-center gap-3 border-y border-border/40 py-4 text-sm text-muted-foreground">
             {author && (
               <Link href={`/blog/author/${author.slug}`} className="flex items-center gap-2 hover:text-foreground">
                 {author.avatar_url && (
                   <Image src={author.avatar_url} alt={author.name} width={32} height={32} className="rounded-full" />
                 )}
-                <span>{author.name}</span>
+                <span className="font-medium text-foreground/90">{author.name}</span>
               </Link>
             )}
             {post.published_at && (
               <>
-                <span aria-hidden="true">·</span>
+                <span aria-hidden="true" className="text-border">·</span>
                 <time dateTime={post.published_at}>{formatDate(post.published_at)}</time>
               </>
             )}
-            <span aria-hidden="true">·</span>
-            <span className="inline-flex items-center gap-1">
-              <Clock className="h-3 w-3" aria-hidden="true" />
+            <span aria-hidden="true" className="text-border">·</span>
+            <span className="inline-flex items-center gap-1.5">
+              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
               {post.read_time_minutes} min read
             </span>
           </div>
         </header>
 
+        {post.cover_image_url && (
+          <div className="relative -mx-4 mb-12 aspect-[2/1] overflow-hidden sm:mx-0 sm:rounded-xl sm:border sm:border-border">
+            <Image src={post.cover_image_url} alt={post.title} fill priority sizes="(min-width: 768px) 768px, 100vw" className="object-cover" />
+          </div>
+        )}
+
         <div
-          className="prose prose-sm sm:prose-base max-w-none [&_h2]:mt-8 [&_h3]:mt-6"
+          className="blog-body"
           dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
         />
 
