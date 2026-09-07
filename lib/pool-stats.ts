@@ -48,6 +48,11 @@ const COIN_MAP: Record<string, { symbol: string; icon: string; algo: string }> =
   "dogecoin-solo": { symbol: "DOGE", icon: "/coins/doge.svg", algo: "Scrypt" },
   "bitcoincash-solo": { symbol: "BCH", icon: "/coins/bch.svg", algo: "SHA-256d" },
   "digibyte-solo": { symbol: "DGB", icon: "/coins/dgb.svg", algo: "SHA-256d" },
+  "ecash-solo": { symbol: "XEC", icon: "/coins/xec.svg", algo: "SHA-256d" },
+  "ethereumclassic-solo": { symbol: "ETC", icon: "/coins/etc.svg", algo: "Etchash" },
+  "zcash-solo": { symbol: "ZEC", icon: "/coins/zec.svg", algo: "Equihash" },
+  "monero-solo": { symbol: "XMR", icon: "/coins/xmr.svg", algo: "RandomX" },
+  "ravencoin-solo": { symbol: "RVN", icon: "/coins/rvn.svg", algo: "KawPow" },
 };
 
 export const POOL_ORDER = [
@@ -56,6 +61,11 @@ export const POOL_ORDER = [
   "dogecoin-solo",
   "bitcoincash-solo",
   "digibyte-solo",
+  "ecash-solo",
+  "ethereumclassic-solo",
+  "zcash-solo",
+  "monero-solo",
+  "ravencoin-solo",
 ];
 
 const BASE = process.env.MININGCORE_API_URL ?? "";
@@ -74,7 +84,6 @@ export async function fetchPoolData(): Promise<PoolResult[]> {
   } catch (err) {
     Sentry.captureException(err);
     console.warn("[fetchPoolData] outer fetch failed", { err });
-    // pools stays [] — all pools below will return PoolErrorInfo
   }
 
   const results = await Promise.all(
@@ -94,7 +103,6 @@ export async function fetchPoolData(): Promise<PoolResult[]> {
       }
 
       try {
-        // Fetch performance history
         let performance: PerformanceSample[] = [];
         try {
           const perfRes = await fetch(
@@ -105,9 +113,8 @@ export async function fetchPoolData(): Promise<PoolResult[]> {
             const perfData = await perfRes.json();
             performance = perfData.stats ?? [];
           }
-        } catch { /* ignore — pool still included with empty performance */ }
+        } catch { /* ignore */ }
 
-        // Count workers across all top miners
         const miners = pool.topMiners ?? [];
         let workerCount = 0;
         if (miners.length > 0) {

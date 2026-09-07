@@ -15,7 +15,7 @@ import {
 } from "@/lib/data";
 import { CoinSymbolSchema } from "@/lib/schemas/coin";
 
-const validCoins = ["btc", "ltc", "doge", "bch", "dgb"] as const;
+const validCoins = ["btc", "ltc", "doge", "bch", "dgb", "xec", "etc", "zec", "xmr", "rvn"] as const;
 
 export function generateStaticParams() {
   return validCoins.map((coin) => ({ coin }));
@@ -54,7 +54,11 @@ export default async function CoinPage({
 
   const stratum = STRATUM.find((s) => s.coin === symbol);
   const miners =
-    coinData.algorithm === "SHA-256" ? MINERS_SHA256 : MINERS_SCRYPT;
+    coinData.algorithm === "SHA-256"
+      ? MINERS_SHA256
+      : coinData.algorithm === "Scrypt"
+        ? MINERS_SCRYPT
+        : [];
   const walletData = WALLETS[symbol];
 
   return (
@@ -173,41 +177,52 @@ export default async function CoinPage({
           </p>
         </div>
 
-        <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
-          <div className="divide-y divide-border/40">
-            {miners.map((miner) => (
-              <div
-                key={miner.name}
-                className="flex items-center justify-between px-4 py-3"
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="text-sm font-medium">{miner.name}</p>
-                    <Badge variant="outline" className="text-[10px]">
-                      {TIER_LABELS[miner.tier]}
-                    </Badge>
+        {miners.length > 0 ? (
+          <>
+            <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
+              <div className="divide-y divide-border/40">
+                {miners.map((miner) => (
+                  <div
+                    key={miner.name}
+                    className="flex items-center justify-between px-4 py-3"
+                  >
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm font-medium">{miner.name}</p>
+                        <Badge variant="outline" className="text-[10px]">
+                          {TIER_LABELS[miner.tier]}
+                        </Badge>
+                      </div>
+                      {miner.note && (
+                        <p className="text-xs text-muted-foreground">{miner.note}</p>
+                      )}
+                    </div>
+                    <div className="ml-4 shrink-0 text-right">
+                      <p className="font-mono text-sm">{miner.hashrate}</p>
+                      <p className="font-mono text-xs text-muted-foreground">
+                        {miner.power}
+                      </p>
+                    </div>
                   </div>
-                  {miner.note && (
-                    <p className="text-xs text-muted-foreground">{miner.note}</p>
-                  )}
-                </div>
-                <div className="ml-4 shrink-0 text-right">
-                  <p className="font-mono text-sm">{miner.hashrate}</p>
-                  <p className="font-mono text-xs text-muted-foreground">
-                    {miner.power}
-                  </p>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </div>
+            </div>
 
-        <p className="text-xs text-muted-foreground">
-          Any {coinData.algorithm} ASIC that supports stratum will work.{" "}
-          <Link href="/miners" className="text-primary hover:underline">
-            View all recommended hardware
-          </Link>
-        </p>
+            <p className="text-xs text-muted-foreground">
+              Any {coinData.algorithm} ASIC that supports stratum will work.{" "}
+              <Link href="/miners" className="text-primary hover:underline">
+                View all recommended hardware
+              </Link>
+            </p>
+          </>
+        ) : (
+          <div className="rounded-xl border border-border/40 bg-card p-5">
+            <p className="text-sm text-muted-foreground">
+              {coinData.name} uses {coinData.algorithm}. Any miner that supports
+              the stratum protocol for this algorithm will work with Bitmern Solo.
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Recommended wallets */}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { POOL_ORDER } from "@/lib/pool-stats";
 
 const HASH_UNITS = ["H/s", "KH/s", "MH/s", "GH/s", "TH/s", "PH/s", "EH/s", "ZH/s"];
 
@@ -21,6 +22,11 @@ const COIN_MAP: Record<string, { symbol: string; icon: string }> = {
   "dogecoin-solo": { symbol: "DOGE", icon: "/coins/doge.svg" },
   "bitcoincash-solo": { symbol: "BCH", icon: "/coins/bch.svg" },
   "digibyte-solo": { symbol: "DGB", icon: "/coins/dgb.svg" },
+  "ecash-solo": { symbol: "XEC", icon: "/coins/xec.svg" },
+  "ethereumclassic-solo": { symbol: "ETC", icon: "/coins/etc.svg" },
+  "zcash-solo": { symbol: "ZEC", icon: "/coins/zec.svg" },
+  "monero-solo": { symbol: "XMR", icon: "/coins/xmr.svg" },
+  "ravencoin-solo": { symbol: "RVN", icon: "/coins/rvn.svg" },
 };
 
 interface TopMiner {
@@ -87,9 +93,7 @@ async function fetchPools(): Promise<PoolWithWorkers[]> {
 export async function Pools() {
   const pools = await fetchPools();
 
-  // Desired display order
-  const order = ["bitcoin-solo", "litecoin-solo", "dogecoin-solo", "bitcoincash-solo", "digibyte-solo"];
-  const sorted = order
+  const sorted = POOL_ORDER
     .map((id) => pools.find((p) => p.id === id))
     .filter((p): p is PoolWithWorkers => !!p);
 

@@ -4,8 +4,6 @@ import { useState, useMemo } from "react";
 import Image from "next/image";
 import { Target, Clock, DollarSign } from "lucide-react";
 
-/* ─── Coin config ─── */
-
 interface CoinDef {
   id: string;
   poolId: string;
@@ -24,9 +22,12 @@ const COINS: CoinDef[] = [
   { id: "ltc", poolId: "litecoin-solo", symbol: "LTC", name: "Litecoin", icon: "/coins/ltc.svg", hashUnit: "GH/s", hashMultiplier: 1e9, blockTime: 150, blockReward: 6.25 },
   { id: "doge", poolId: "dogecoin-solo", symbol: "DOGE", name: "Dogecoin", icon: "/coins/doge.svg", hashUnit: "GH/s", hashMultiplier: 1e9, blockTime: 60, blockReward: 10000 },
   { id: "dgb", poolId: "digibyte-solo", symbol: "DGB", name: "DigiByte", icon: "/coins/dgb.svg", hashUnit: "TH/s", hashMultiplier: 1e12, blockTime: 15, blockReward: 625 },
+  { id: "xec", poolId: "ecash-solo", symbol: "XEC", name: "eCash", icon: "/coins/xec.svg", hashUnit: "TH/s", hashMultiplier: 1e12, blockTime: 600, blockReward: 1562500 },
+  { id: "etc", poolId: "ethereumclassic-solo", symbol: "ETC", name: "Ethereum Classic", icon: "/coins/etc.svg", hashUnit: "MH/s", hashMultiplier: 1e6, blockTime: 13, blockReward: 2.56 },
+  { id: "zec", poolId: "zcash-solo", symbol: "ZEC", name: "Zcash", icon: "/coins/zec.svg", hashUnit: "Sol/s", hashMultiplier: 1, blockTime: 75, blockReward: 1.5625 },
+  { id: "xmr", poolId: "monero-solo", symbol: "XMR", name: "Monero", icon: "/coins/xmr.svg", hashUnit: "KH/s", hashMultiplier: 1e3, blockTime: 120, blockReward: 0.6 },
+  { id: "rvn", poolId: "ravencoin-solo", symbol: "RVN", name: "Ravencoin", icon: "/coins/rvn.svg", hashUnit: "MH/s", hashMultiplier: 1e6, blockTime: 60, blockReward: 2500 },
 ];
-
-/* ─── Types ─── */
 
 export interface CoinNetworkData {
   poolId: string;
@@ -34,8 +35,6 @@ export interface CoinNetworkData {
   networkHashrate: number;
   blockReward?: number;
 }
-
-/* ─── Formatting helpers ─── */
 
 function formatNumber(num: number, decimals = 0): string {
   return new Intl.NumberFormat("en-US", {
@@ -96,8 +95,6 @@ function formatExpectedTime(seconds: number): string {
   return `~${(seconds / 31536000).toFixed(1)} years`;
 }
 
-/* ─── Periods ─── */
-
 const PERIODS = [
   { label: "Per Block", seconds: 0 },
   { label: "Per Hour", seconds: 3600 },
@@ -106,8 +103,6 @@ const PERIODS = [
   { label: "Per Month", seconds: 2592000 },
   { label: "Per Year", seconds: 31536000 },
 ];
-
-/* ─── Component ─── */
 
 interface SoloChancesClientProps {
   networkData: CoinNetworkData[];
@@ -159,8 +154,7 @@ export function SoloChancesClient({ networkData, prices }: SoloChancesClientProp
           </p>
         </div>
 
-        {/* Coin switcher */}
-        <div className="flex justify-center gap-2 mb-10">
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
           {COINS.map((c) => (
             <button
               key={c.id}
@@ -179,9 +173,7 @@ export function SoloChancesClient({ networkData, prices }: SoloChancesClientProp
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* Left column — Input + Network data */}
           <div className="space-y-4">
-            {/* Hashrate input */}
             <div className="rounded-xl border border-border/40 bg-card p-5">
               <p className="text-sm font-semibold mb-3">Your Hashrate</p>
               <div className="space-y-1.5">
@@ -198,7 +190,6 @@ export function SoloChancesClient({ networkData, prices }: SoloChancesClientProp
               </div>
             </div>
 
-            {/* Network data */}
             <div className="rounded-xl border border-border/40 bg-card p-5">
               <p className="text-xs font-medium text-muted-foreground mb-3">
                 Live Network Data — {coin.symbol}
@@ -220,9 +211,7 @@ export function SoloChancesClient({ networkData, prices }: SoloChancesClientProp
             </div>
           </div>
 
-          {/* Right column — Results */}
           <div className="space-y-4 lg:col-span-2">
-            {/* 3 stat cards */}
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl border border-border/40 bg-card p-5">
                 <div className="flex items-center gap-2 mb-2">
@@ -253,7 +242,6 @@ export function SoloChancesClient({ networkData, prices }: SoloChancesClientProp
               </div>
             </div>
 
-            {/* Probability table */}
             <div className="rounded-xl border border-border/40 bg-card overflow-hidden">
               <div className="px-5 py-3 border-b border-border/30">
                 <p className="text-sm font-semibold">
