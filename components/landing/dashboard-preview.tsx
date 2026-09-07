@@ -1,1 +1,1 @@
-PLACEHOLDER_WILL_REPLACE_WITH_REAL
+/workspace/dashboard-preview.tsx
