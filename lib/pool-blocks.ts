@@ -30,6 +30,11 @@ const COIN_LABELS: Record<string, { symbol: string; name: string; icon: string }
   "dogecoin-solo": { symbol: "DOGE", name: "Dogecoin", icon: "/coins/doge.svg" },
   "bitcoincash-solo": { symbol: "BCH", name: "Bitcoin Cash", icon: "/coins/bch.svg" },
   "digibyte-solo": { symbol: "DGB", name: "DigiByte", icon: "/coins/dgb.svg" },
+  "ecash-solo": { symbol: "XEC", name: "eCash", icon: "/coins/xec.svg" },
+  "ethereumclassic-solo": { symbol: "ETC", name: "Ethereum Classic", icon: "/coins/etc.svg" },
+  "zcash-solo": { symbol: "ZEC", name: "Zcash", icon: "/coins/zec.svg" },
+  "monero-solo": { symbol: "XMR", name: "Monero", icon: "/coins/xmr.svg" },
+  "ravencoin-solo": { symbol: "RVN", name: "Ravencoin", icon: "/coins/rvn.svg" },
 };
 
 const BASE = process.env.MININGCORE_API_URL ?? "";
