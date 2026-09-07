@@ -7,6 +7,11 @@ const COINGECKO_IDS: Record<string, string> = {
   ltc: "litecoin",
   doge: "dogecoin",
   dgb: "digibyte",
+  xec: "ecash",
+  etc: "ethereum-classic",
+  zec: "zcash",
+  xmr: "monero",
+  rvn: "ravencoin",
 };
 
 async function fetchNetworkData(): Promise<CoinNetworkData[]> {
