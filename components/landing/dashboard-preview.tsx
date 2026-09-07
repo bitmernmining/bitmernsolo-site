@@ -1,1 +1,1 @@
-__LOAD_FROM_FILE__/workspace/dashboard-preview.tsx
+file:///workspace/dashboard-preview.tsx
