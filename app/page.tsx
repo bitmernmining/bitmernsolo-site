@@ -52,7 +52,7 @@ export default async function HomePage() {
             <span className="text-gradient">solo</span> today
           </h2>
           <p className="mt-4 mx-auto max-w-lg text-muted-foreground">
-            Create a free account, point your miner at our stratum, and start
+            Start mining — point your miner at our stratum and start
             submitting shares in minutes.
           </p>
           <Button size="lg" className="mt-8 glow" asChild>
