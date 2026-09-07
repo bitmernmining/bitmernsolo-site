@@ -154,9 +154,24 @@ export function QuickConnect() {
             </div>
             <div className="rounded-lg border border-border/40 bg-background/30 px-3 py-2.5">
               <p className="text-[10px] text-muted-foreground mb-0.5">Password</p>
-              <code className="font-mono text-xs sm:text-sm">x</code>
+              <code className="font-mono text-xs sm:text-sm break-all">
+                {coin === "LTC" ? "doge=YourDogeAddress" : "x"}
+              </code>
             </div>
           </div>
+
+          {coin === "LTC" ? (
+            <p className="mb-5 text-xs text-muted-foreground leading-relaxed">
+              Mine LTC, earn LTC + DOGE. Password:{" "}
+              <code className="text-foreground">doge=YourDogeAddress</code> (AuxPoW merge).
+              Direct DOGE mining still works on doge.bitmernsolo.com.
+            </p>
+          ) : coin === "DOGE" ? (
+            <p className="mb-5 text-xs text-muted-foreground leading-relaxed">
+              Direct DOGE stratum. Or merge-mine DOGE while mining LTC with password{" "}
+              <code className="text-foreground">doge=YourDogeAddress</code> on the LTC endpoint.
+            </p>
+          ) : null}
 
           <div className="text-center sm:text-left">
             <Link
