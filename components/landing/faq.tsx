@@ -12,7 +12,7 @@ const faqs = [
   {
     question: "What is solo mining?",
     answer:
-      "Solo mining means your hardware works independently to find a block. Unlike shared pools where rewards are split among all participants, solo mining pays the entire block reward to you when your miner finds one. The trade-off is higher variance \u2014 you may wait longer between blocks, but each payout is the full reward.",
+      "Solo mining means your hardware works independently to find a block. Unlike shared pools where rewards are split among all participants, solo mining pays the entire block reward to you when your miner finds one. The trade-off is higher variance — you may wait longer between blocks, but each payout is the full reward.",
   },
   {
     question: "What equipment do I need?",
@@ -32,7 +32,12 @@ const faqs = [
   {
     question: "How do I connect my miner?",
     answer:
-      "Set your stratum URL to the endpoint for your coin (for example, stratum+tcp://btc.bitmernsolo.com:3102 for Bitcoin). Use your wallet address as the username and \"x\" as the password. Choose the port that best matches your hashrate for optimal difficulty. Our Getting Started guide walks through the full process.",
+      "Set your stratum URL to the endpoint for your coin (for example, stratum+tcp://btc.bitmernsolo.com:3102 for Bitcoin). Use your wallet address as the username. Password is usually x — except for Litecoin merge mining, use doge=YourDogeAddress to earn LTC + DOGE. Choose the port that best matches your hashrate. Our Getting Started guide walks through the full process.",
+  },
+  {
+    question: "Can I earn DOGE while mining LTC?",
+    answer:
+      "Yes. Point your Scrypt miner at the LTC stratum (ltc.bitmernsolo.com ports 13032/13042/13052), use your LTC address as the username, and set the password to doge=YourDogeAddress. AuxPoW merge mining credits both LTC and DOGE. Direct DOGE ports on doge.bitmernsolo.com still work for DOGE-only mining.",
   },
   {
     question: "Can I mine multiple coins at the same time?",
@@ -50,7 +55,6 @@ export function FAQ() {
   return (
     <section id="faq" className="relative bg-card/30">
       <div className="mx-auto max-w-4xl px-4 py-20 sm:px-6 sm:py-24">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center rounded-full bg-primary/10 p-2.5 mb-4">
             <HelpCircle className="h-5 w-5 text-primary" />
@@ -68,7 +72,6 @@ export function FAQ() {
           </p>
         </div>
 
-        {/* FAQ accordion in a card container */}
         <div className="rounded-xl border border-border/40 bg-card/50 backdrop-blur-sm overflow-hidden">
           <Accordion type="single" collapsible>
             {faqs.map((faq, i) => (
@@ -88,7 +91,6 @@ export function FAQ() {
           </Accordion>
         </div>
 
-        {/* Bottom CTA */}
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
           <Link
             href="/faq"

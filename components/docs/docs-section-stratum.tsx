@@ -41,12 +41,16 @@ export function DocsStratum() {
             </div>
 
             <h3 className="mt-8 text-sm font-semibold mb-3">Credentials</h3>
-            <CodeBlock label="Miner configuration">{`Username:  YOUR_WALLET_ADDRESS.workerName
+            <CodeBlock label="Miner configuration (most coins)">{`Username:  YOUR_WALLET_ADDRESS.workerName
 Password:  x`}</CodeBlock>
+            <CodeBlock label="Litecoin + Dogecoin merge (AuxPoW)">{`Username:  YOUR_LTC_ADDRESS.workerName
+Password:  doge=YourDogeAddress`}</CodeBlock>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
               The part after the dot is your worker name — use any label you want
               (e.g. <code className="rounded bg-secondary/80 px-1.5 py-0.5 text-xs text-foreground">antminer-s21</code>,{" "}
-              <code className="rounded bg-secondary/80 px-1.5 py-0.5 text-xs text-foreground">garage-rig</code>). Password can be anything.
+              <code className="rounded bg-secondary/80 px-1.5 py-0.5 text-xs text-foreground">garage-rig</code>).
+              For LTC, set password to <code className="rounded bg-secondary/80 px-1.5 py-0.5 text-xs text-foreground">doge=YourDogeAddress</code> to earn LTC + DOGE via AuxPoW merge mining.
+              Direct DOGE mining on the DOGE stratum (password <code className="rounded bg-secondary/80 px-1.5 py-0.5 text-xs text-foreground">x</code>) still works.
             </p>
 
             <h3 className="mt-8 text-sm font-semibold mb-3">Configuration examples</h3>
