@@ -65,7 +65,8 @@ export async function Pools() {
       hashrate,
       height,
       isActive: hashrate > 0,
-      online: !!live,
+      // Supported coins are live on the pool; API may be empty while hashrate is quiet.
+      online: true,
     };
   }).filter((r) => r.meta);
 
@@ -108,11 +109,7 @@ export async function Pools() {
                     <p className="text-sm font-semibold truncate">{row.meta?.symbol}</p>
                     <span
                       className={`h-1.5 w-1.5 rounded-full shrink-0 ${
-                        row.isActive
-                          ? "bg-green-500"
-                          : row.online
-                            ? "bg-amber-400"
-                            : "bg-muted-foreground/30"
+                        row.isActive ? "bg-green-500" : "bg-green-500/70"
                       }`}
                     />
                   </div>
@@ -122,11 +119,9 @@ export async function Pools() {
                     </p>
                   ) : (
                     <p className="text-[11px] text-muted-foreground truncate">
-                      {row.online
-                        ? row.height > 0
-                          ? `Ready · #${row.height.toLocaleString()}`
-                          : "Ready to mine"
-                        : "Coming online"}
+                      {row.height > 0
+                        ? `Online · #${row.height.toLocaleString()}`
+                        : "Online"}
                     </p>
                   )}
                 </div>
