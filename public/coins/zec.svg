@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#F4B728"/><text x="16" y="21" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="#1a1a1a">ZEC</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <circle cx="16" cy="16" r="16" fill="#F4B728"/>
+  <path d="M11 9.5h10v2.4l-6.2 8.2H21v2.4H11v-2.4l6.2-8.2H11V9.5z" fill="#1a1a1a"/>
+  <rect x="14.2" y="7.2" width="3.6" height="2" rx="0.4" fill="#1a1a1a"/>
+  <rect x="14.2" y="22.8" width="3.6" height="2" rx="0.4" fill="#1a1a1a"/>
+</svg>
