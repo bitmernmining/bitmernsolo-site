@@ -44,7 +44,6 @@ export default async function HomePage() {
       <FeaturedProducts />
       <FAQ />
 
-      {/* Final CTA */}
       <section className="relative overflow-hidden">
         <div className="pointer-events-none absolute inset-0 dot-grid opacity-30" />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28 text-center">
