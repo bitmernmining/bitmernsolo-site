@@ -13,6 +13,11 @@ const coins = [
   { id: "doge", label: "Dogecoin", symbol: "DOGE" },
   { id: "bch", label: "Bitcoin Cash", symbol: "BCH" },
   { id: "dgb", label: "DigiByte", symbol: "DGB" },
+  { id: "xec", label: "eCash", symbol: "XEC" },
+  { id: "etc", label: "Ethereum Classic", symbol: "ETC" },
+  { id: "zec", label: "Zcash", symbol: "ZEC" },
+  { id: "xmr", label: "Monero", symbol: "XMR" },
+  { id: "rvn", label: "Ravencoin", symbol: "RVN" },
 ];
 
 const wallets = [
@@ -38,18 +43,18 @@ export function Features() {
 
         {/* Row 1 — Two hero feature cards */}
         <div className="grid gap-4 lg:grid-cols-2">
-          {/* 5 coins */}
+          {/* Supported coins */}
           <div className="flex flex-col rounded-xl border border-border/40 bg-card p-6 transition-colors hover:border-border/60">
-            <h3 className="text-base font-semibold">Five coins, one account</h3>
+            <h3 className="text-base font-semibold">Ten coins, one account</h3>
             <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-              Mine Bitcoin, Litecoin, Dogecoin, Bitcoin Cash, or DigiByte. Switch
+              Mine BTC, LTC, DOGE, BCH, DGB, XEC, ETC, ZEC, XMR, or RVN. Switch
               coins anytime from a single dashboard with dedicated stratum endpoints.
             </p>
-            <div className="mt-auto pt-4 flex items-center gap-3">
+            <div className="mt-auto pt-4 grid grid-cols-5 gap-2">
               {coins.map((coin) => (
                 <div
                   key={coin.id}
-                  className="flex flex-1 flex-col items-center gap-1.5 rounded-lg border border-border/40 bg-background/30 py-2.5"
+                  className="flex flex-col items-center gap-1.5 rounded-lg border border-border/40 bg-background/30 py-2.5"
                 >
                   <Image
                     src={`/coins/${coin.id}.svg`}
