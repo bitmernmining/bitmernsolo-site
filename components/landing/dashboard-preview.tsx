@@ -1,1 +1,1 @@
-PLACEHOLDER_WILL_REPLACE
+__LOAD_FROM_FILE__/workspace/dashboard-preview.tsx
