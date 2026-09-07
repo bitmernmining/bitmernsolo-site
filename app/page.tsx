@@ -1,6 +1,7 @@
 import { Hero } from "@/components/landing/hero";
 import { Features } from "@/components/landing/features";
 import { DashboardPreview } from "@/components/landing/dashboard-preview";
+import { QuickConnect } from "@/components/landing/quick-connect";
 import { Pools } from "@/components/landing/pools";
 import { SupportedCoins } from "@/components/landing/supported-coins";
 import { HowItWorks } from "@/components/landing/how-it-works";
@@ -30,6 +31,7 @@ export default async function HomePage() {
       <NewBlockBanner />
       <Hero blocksFound={blocksFound} />
       <Features />
+      <QuickConnect />
       <Pools />
       <BlocksFound />
       <DashboardPreview />
@@ -56,7 +58,7 @@ export default async function HomePage() {
           </p>
           <Button size="lg" className="mt-8 glow" asChild>
             <a href="https://app.bitmernsolo.com/signup">
-              Get Started
+              Start Mining
               <ArrowRight className="ml-2 h-4 w-4" />
             </a>
           </Button>
