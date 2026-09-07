@@ -16,38 +16,27 @@ function formatHashrate(h: number): { value: string; unit: string } {
   return { value: v.toFixed(2), unit: HASH_UNITS[i] };
 }
 
-const COIN_MAP: Record<string, { symbol: string; icon: string }> = {
-  "bitcoin-solo": { symbol: "BTC", icon: "/coins/btc.svg" },
-  "litecoin-solo": { symbol: "LTC", icon: "/coins/ltc.svg" },
-  "dogecoin-solo": { symbol: "DOGE", icon: "/coins/doge.svg" },
-  "bitcoincash-solo": { symbol: "BCH", icon: "/coins/bch.svg" },
-  "digibyte-solo": { symbol: "DGB", icon: "/coins/dgb.svg" },
-  "ecash-solo": { symbol: "XEC", icon: "/coins/xec.svg" },
-  "ethereumclassic-solo": { symbol: "ETC", icon: "/coins/etc.svg" },
-  "zcash-solo": { symbol: "ZEC", icon: "/coins/zec.svg" },
-  "monero-solo": { symbol: "XMR", icon: "/coins/xmr.svg" },
-  "ravencoin-solo": { symbol: "RVN", icon: "/coins/rvn.svg" },
+const COIN_MAP: Record<string, { symbol: string; name: string; icon: string }> = {
+  "bitcoin-solo": { symbol: "BTC", name: "Bitcoin", icon: "/coins/btc.svg" },
+  "litecoin-solo": { symbol: "LTC", name: "Litecoin", icon: "/coins/ltc.svg" },
+  "dogecoin-solo": { symbol: "DOGE", name: "Dogecoin", icon: "/coins/doge.svg" },
+  "bitcoincash-solo": { symbol: "BCH", name: "Bitcoin Cash", icon: "/coins/bch.svg" },
+  "digibyte-solo": { symbol: "DGB", name: "DigiByte", icon: "/coins/dgb.svg" },
+  "ecash-solo": { symbol: "XEC", name: "eCash", icon: "/coins/xec.svg" },
+  "ethereumclassic-solo": { symbol: "ETC", name: "Ethereum Classic", icon: "/coins/etc.svg" },
+  "zcash-solo": { symbol: "ZEC", name: "Zcash", icon: "/coins/zec.svg" },
+  "monero-solo": { symbol: "XMR", name: "Monero", icon: "/coins/xmr.svg" },
+  "ravencoin-solo": { symbol: "RVN", name: "Ravencoin", icon: "/coins/rvn.svg" },
 };
-
-interface TopMiner {
-  miner: string;
-  hashrate: number;
-  sharesPerSecond: number;
-}
 
 interface PoolData {
   id: string;
   coin: { name: string; symbol: string; algorithm: string };
   poolStats: { poolHashrate: number; connectedMiners: number };
   networkStats: { networkHashrate: number; blockHeight: number };
-  topMiners: TopMiner[];
 }
 
-interface PoolWithWorkers extends PoolData {
-  workerCount: number;
-}
-
-async function fetchPools(): Promise<PoolWithWorkers[]> {
+async function fetchPools(): Promise<PoolData[]> {
   try {
     const BASE = process.env.MININGCORE_API_URL ?? "";
     const res = await fetch(`${BASE}/api/pools`, {
@@ -55,36 +44,7 @@ async function fetchPools(): Promise<PoolWithWorkers[]> {
     });
     if (!res.ok) return [];
     const data = await res.json();
-    const pools: PoolData[] = data.pools ?? [];
-
-    // For each pool, fetch individual miner details to count workers
-    const poolsWithWorkers = await Promise.all(
-      pools.map(async (pool) => {
-        const miners = pool.topMiners ?? [];
-        if (miners.length === 0) return { ...pool, workerCount: 0 };
-
-        const workerCounts = await Promise.all(
-          miners.map(async (m) => {
-            try {
-              const minerRes = await fetch(
-                `${BASE}/api/pools/${pool.id}/miners/${encodeURIComponent(m.miner)}`,
-                { next: { revalidate: 60 } }
-              );
-              if (!minerRes.ok) return 0;
-              const minerData = await minerRes.json();
-              const workers = minerData?.performance?.workers;
-              return workers ? Object.keys(workers).length : 0;
-            } catch {
-              return 0;
-            }
-          })
-        );
-
-        return { ...pool, workerCount: workerCounts.reduce((a, b) => a + b, 0) };
-      })
-    );
-
-    return poolsWithWorkers;
+    return data.pools ?? [];
   } catch {
     return [];
   }
@@ -92,96 +52,101 @@ async function fetchPools(): Promise<PoolWithWorkers[]> {
 
 export async function Pools() {
   const pools = await fetchPools();
+  const byId = new Map(pools.map((p) => [p.id, p]));
 
-  const sorted = POOL_ORDER
-    .map((id) => pools.find((p) => p.id === id))
-    .filter((p): p is PoolWithWorkers => !!p);
+  const rows = POOL_ORDER.map((id) => {
+    const meta = COIN_MAP[id];
+    const live = byId.get(id);
+    const hashrate = live?.poolStats.poolHashrate ?? 0;
+    const height = live?.networkStats.blockHeight ?? 0;
+    const algo = live?.coin.algorithm ?? "";
+    return {
+      id,
+      meta,
+      hashrate,
+      height,
+      algo,
+      isActive: hashrate > 0,
+      online: !!live,
+    };
+  }).filter((r) => r.meta);
+
+  const activeCount = rows.filter((r) => r.isActive).length;
+  const onlineCount = rows.filter((r) => r.online).length;
 
   return (
     <section id="pools">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-24">
-        <div className="text-center mb-12">
+        <div className="text-center mb-10">
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-            Pool stats
+            Pool status
           </h2>
-          <p className="mt-2 text-muted-foreground">
-            Live data pulled directly from our mining infrastructure, refreshed every 60 seconds.
+          <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
+            {onlineCount} coins online
+            {activeCount > 0 ? ` · ${activeCount} with live hashrate` : ""}.
+            Full live cards live on the pool stats page — we keep this light while the network is quiet.
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {sorted.map((pool) => {
-            const meta = COIN_MAP[pool.id];
-            const hr = formatHashrate(pool.poolStats.poolHashrate);
-            const netHr = formatHashrate(pool.networkStats.networkHashrate);
-            const workers = pool.workerCount;
-            const isActive = pool.poolStats.poolHashrate > 0;
-
+        <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5">
+          {rows.map((row) => {
+            const hr = formatHashrate(row.hashrate);
             return (
               <div
-                key={pool.id}
-                className="flex flex-col rounded-xl border border-border/40 bg-card p-4 transition-colors hover:border-border/60"
+                key={row.id}
+                className="flex items-center gap-3 rounded-xl border border-border/40 bg-card px-3 py-3"
               >
-                {/* Coin header */}
-                <div className="flex items-center gap-2.5 mb-3">
-                  {meta && (
-                    <Image
-                      src={meta.icon}
-                      alt={pool.coin.name}
-                      width={28}
-                      height={28}
-                      className="h-7 w-7"
+                {row.meta && (
+                  <Image
+                    src={row.meta.icon}
+                    alt={row.meta.name}
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 shrink-0"
+                  />
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-semibold truncate">{row.meta?.symbol}</p>
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full shrink-0 ${
+                        row.isActive
+                          ? "bg-green-500"
+                          : row.online
+                            ? "bg-amber-400"
+                            : "bg-muted-foreground/30"
+                      }`}
                     />
+                  </div>
+                  {row.isActive ? (
+                    <p className="font-mono text-[11px] text-muted-foreground truncate">
+                      {hr.value} {hr.unit}
+                    </p>
+                  ) : (
+                    <p className="text-[11px] text-muted-foreground truncate">
+                      {row.online
+                        ? row.height > 0
+                          ? `Ready · #${row.height.toLocaleString()}`
+                          : "Ready to mine"
+                        : "Coming online"}
+                    </p>
                   )}
-                  <div className="min-w-0">
-                    <p className="text-sm font-semibold truncate">{pool.coin.name}</p>
-                    <p className="text-[10px] text-muted-foreground font-mono">{pool.coin.algorithm}</p>
-                  </div>
                 </div>
-
-                {/* Pool hashrate — fixed height for alignment */}
-                <div className="mb-3">
-                  <p className="text-[10px] text-muted-foreground mb-0.5">Pool Hashrate</p>
-                  <div className="flex items-baseline gap-1 h-7">
-                    {isActive ? (
-                      <>
-                        <span className="font-mono text-lg font-semibold leading-none">{hr.value}</span>
-                        <span className="text-[10px] text-muted-foreground">{hr.unit}</span>
-                      </>
-                    ) : (
-                      <span className="font-mono text-lg leading-none text-muted-foreground">—</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Miners & Network */}
-                <div className="grid grid-cols-2 gap-1.5 mt-auto">
-                  <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[9px] text-muted-foreground">Workers</p>
-                    <div className="flex items-center gap-1">
-                      <span className={`h-1.5 w-1.5 rounded-full shrink-0 ${isActive ? "bg-green-500" : "bg-muted-foreground/30"}`} />
-                      <span className="font-mono text-xs font-medium">{workers}</span>
-                    </div>
-                  </div>
-                  <div className="rounded-md border border-border/40 bg-background/30 px-2 py-1.5">
-                    <p className="text-[9px] text-muted-foreground">Network</p>
-                    <p className="font-mono text-xs text-muted-foreground truncate">{netHr.value} {netHr.unit}</p>
-                  </div>
-                </div>
-
-                {/* Block height */}
-                <p className="mt-2 text-[10px] text-muted-foreground font-mono text-center">
-                  Block #{pool.networkStats.blockHeight.toLocaleString()}
-                </p>
               </div>
             );
           })}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
+          <Link
+            href="#blocks-found"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            See blocks we&apos;ve found
+          </Link>
           <Link
             href="/pool-stats"
-            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline"
+            className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline font-medium"
           >
             View full pool stats
             <ArrowRight className="h-3.5 w-3.5" />
