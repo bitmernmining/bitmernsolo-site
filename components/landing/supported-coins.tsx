@@ -1,87 +1,5 @@
 import Image from "next/image";
-
-const coins = [
-  {
-    symbol: "BTC",
-    name: "Bitcoin",
-    algorithm: "SHA-256",
-    icon: "/coins/btc.svg",
-    stratum: "btc.bitmernsolo.com",
-    ports: ["3102", "3112", "3122", "3132"],
-  },
-  {
-    symbol: "LTC",
-    name: "Litecoin",
-    algorithm: "Scrypt",
-    icon: "/coins/ltc.svg",
-    stratum: "ltc.bitmernsolo.com",
-    ports: ["3032", "3042", "3052"],
-  },
-  {
-    symbol: "DOGE",
-    name: "Dogecoin",
-    algorithm: "Scrypt",
-    icon: "/coins/doge.svg",
-    stratum: "doge.bitmernsolo.com",
-    ports: ["3033", "3043", "3053"],
-  },
-  {
-    symbol: "BCH",
-    name: "Bitcoin Cash",
-    algorithm: "SHA-256",
-    icon: "/coins/bch.svg",
-    stratum: "bch.bitmernsolo.com",
-    ports: ["13103", "13113", "13123"],
-  },
-  {
-    symbol: "DGB",
-    name: "DigiByte",
-    algorithm: "SHA-256",
-    icon: "/coins/dgb.svg",
-    stratum: "dgb.bitmernsolo.com",
-    ports: ["4032", "4042", "4052"],
-  },
-  {
-    symbol: "XEC",
-    name: "eCash",
-    algorithm: "SHA-256",
-    icon: "/coins/xec.svg",
-    stratum: "xec.bitmernsolo.com",
-    ports: ["13302", "13312", "13322"],
-  },
-  {
-    symbol: "ETC",
-    name: "Ethereum Classic",
-    algorithm: "Etchash",
-    icon: "/coins/etc.svg",
-    stratum: "etc.bitmernsolo.com",
-    ports: ["13402", "13412", "13422"],
-  },
-  {
-    symbol: "ZEC",
-    name: "Zcash",
-    algorithm: "Equihash",
-    icon: "/coins/zec.svg",
-    stratum: "zec.bitmernsolo.com",
-    ports: ["13502", "13512", "13522"],
-  },
-  {
-    symbol: "XMR",
-    name: "Monero",
-    algorithm: "RandomX",
-    icon: "/coins/xmr.svg",
-    stratum: "xmr.bitmernsolo.com",
-    ports: ["13602", "13612", "13622"],
-  },
-  {
-    symbol: "RVN",
-    name: "Ravencoin",
-    algorithm: "KawPow",
-    icon: "/coins/rvn.svg",
-    stratum: "rvn.bitmernsolo.com",
-    ports: ["13702", "13712", "13722"],
-  },
-];
+import { STRATUM } from "@/lib/data";
 
 export function SupportedCoins() {
   return (
@@ -105,9 +23,9 @@ export function SupportedCoins() {
               </tr>
             </thead>
             <tbody>
-              {coins.map((coin) => (
+              {STRATUM.map((coin) => (
                 <tr
-                  key={coin.symbol}
+                  key={coin.coin}
                   className="border-b border-border/20 transition-colors hover:bg-card/30"
                 >
                   <td className="py-4 pr-6">
@@ -121,13 +39,17 @@ export function SupportedCoins() {
                       />
                       <div>
                         <span className="font-medium">{coin.name}</span>
-                        <span className="ml-2 text-xs text-muted-foreground">{coin.symbol}</span>
+                        <span className="ml-2 text-xs text-muted-foreground">{coin.coin}</span>
                       </div>
                     </div>
                   </td>
-                  <td className="py-4 pr-6 font-mono text-xs text-muted-foreground">{coin.algorithm}</td>
-                  <td className="py-4 pr-6 font-mono text-xs text-primary">{coin.stratum}</td>
-                  <td className="py-4 font-mono text-xs text-muted-foreground">{coin.ports.join(", ")}</td>
+                  <td className="py-4 pr-6 font-mono text-xs text-muted-foreground">{coin.algo}</td>
+                  <td className="py-4 pr-6 font-mono text-xs text-primary">
+                    {coin.host.replace(/^stratum\+tcp:\/\//, "")}
+                  </td>
+                  <td className="py-4 font-mono text-xs text-muted-foreground">
+                    {coin.ports.map((p) => p.port).join(", ")}
+                  </td>
                 </tr>
               ))}
             </tbody>
