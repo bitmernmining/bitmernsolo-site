@@ -1,0 +1,125 @@
+import type { StratumEndpoint } from "./data-types";
+
+export const STRATUM: StratumEndpoint[] = [
+  {
+    coin: "BTC",
+    name: "Bitcoin",
+    icon: "/coins/btc.svg",
+    algo: "SHA-256d",
+    host: "stratum+tcp://btc.bitmernsolo.com",
+    ports: [
+      { port: 3102, diff: "25k", label: "Default — works with any SHA-256 ASIC" },
+      { port: 3112, diff: "20k", label: "Slightly lower start difficulty" },
+      { port: 3122, diff: "15k", label: "For smaller/older ASICs" },
+      { port: 3132, diff: "10k", label: "Lowest — entry-level hardware" },
+    ],
+  },
+  {
+    coin: "LTC",
+    name: "Litecoin",
+    icon: "/coins/ltc.svg",
+    algo: "Scrypt",
+    host: "stratum+tcp://ltc.bitmernsolo.com",
+    ports: [
+      { port: 13032, diff: "25k", label: "Default — works with any Scrypt ASIC" },
+      { port: 13042, diff: "10k", label: "For smaller ASICs" },
+      { port: 13052, diff: "1k", label: "Lowest — entry-level / GPU" },
+    ],
+  },
+  {
+    coin: "DOGE",
+    name: "Dogecoin",
+    icon: "/coins/doge.svg",
+    algo: "Scrypt",
+    host: "stratum+tcp://doge.bitmernsolo.com",
+    ports: [
+      { port: 13033, diff: "25k", label: "Default — works with any Scrypt ASIC" },
+      { port: 13043, diff: "10k", label: "For smaller ASICs" },
+      { port: 13053, diff: "1k", label: "Lowest — entry-level / GPU" },
+    ],
+  },
+  {
+    coin: "BCH",
+    name: "Bitcoin Cash",
+    icon: "/coins/bch.svg",
+    algo: "SHA-256d",
+    host: "stratum+tcp://bch.bitmernsolo.com",
+    ports: [
+      { port: 13103, diff: "500k", label: "Default — high-throughput SHA-256 ASICs" },
+      { port: 13113, diff: "100k", label: "For mid-range ASICs" },
+      { port: 13123, diff: "10k", label: "For smaller/older hardware" },
+    ],
+  },
+  {
+    coin: "DGB",
+    name: "DigiByte",
+    icon: "/coins/dgb.svg",
+    algo: "SHA-256d",
+    host: "stratum+tcp://dgb.bitmernsolo.com",
+    ports: [
+      { port: 4032, diff: "500k", label: "Default — works with any SHA-256 ASIC" },
+      { port: 4042, diff: "100k", label: "For mid-range ASICs" },
+      { port: 4052, diff: "10k", label: "For smaller/older hardware" },
+    ],
+  },
+  {
+    coin: "XEC",
+    name: "eCash",
+    icon: "/coins/xec.svg",
+    algo: "SHA-256d",
+    host: "stratum+tcp://xec.bitmernsolo.com",
+    ports: [
+      { port: 13302, diff: "500k", label: "Default — high-throughput SHA-256 ASICs" },
+      { port: 13312, diff: "100k", label: "For mid-range ASICs" },
+      { port: 13322, diff: "10k", label: "For smaller/older hardware" },
+    ],
+  },
+  {
+    coin: "ETC",
+    name: "Ethereum Classic",
+    icon: "/coins/etc.svg",
+    algo: "Etchash",
+    host: "stratum+tcp://etc.bitmernsolo.com",
+    ports: [
+      { port: 13402, diff: "4G", label: "Default — GPU / Etchash miners" },
+      { port: 13412, diff: "2G", label: "For mid-range GPUs" },
+      { port: 13422, diff: "1G", label: "Lowest — smaller GPUs" },
+    ],
+  },
+  {
+    coin: "ZEC",
+    name: "Zcash",
+    icon: "/coins/zec.svg",
+    algo: "Equihash",
+    host: "stratum+tcp://zec.bitmernsolo.com",
+    ports: [
+      { port: 13502, diff: "10k", label: "Default — Equihash ASICs / GPUs" },
+      { port: 13512, diff: "5k", label: "For mid-range hardware" },
+      { port: 13522, diff: "1k", label: "Lowest — smaller setups" },
+    ],
+  },
+  {
+    coin: "XMR",
+    name: "Monero",
+    icon: "/coins/xmr.svg",
+    algo: "RandomX",
+    host: "stratum+tcp://xmr.bitmernsolo.com",
+    ports: [
+      { port: 13602, diff: "50k", label: "Default — CPU / RandomX miners" },
+      { port: 13612, diff: "25k", label: "For mid-range CPUs" },
+      { port: 13622, diff: "10k", label: "Lowest — smaller CPUs" },
+    ],
+  },
+  {
+    coin: "RVN",
+    name: "Ravencoin",
+    icon: "/coins/rvn.svg",
+    algo: "KawPow",
+    host: "stratum+tcp://rvn.bitmernsolo.com",
+    ports: [
+      { port: 13702, diff: "4G", label: "Default — GPU / KawPow miners" },
+      { port: 13712, diff: "2G", label: "For mid-range GPUs" },
+      { port: 13722, diff: "1G", label: "Lowest — smaller GPUs" },
+    ],
+  },
+];
