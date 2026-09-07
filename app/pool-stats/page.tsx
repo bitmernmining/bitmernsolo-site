@@ -7,7 +7,7 @@ import { fetchPoolData } from "@/lib/pool-stats";
 export const metadata: Metadata = {
   title: "Pool Stats — Bitmern Solo",
   description:
-    "Live pool hashrate, connected workers, network data, and block heights for all five coins on Bitmern Solo.",
+    "Live pool hashrate, connected workers, network data, and block heights for every coin on Bitmern Solo.",
 };
 
 /* ── Page ── */
