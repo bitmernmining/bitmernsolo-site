@@ -115,8 +115,9 @@ export const STRATUM: StratumEndpoint[] = [
     algo: "Scrypt",
     host: "stratum+tcp://doge.bitmernsolo.com",
     ports: [
-      { port: 3062, diff: "25k", label: "Default — works with any Scrypt ASIC" },
-      { port: 3072, diff: "10k", label: "For smaller ASICs" },
+      { port: 3033, diff: "25k", label: "Default — works with any Scrypt ASIC" },
+      { port: 3043, diff: "10k", label: "For smaller ASICs" },
+      { port: 3053, diff: "1k", label: "Lowest — entry-level / GPU" },
     ],
   },
   {
