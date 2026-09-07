@@ -59,13 +59,11 @@ export async function Pools() {
     const live = byId.get(id);
     const hashrate = live?.poolStats.poolHashrate ?? 0;
     const height = live?.networkStats.blockHeight ?? 0;
-    const algo = live?.coin.algorithm ?? "";
     return {
       id,
       meta,
       hashrate,
       height,
-      algo,
       isActive: hashrate > 0,
       online: !!live,
     };
@@ -84,7 +82,7 @@ export async function Pools() {
           <p className="mt-2 text-muted-foreground max-w-xl mx-auto">
             {onlineCount} coins online
             {activeCount > 0 ? ` · ${activeCount} with live hashrate` : ""}.
-            Full live cards live on the pool stats page — we keep this light while the network is quiet.
+            Detailed live cards are on the pool stats page — this stays light while hashrate is quiet.
           </p>
         </div>
 
