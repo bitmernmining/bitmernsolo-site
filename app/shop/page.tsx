@@ -56,8 +56,8 @@ export default function ShopPage(): React.ReactNode {
               Solo Mining Hardware
             </h1>
             <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-              Desktop miners built for solo mining. Point them at Bitmern Pool,
-              chase blocks, and keep 100% of the reward.
+              Desktop miners built for solo mining. Point them at Bitmern Solo,
+              chase blocks, and keep 99% of the reward (flat 1% pool fee).
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
@@ -70,6 +70,35 @@ export default function ShopPage(): React.ReactNode {
               Find Your Miner
             </Button>
           </div>
+        </div>
+      </div>
+
+
+      {/* Bitmern Edition Phase 1 callout — inventory may be 0 */}
+      <div className="rounded-xl border border-primary/25 bg-primary/5 p-5 sm:p-6">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-2xl">
+            <p className="text-[11px] font-medium uppercase tracking-wider text-primary mb-1">Bitmern Edition</p>
+            <h2 className="font-heading text-lg font-semibold tracking-tight sm:text-xl">
+              Pre-configured for Bitmern Solo — stock AxeOS / ESP-Miner
+            </h2>
+            <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+              Honest listing: unmodified open firmware, pre-pointed at Bitmern Solo
+              (1% fee, you keep 99%), fully unlockable, and{" "}
+              <span className="text-foreground">not an official Bitaxe</span>. We credit
+              AxeOS / ESP-Miner. Current inventory:{" "}
+              <span className="font-medium text-foreground">0</span> — card below is the Phase 1 template.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Printable insert:{" "}
+              <a href="/bitmern-edition-setup-card.html" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                Bitmern Edition setup card
+              </a>
+            </p>
+          </div>
+          <a href="/shop/bitmern-edition" className="inline-flex shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium hover:bg-primary/15 transition-colors">
+            View listing
+          </a>
         </div>
       </div>
 
