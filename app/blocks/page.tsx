@@ -7,9 +7,9 @@ import { fetchBlocksSummary, type BlockStatus } from "@/lib/pool-blocks";
 import { fetchRecentFoundBlocks, type FoundBlock } from "@/lib/found-blocks";
 
 export const metadata: Metadata = {
-  title: "Blocks Found — Bitmern Solo",
+  title: "DigiByte Blocks Found — Bitmern Solo",
   description:
-    "Blocks discovered on Bitmern Solo with explorer verification links. Flat 1% pool fee — keep 99%.",
+    "DigiByte (and other coin) blocks discovered on Bitmern Solo with explorer verification links. Flat 1% pool fee — keep 99%.",
 };
 
 function formatRelative(iso: string): string {
@@ -71,6 +71,9 @@ export default async function BlocksPage() {
     fetchRecentFoundBlocks(120),
   ]);
 
+  const digibyte = summary.perCoin.find((c) => c.symbol === "DGB");
+  const digibyteConfirmed = digibyte?.confirmed ?? 0;
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
       <div className="text-center mb-12">
@@ -78,21 +81,24 @@ export default async function BlocksPage() {
           <Boxes className="h-3.5 w-3.5" /> Live from Miningcore
         </div>
         <h1 className="font-bold tracking-tight" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}>
-          Blocks we&apos;ve found
+          DigiByte blocks we&apos;ve found
         </h1>
         <p className="mt-3 mx-auto max-w-2xl text-muted-foreground leading-relaxed">
-          Public record of Bitmern Solo finds. Each row links to a blockchain explorer.
+          Public record of Bitmern Solo finds by coin (currently dominated by{" "}
+          <span className="text-foreground font-medium">DigiByte</span>). Each row links to a blockchain explorer.
           Flat <span className="text-foreground font-medium">1% pool fee</span> — miners keep 99%.
+          These are not Bitcoin blocks unless the coin column says BTC.
         </p>
       </div>
 
       <div className="mb-10 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {summary.perCoin.map((c) => (
           <div key={c.id} className="flex items-center gap-3 rounded-lg border border-border/60 bg-card/50 px-4 py-3">
-            {c.icon ? <Image src={c.icon} alt={c.symbol} width={28} height={28} className="rounded-full" /> : null}
+            {c.icon ? <Image src={c.icon} alt={c.name} width={28} height={28} className="rounded-full" /> : null}
             <div>
-              <div className="text-xs text-muted-foreground">{c.symbol}</div>
+              <div className="text-xs text-muted-foreground">{c.name} ({c.symbol})</div>
               <div className="text-lg font-bold tabular-nums">{c.confirmed.toLocaleString()}</div>
+              <div className="text-[10px] text-muted-foreground">confirmed</div>
               {c.pending > 0 ? <div className="text-[10px] text-muted-foreground">+{c.pending} pending</div> : null}
             </div>
           </div>
@@ -103,8 +109,11 @@ export default async function BlocksPage() {
         <div>
           <h2 className="text-lg font-semibold">Recent blocks</h2>
           <p className="text-sm text-muted-foreground">
-            {summary.totalConfirmed.toLocaleString()} confirmed
-            {summary.latest ? ` · latest ${summary.latest.symbol} #${summary.latest.height.toLocaleString()}` : ""}
+            <span className="font-medium text-foreground">{digibyteConfirmed.toLocaleString()} DigiByte</span> confirmed
+            {summary.totalConfirmed !== digibyteConfirmed
+              ? ` · ${summary.totalConfirmed.toLocaleString()} across all coins`
+              : ""}
+            {summary.latest ? ` · latest ${summary.latest.symbol === "DGB" ? "DigiByte" : summary.latest.symbol} #${summary.latest.height.toLocaleString()}` : ""}
           </p>
         </div>
         <Link href="/pool-stats" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline font-medium">
@@ -115,7 +124,7 @@ export default async function BlocksPage() {
       {blocks.length === 0 ? (
         <div className="rounded-xl border border-border/40 bg-card/40 px-6 py-16 text-center">
           <Boxes className="mx-auto h-8 w-8 text-muted-foreground/40 mb-3" />
-          <h3 className="font-heading font-medium">No blocks to show yet</h3>
+          <h3 className="font-heading font-medium">No DigiByte (or other) blocks to show yet</h3>
           <p className="mt-1 text-sm text-muted-foreground">When the pool finds a block, it appears here with an explorer link.</p>
         </div>
       ) : (
@@ -141,7 +150,7 @@ export default async function BlocksPage() {
       )}
 
       <div className="mt-16 text-center rounded-xl border border-primary/20 bg-primary/5 p-8">
-        <h2 className="text-2xl font-bold tracking-tight">Mine the next one</h2>
+        <h2 className="text-2xl font-bold tracking-tight">Mine the next DigiByte block</h2>
         <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
           Point your miner at Bitmern Solo. Keep 99% of the reward — flat 1% pool fee.
         </p>
