@@ -7,6 +7,7 @@ const linkColumns = {
   Product: [
     { label: "Features", href: "/#features" },
     { label: "Pool Stats", href: "/pool-stats" },
+    { label: "Blocks Found", href: "/blocks" },
     { label: "Pricing", href: "/pricing" },
     { label: "FAQ", href: "/faq" },
   ],
@@ -51,8 +52,8 @@ export function Footer() {
               />
             </Link>
             <p className="mt-4 max-w-xs text-sm text-muted-foreground leading-relaxed">
-              Solo mining pool with a flat 1% fee. Connect your miner, keep the
-              entire block reward. No shared payouts.
+              Solo mining pool with a flat 1% fee. Connect your miner, keep 99%
+              of the block reward. No shared payouts.
             </p>
 
             {/* Coin icons — now linked to coin pages */}
