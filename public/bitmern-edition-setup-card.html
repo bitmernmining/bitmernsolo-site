@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bitmern Edition — Setup Card</title>
+  <style>
+    :root {
+      --bg: #0a0a0a;
+      --fg: #e6e6e6;
+      --muted: #808080;
+      --primary: #f1ae2e;
+      --border: #292929;
+      --card: #0f0f0f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Manrope, ui-sans-serif, system-ui, sans-serif;
+      background: #111;
+      color: var(--fg);
+      padding: 1.5rem;
+    }
+    h1, h2 { font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif; }
+    .toolbar {
+      max-width: 720px;
+      margin: 0 auto 1rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+    .toolbar button, .toolbar a {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--fg);
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.875rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .toolbar button.primary {
+      background: var(--primary);
+      color: #0a0a0a;
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+    .card {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      padding: 1.75rem 1.5rem;
+    }
+    .eyebrow {
+      color: var(--primary);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    h1 {
+      margin: 0 0 0.5rem;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+    }
+    .lead {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    ol {
+      margin: 0;
+      padding-left: 1.2rem;
+      line-height: 1.55;
+      font-size: 0.95rem;
+    }
+    li { margin: 0.55rem 0; }
+    code {
+      font-family: "JetBrains Mono", ui-monospace, monospace;
+      font-size: 0.85em;
+      background: #1b1b1b;
+      border: 1px solid var(--border);
+      border-radius: 0.25rem;
+      padding: 0.1rem 0.35rem;
+    }
+    .note {
+      margin-top: 1.25rem;
+      padding: 0.9rem 1rem;
+      border: 1px solid color-mix(in srgb, var(--primary) 35%, var(--border));
+      background: color-mix(in srgb, var(--primary) 8%, transparent);
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    .fine {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+    @media print {
+      body { background: white; color: black; padding: 0; }
+      .toolbar { display: none; }
+      .card {
+        border: 1px solid #ccc;
+        max-width: none;
+        border-radius: 0;
+      }
+      .eyebrow, .note { color: #8a6200; }
+      .lead, .fine { color: #444; }
+      code { background: #f3f3f3; border-color: #ddd; color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <a href="/shop/bitmern-edition">Shop listing</a>
+    <button class="primary" type="button" onclick="window.print()">Print setup card</button>
+  </div>
+
+  <article class="card">
+    <p class="eyebrow">Bitmern Edition · Insert card</p>
+    <h1>Quick setup</h1>
+    <p class="lead">
+      Your unit ships with <strong>stock, unmodified AxeOS / ESP-Miner</strong>,
+      pre-configured for <strong>Bitmern Solo</strong> (flat <strong>1%</strong> pool fee —
+      you keep <strong>99%</strong>). Fully unlockable. Not an official Bitaxe.
+    </p>
+
+    <ol>
+      <li>Power the board and join its Wi-Fi setup AP (see AxeOS / device label).</li>
+      <li>Open the AxeOS UI and confirm Wi-Fi for your home network.</li>
+      <li>
+        Stratum should already point at Bitmern Solo, e.g.
+        <code>stratum+tcp://btc.bitmernsolo.com:3102</code>
+        (other coins use their public <code>*.bitmernsolo.com</code> hosts).
+      </li>
+      <li>
+        Username: <code>YOUR_WALLET_ADDRESS.workerName</code> · Password: <code>x</code>
+        (LTC merge: <code>doge=YourDogeAddress</code>).
+      </li>
+      <li>Save, reboot if prompted, and watch shares on the Bitmern Solo dashboard.</li>
+    </ol>
+
+    <div class="note">
+      Pool fee is <strong>1%</strong> on block rewards. You keep <strong>99%</strong>.
+      Firmware is unlockable — change pool, Wi-Fi, or flash anytime. Credits to the
+      open <strong>AxeOS</strong> / <strong>ESP-Miner</strong> projects.
+    </div>
+
+    <p class="fine">
+      Docs: https://bitmernsolo.com/getting-started · Shop:
+      https://bitmernsolo.com/shop/bitmern-edition · Blocks found:
+      https://bitmernsolo.com/blocks
+    </p>
+  </article>
+</body>
+</html>

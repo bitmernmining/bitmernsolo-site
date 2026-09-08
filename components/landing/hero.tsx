@@ -18,7 +18,7 @@ export function Hero({ blocksFound }: HeroProps = {}) {
           </div>
           {blocksFound && blocksFound > 0 ? (
             <a
-              href="#blocks-found"
+              href="/blocks"
               className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-3 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
@@ -39,8 +39,8 @@ export function Hero({ blocksFound }: HeroProps = {}) {
         </h1>
 
         <p className="animate-fade-up-d2 mt-6 mx-auto max-w-xl text-lg leading-relaxed text-muted-foreground">
-          Connect your miner to Bitmern Solo and keep the entire block reward
-          to yourself. Just a flat 1% fee, no shared payouts, and no middlemen.
+          Connect your miner to Bitmern Solo and keep 99% of every block reward.
+          Flat 1% pool fee, no shared payouts, and no middlemen.
         </p>
 
         <div className="animate-fade-up-d3 mt-8 flex flex-wrap justify-center gap-3">

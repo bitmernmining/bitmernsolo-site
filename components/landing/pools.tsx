@@ -132,7 +132,7 @@ export async function Pools() {
 
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
           <Link
-            href="#blocks-found"
+            href="/blocks"
             className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             See blocks we&apos;ve found

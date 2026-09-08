@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { ProductSchema } from "@/lib/schemas/product";
 import type { Product } from "@/lib/schemas/product";
+import { withBitmernEditionCatalog } from "@/lib/bitmern-edition-product";
 
 export async function GET() {
   const supabase = await createClient();
@@ -31,5 +32,5 @@ export async function GET() {
     })
     .filter((p): p is Product => p !== null);
 
-  return NextResponse.json(products);
+  return NextResponse.json(withBitmernEditionCatalog(products));
 }
