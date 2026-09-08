@@ -1,5 +1,5 @@
 import * as Sentry from "@sentry/nextjs";
-import { POOL_ORDER } from "./pool-stats";
+import { POOL_ORDER, getMiningcoreApiBase } from "./pool-stats";
 
 export interface PoolBlocksInfo {
   id: string;
@@ -37,8 +37,6 @@ const COIN_LABELS: Record<string, { symbol: string; name: string; icon: string }
   "ravencoin-solo": { symbol: "RVN", name: "Ravencoin", icon: "/coins/rvn.svg" },
 };
 
-const BASE = process.env.MININGCORE_API_URL ?? "";
-
 // Miningcore returns the most recent 50 by default. Page through to get the full count.
 // Cap pagination at 20 pages (1000 blocks per coin) to bound the request budget.
 const PAGE_SIZE = 50;
@@ -52,9 +50,10 @@ function normalizeStatus(raw: string): BlockStatus {
 }
 
 async function fetchPoolBlocks(poolId: string): Promise<MiningcoreBlock[]> {
+  const base = getMiningcoreApiBase();
   const out: MiningcoreBlock[] = [];
   for (let page = 0; page < MAX_PAGES; page++) {
-    const url = `${BASE}/api/pools/${poolId}/blocks?page=${page}&pageSize=${PAGE_SIZE}`;
+    const url = `${base}/api/pools/${poolId}/blocks?page=${page}&pageSize=${PAGE_SIZE}`;
     let chunk: MiningcoreBlock[] = [];
     try {
       const res = await fetch(url, { next: { revalidate: 60, tags: ["blocks-found"] } });
