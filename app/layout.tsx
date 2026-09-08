@@ -43,6 +43,8 @@ export const metadata: Metadata = {
   },
 };
 
+const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +69,14 @@ export default function RootLayout({
             strategy="lazyOnload"
           />
         )}
+        {plausibleDomain ? (
+          <Script
+            defer
+            data-domain={plausibleDomain}
+            src="https://plausible.io/js/script.js"
+            strategy="afterInteractive"
+          />
+        ) : null}
       </head>
       <body className="min-h-screen bg-background antialiased">
         <CatalogProvider>
