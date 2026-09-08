@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Boxes } from "lucide-react";
 import { fetchBlocksSummary } from "@/lib/pool-blocks";
 
@@ -56,7 +57,7 @@ export async function BlocksFound() {
             <span className="text-gradient">{summary.totalConfirmed.toLocaleString()}</span> blocks found
           </h2>
           <p className="mt-4 mx-auto max-w-xl text-muted-foreground">
-            Every block Bitmern Solo has discovered, across all five chains. Updated live from the pool — confirmed only.
+            Every block Bitmern Solo has discovered across supported coins. Updated live from the pool — confirmed counts shown below.
           </p>
         </div>
 
@@ -95,6 +96,15 @@ export async function BlocksFound() {
             </span>
           </div>
         ) : null}
+
+        <div className="mt-8 text-center">
+          <Link
+            href="/blocks"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+          >
+            See blocks we&apos;ve found — full list &amp; explorer links
+          </Link>
+        </div>
       </div>
     </section>
   );
