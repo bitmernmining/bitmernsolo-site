@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { ProductCard } from "@/components/shop/product-card";
 import { MinerQuiz } from "@/components/shop/miner-quiz";
 import { useProducts, type SortOption } from "@/hooks/use-products";
@@ -96,9 +97,12 @@ export default function ShopPage(): React.ReactNode {
               </a>
             </p>
           </div>
-          <a href="/shop/bitmern-edition" className="inline-flex shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium hover:bg-primary/15 transition-colors">
+          <Link
+            href="/shop/bitmern-edition"
+            className="inline-flex shrink-0 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-medium hover:bg-primary/15 transition-colors"
+          >
             View listing
-          </a>
+          </Link>
         </div>
       </div>
 
