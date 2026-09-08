@@ -27,11 +27,11 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Bitmern Solo — Solo Mining Pool for 10 Coins (BTC, LTC, DOGE & more)",
   description:
-    "Mine solo with zero pool fees. Connect your ASIC or GPU, keep 100% of the block reward across 10 coins. Real-time dashboards, multi-coin support, and enterprise-grade infrastructure.",
+    "Mine solo with a flat 1% fee. Connect your ASIC or GPU, keep 99% of the block reward across 10 coins. Real-time dashboards, multi-coin support, and enterprise-grade infrastructure.",
   openGraph: {
     title: "Bitmern Solo — Solo Mining Pool for 10 Coins",
     description:
-      "Mine solo with a flat 1% fee. BTC, LTC, DOGE, BCH, DGB, XEC, ETC, ZEC, XMR & RVN — keep 100% of the block reward.",
+      "Mine solo with a flat 1% fee. BTC, LTC, DOGE, BCH, DGB, XEC, ETC, ZEC, XMR & RVN — keep 99% of the block reward.",
     type: "website",
     url: "https://bitmernsolo.com",
   },
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Bitmern Solo — Solo Mining Pool for 10 Coins",
     description:
-      "Mine solo with a flat 1% fee. BTC, LTC, DOGE, BCH, DGB, XEC, ETC, ZEC, XMR & RVN — keep 100% of the block reward.",
+      "Mine solo with a flat 1% fee. BTC, LTC, DOGE, BCH, DGB, XEC, ETC, ZEC, XMR & RVN — keep 99% of the block reward.",
   },
 };
 
