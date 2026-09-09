@@ -43,7 +43,10 @@ export const metadata: Metadata = {
   },
 };
 
-const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
+// Plausible Cloud registers apex domains; strip www so data-domain matches the site.
+const plausibleDomain = (process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || "")
+  .trim()
+  .replace(/^www\./i, "") || undefined;
 
 export default function RootLayout({
   children,
