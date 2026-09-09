@@ -8,10 +8,10 @@ export const STRATUM: StratumEndpoint[] = [
     algo: "SHA-256d",
     host: "stratum+tcp://btc.bitmernsolo.com",
     ports: [
-      { port: 3102, diff: "25k", label: "Default — works with any SHA-256 ASIC" },
-      { port: 3112, diff: "20k", label: "Slightly lower start difficulty" },
+      { port: 3132, diff: "10k", label: "Recommended — easiest Diff, entry-level hardware" },
       { port: 3122, diff: "15k", label: "For smaller/older ASICs" },
-      { port: 3132, diff: "10k", label: "Lowest — entry-level hardware" },
+      { port: 3112, diff: "20k", label: "Slightly higher start difficulty" },
+      { port: 3102, diff: "25k", label: "Highest start Diff — any SHA-256 ASIC" },
     ],
   },
   {
@@ -21,9 +21,9 @@ export const STRATUM: StratumEndpoint[] = [
     algo: "Scrypt",
     host: "stratum+tcp://ltc.bitmernsolo.com",
     ports: [
-      { port: 13032, diff: "25k", label: "Default — works with any Scrypt ASIC" },
+      { port: 13052, diff: "1k", label: "Recommended — easiest Diff, entry-level / GPU" },
       { port: 13042, diff: "10k", label: "For smaller ASICs" },
-      { port: 13052, diff: "1k", label: "Lowest — entry-level / GPU" },
+      { port: 13032, diff: "25k", label: "Highest start Diff — any Scrypt ASIC" },
     ],
   },
   {
@@ -33,9 +33,9 @@ export const STRATUM: StratumEndpoint[] = [
     algo: "Scrypt",
     host: "stratum+tcp://doge.bitmernsolo.com",
     ports: [
-      { port: 13033, diff: "25k", label: "Default — works with any Scrypt ASIC" },
+      { port: 13053, diff: "1k", label: "Recommended — easiest Diff, entry-level / GPU" },
       { port: 13043, diff: "10k", label: "For smaller ASICs" },
-      { port: 13053, diff: "1k", label: "Lowest — entry-level / GPU" },
+      { port: 13033, diff: "25k", label: "Highest start Diff — any Scrypt ASIC" },
     ],
   },
   {
@@ -45,9 +45,9 @@ export const STRATUM: StratumEndpoint[] = [
     algo: "SHA-256d",
     host: "stratum+tcp://bch.bitmernsolo.com",
     ports: [
-      { port: 13103, diff: "500k", label: "Default — high-throughput SHA-256 ASICs" },
+      { port: 13123, diff: "10k", label: "Recommended — easiest Diff, smaller/older hardware" },
       { port: 13113, diff: "100k", label: "For mid-range ASICs" },
-      { port: 13123, diff: "10k", label: "For smaller/older hardware" },
+      { port: 13103, diff: "500k", label: "Highest start Diff — high-throughput SHA-256 ASICs" },
     ],
   },
   {
@@ -57,9 +57,9 @@ export const STRATUM: StratumEndpoint[] = [
     algo: "SHA-256d",
     host: "stratum+tcp://dgb.bitmernsolo.com",
     ports: [
-      { port: 4032, diff: "500k", label: "Default — works with any SHA-256 ASIC" },
+      { port: 4052, diff: "10k", label: "Recommended — easiest Diff, smaller/older hardware" },
       { port: 4042, diff: "100k", label: "For mid-range ASICs" },
-      { port: 4052, diff: "10k", label: "For smaller/older hardware" },
+      { port: 4032, diff: "500k", label: "Highest start Diff — any SHA-256 ASIC" },
     ],
   },
   {

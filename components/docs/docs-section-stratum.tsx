@@ -55,11 +55,11 @@ Password:  doge=YourDogeAddress`}</CodeBlock>
 
             <h3 className="mt-8 text-sm font-semibold mb-3">Configuration examples</h3>
             <div className="space-y-4">
-              <CodeBlock label="Miner web interface / software (ASIC, GPU, or CPU)">{`Pool URL:  stratum+tcp://btc.bitmernsolo.com:3102
+              <CodeBlock label="Miner web interface / software (ASIC, GPU, or CPU)">{`Pool URL:  stratum+tcp://btc.bitmernsolo.com:3132
 Worker:    YOUR_WALLET_ADDRESS.worker1
 Password:  x`}</CodeBlock>
 
-              <CodeBlock label="CGMiner / BFGMiner (command line)">{`cgminer -o stratum+tcp://btc.bitmernsolo.com:3102 \\
+              <CodeBlock label="CGMiner / BFGMiner (command line)">{`cgminer -o stratum+tcp://btc.bitmernsolo.com:3132 \\
   -u YOUR_WALLET_ADDRESS.worker1 \\
   -p x`}</CodeBlock>
             </div>
